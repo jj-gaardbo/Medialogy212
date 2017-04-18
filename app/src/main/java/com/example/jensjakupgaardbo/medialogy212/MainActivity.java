@@ -2,6 +2,7 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.IDNA;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,8 +49,11 @@ public class MainActivity extends AppCompatActivity {
         Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);
         //pack stuff with it
         startActivity(openAlarmPage);
+    }
 
-
-
+    public void goToIntro(View view) {
+        Intent i = new Intent(getApplicationContext(), Infopage.class);
+        //pack stuff with it
+        startActivity(i);
     }
 }

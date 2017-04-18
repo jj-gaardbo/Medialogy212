@@ -21,10 +21,20 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="94dp"
+        android:layout_marginTop="62dp"
         android:text=" goto alarm page"
         android:onClick="gotoAlarm"
-        />
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/goToIntro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="Button"
+        android:onClick="goToIntro"/>
+
 </RelativeLayout>
