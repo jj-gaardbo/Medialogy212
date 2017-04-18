@@ -18,6 +18,7 @@
         android:id="@+id/textView" />
 
     <Button
+
         android:id="@+id/button_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,4 +30,16 @@
         android:layout_marginTop="36dp"
         android:text="Video page"
         android:onClick="nextPage"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="94dp"
+        android:text=" goto alarm page"
+        android:onClick="gotoAlarm"
+        />
+
 </RelativeLayout>
