@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
@@ -62,11 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotoAlarm(View view) {
         Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);
-        //pack stuff with it
         startActivity(openAlarmPage);
-
-
-
     }
 }
 

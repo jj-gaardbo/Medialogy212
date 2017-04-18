@@ -19,6 +19,7 @@
 
     <Button
 
+
         android:id="@+id/button_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
         android:onClick="nextPage"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/go_to_alarm_page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView"
