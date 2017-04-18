@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,5 +42,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_main);
         }
+    }
+
+    public void gotoAlarm(View view) {
+        Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);
+        //pack stuff with it
+        startActivity(openAlarmPage);
+
+
+
     }
 }
