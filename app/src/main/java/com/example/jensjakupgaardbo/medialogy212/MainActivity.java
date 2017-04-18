@@ -2,7 +2,6 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.text.IDNA;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
