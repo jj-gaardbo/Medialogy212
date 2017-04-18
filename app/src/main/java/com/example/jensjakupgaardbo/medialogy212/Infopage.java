@@ -1,14 +1,10 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
 
-import com.github.paolorotolo.appintro.*;
+import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntroFragment;
 
 public class Infopage extends AppIntro {
 
@@ -18,8 +14,9 @@ public class Infopage extends AppIntro {
 
         //addSlide(new layout.firstInfoFragment());
 
-        addSlide(AppIntroFragment.newInstance("Importance of sleep", "Sleep real important yo", R.mipmap.shit, Color.parseColor("#3F51B5")));
-        addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#FF4081")));
+        addSlide(AppIntroFragment.newInstance("Importance of sleep", "Sleep real important yo", R.mipmap.shit, Color.parseColor("#c0392b")));
+        addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#e74c3c")));
+        addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#f74c3c")));
 
 
     }
