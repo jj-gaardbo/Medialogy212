@@ -46,11 +46,11 @@
         android:id="@+id/goToIntro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/"button"
+        android:layout_below="@+id/go_to_alarm_page"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
         android:text="Button"
         android:onClick="goToIntro"/>
->>>>>>> 0039dc227d4c49e58e00823460158fb92177493d
+
 
 </RelativeLayout>
