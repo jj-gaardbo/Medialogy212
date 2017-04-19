@@ -10,21 +10,21 @@
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/editText"
-        android:layout_below="@+id/editText"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="20dp"
         android:text="add"
         tools:layout_editor_absoluteX="33dp"
         tools:layout_editor_absoluteY="88dp"
         android:onClick="addButtonClicked"
-        />
+        android:layout_below="@+id/pinName"
+        android:layout_alignStart="@+id/pinName" />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
+        android:id="@+id/pinName"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="21dp"
         android:layout_marginTop="36dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -34,19 +34,40 @@
         android:id="@+id/removeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/editText"
-        android:layout_alignTop="@+id/addButton"
         android:text="remove"
-        android:onClick="removeButtonClicked"/>
+        android:onClick="removeButtonClicked"
+        android:layout_alignBaseline="@+id/addButton"
+        android:layout_alignBottom="@+id/addButton"
+        android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/displayDBText"
-        android:layout_width="wrap_content"
+        android:id="@+id/pinLat"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/addButton"
-        android:layout_below="@+id/addButton"
-        android:layout_marginTop="52dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="database data goes here" />
+        android:text="LAT"
+        android:layout_alignBaseline="@+id/pinName"
+        android:layout_alignBottom="@+id/pinName"
+        android:layout_toEndOf="@+id/removeButton" />
+
+    <EditText
+        android:id="@+id/pinLng"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="LNG"
+        android:layout_alignBaseline="@+id/pinLat"
+        android:layout_alignBottom="@+id/pinLat"
+        android:layout_alignEnd="@+id/dataViewer" />
+
+    <TextView
+        android:id="@+id/dataViewer"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/removeButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:text="Database content" />
 </RelativeLayout>
