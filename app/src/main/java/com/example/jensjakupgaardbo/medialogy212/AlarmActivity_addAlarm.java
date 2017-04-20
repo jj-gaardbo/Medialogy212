@@ -10,11 +10,13 @@ import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AlarmActivity_addAlarm extends AppCompatActivity {
 
     private static final int SLEEP_DURATION_MIN_VALUE = 1;
     private static final int SLEEP_DURATION_MAX_VALUE = 12;
+    private static final int SLEEP_DURATION_DEFAULT_VALUE = 7;
     Alarm parentAlarm;
     TimePicker wake_time;
     NumberPicker duration;
@@ -33,6 +35,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         duration = (NumberPicker) findViewById(R.id.sleep_duration);
         duration.setMinValue(SLEEP_DURATION_MIN_VALUE);
         duration.setMaxValue(SLEEP_DURATION_MAX_VALUE);
+        duration.setValue(SLEEP_DURATION_DEFAULT_VALUE);
 
         Button btnSaveTime = (Button) findViewById(R.id.save_time);
 
@@ -42,17 +45,45 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
                 saveTime();
             }
         });
-
+        checkDays();
     }
 
     private void checkDays(){
-        days[0] = ((ToggleButton) findViewById(R.id.day_mon)).isChecked();
-        days[1] = ((ToggleButton) findViewById(R.id.day_tue)).isChecked();
-        days[2] = ((ToggleButton) findViewById(R.id.day_wed)).isChecked();
-        days[3] = ((ToggleButton) findViewById(R.id.day_thu)).isChecked();
-        days[4] = ((ToggleButton) findViewById(R.id.day_fri)).isChecked();
-        days[5] = ((ToggleButton) findViewById(R.id.day_sat)).isChecked();
-        days[6] = ((ToggleButton) findViewById(R.id.day_sun)).isChecked();
+        List<ToggleButton> dayBtns = new ArrayList<>();
+        dayBtns.add((ToggleButton) findViewById(R.id.day_mon));
+        dayBtns.add((ToggleButton) findViewById(R.id.day_tue));
+        dayBtns.add((ToggleButton) findViewById(R.id.day_wed));
+        dayBtns.add((ToggleButton) findViewById(R.id.day_thu));
+        dayBtns.add((ToggleButton) findViewById(R.id.day_fri));
+        dayBtns.add((ToggleButton) findViewById(R.id.day_sat));
+        dayBtns.add((ToggleButton) findViewById(R.id.day_sun));
+
+        //Disable the days that are already used
+        List<Integer> disableIndexes = new ArrayList<>();
+        ArrayList<Time> times = parentAlarm.getTimes();
+        for(int t = 0; t < times.size(); t++){
+            boolean[] days = times.get(t).getDays();
+            for(int d = 0; d < days.length; d++){
+                if(days[d]){
+                    disableIndexes.add(d);
+                }
+            }
+        }
+
+        for(int i = 0; i < dayBtns.size(); i++){
+            if(disableIndexes.contains(i)){
+                dayBtns.get(i).setEnabled(false);
+            } else if(dayBtns.get(i).isChecked()){
+                disableIndexes.add(i);
+                dayBtns.get(i).setEnabled(false);
+            }
+            days[i] = dayBtns.get(i).isChecked();
+        }
+
+        if(disableIndexes.size() >= 7){
+            parentAlarm.hasFullWeek = true;
+        }
+
     }
 
     private void saveTime(){
@@ -64,4 +95,5 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         alarmScreen.putExtra("activeAlarm", parentAlarm);
         startActivity(alarmScreen);
     }
+
 }

@@ -12,6 +12,7 @@ public class Alarm implements Serializable{
     private String _alarmname;
     private ArrayList<Time> times = new ArrayList<>();
     private LatLng _latlng;
+    boolean hasFullWeek = false;
 
     public Alarm() {
 

@@ -24,6 +24,11 @@ public class AlarmActivity extends AppCompatActivity {
 
         Button btnNextScreen = (Button) findViewById(R.id.add_alarm);
 
+        //Hide button if the whole week has been assigned an alarm
+        if(alarm.hasFullWeek){
+            btnNextScreen.setVisibility(View.GONE);
+        }
+
         if(adapter == null){
             adapter = new TimeAdapter(this, alarm.getTimes());
         }
