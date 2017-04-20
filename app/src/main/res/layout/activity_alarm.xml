@@ -13,9 +13,10 @@
             tools:layout_editor_absoluteX="148dp" android:id="@+id/add_alarm"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_centerHorizontal="true" android:layout_alignParentBottom="true"/>
-    <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" android:layout_marginTop="136dp" android:id="@+id/picked_time"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/timesList"
+            android:layout_above="@+id/add_alarm" android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" android:layout_marginTop="258dp"/>
 </RelativeLayout>

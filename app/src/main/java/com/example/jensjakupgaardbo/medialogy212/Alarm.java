@@ -2,11 +2,15 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 // class for use in the database of the app, this is the base class that tells us what to save about the alarms
 
-public class Alarm {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Alarm implements Serializable {
 
     //these are the attributes we want to save in each alarm
     private int _id;
     private String _alarmname;
+    private ArrayList<Time> times = new ArrayList<>();
 
     public Alarm() {
 
@@ -33,5 +37,12 @@ public class Alarm {
         this._alarmname = _alarmname;
     }
 
+    public ArrayList<Time> getTimes() {
+        return times;
+    }
+
+    public void setTimes(ArrayList<Time> times) {
+        this.times = times;
+    }
 
 }

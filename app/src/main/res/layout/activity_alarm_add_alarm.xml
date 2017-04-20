@@ -11,15 +11,103 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="com.example.jensjakupgaardbo.medialogy212.AlarmActivity_addAlarm">
 
-    <TimePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner"
-            android:id="@+id/timePicker"
-            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
     <Button
             android:text="Save"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" android:layout_marginBottom="28dp" android:id="@+id/save_time"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/save_time" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+    <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sleep_duration"
+            android:layout_marginTop="16dp" android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+    <TimePicker
+            android:layout_width="wrap_content"
+            android:timePickerMode="spinner"
+            android:layout_height="wrap_content"
+            android:id="@+id/wake_time"
+            android:layout_marginStart="-16dp"
+            android:layout_alignParentTop="true" android:layout_alignParentStart="true"/>
+
+    <TextView
+            android:text="Wake time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" android:id="@+id/textView"/>
+    <TextView
+            android:text="Sleep duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sleep_duration_label" android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+    <TextView
+            android:text="Weekdays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_below="@+id/wake_time"
+            android:layout_alignParentStart="true" android:id="@+id/weekdays_label"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@+id/weekdays_label" android:layout_alignParentStart="true">
+
+        <ToggleButton
+                android:textOn="@string/day_mon"
+                android:textOff="@string/day_mon"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_mon" tools:text="Mon"
+                android:checked="false" android:textSize="10sp"/>
+        <ToggleButton
+                android:textOn="@string/day_tue"
+                android:textOff="@string/day_tue"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_tue" tools:text="Tue"
+                android:checked="false" android:textSize="10sp"/>
+        <ToggleButton
+                android:textOn="@string/day_wed"
+                android:textOff="@string/day_wed"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_wed" tools:text="Wed"
+                android:checked="false" android:textSize="10sp"/>
+        <ToggleButton
+                android:textOn="@string/day_thu"
+                android:textOff="@string/day_thu"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_thu" tools:text="Thu"
+                android:checked="false" android:textSize="10sp"/>
+        <ToggleButton
+                android:textOn="@string/day_fri"
+                android:textOff="@string/day_fri"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_fri" tools:text="Fri"
+                android:checked="false" android:textSize="10sp"/>
+        <ToggleButton
+                android:textOn="@string/day_sat"
+                android:textOff="@string/day_sat"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_sat" tools:text="Sat"
+                android:checked="false" android:textSize="10sp"/>
+        <ToggleButton
+                android:textOn="@string/day_sun"
+                android:textOff="@string/day_sun"
+                android:layout_marginStart="-2dp"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_sun" tools:text="Sun"
+                android:checked="false" android:textSize="10sp"/>
+
+
+    </LinearLayout>
 </RelativeLayout>
