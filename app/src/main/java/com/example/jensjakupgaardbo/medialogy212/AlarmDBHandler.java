@@ -14,6 +14,10 @@ import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+
 public class AlarmDBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 7;
@@ -62,6 +66,67 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public void deleteAlarm(String alarmname){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + "=\"" + alarmname + "\";");
+    }
+
+    public ArrayList<String> getAlarmNames() {
+        ArrayList<String> alarmNames = new ArrayList<>();
+
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ALARMS + " WHERE 1";
+
+        //Cursor points to a location in your results
+        Cursor recordSet = db.rawQuery(query, null);
+        //Move to the first row in your results
+        recordSet.moveToFirst();
+
+        //Position after the last row means the end of the results
+        while (!recordSet.isAfterLast()) {
+
+            // null could happen if we used our empty constructor
+            if (recordSet.getString(recordSet.getColumnIndex("alarmname")) != null) {
+
+
+                alarmNames.add(
+                        recordSet.getString(recordSet.getColumnIndex("alarmname"))
+                );
+            }
+
+            recordSet.moveToNext();
+        }
+        db.close();
+        return alarmNames;
+    }
+
+
+    public ArrayList<Alarm> getAlarms(){                //returns all alarms in the database as an arraylist
+        ArrayList<Alarm> alarms = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_ALARMS + " WHERE 1";
+        //Cursor points to a location in your results
+        Cursor recordSet = db.rawQuery(query, null);
+        //Move to the first row in your results
+        recordSet.moveToFirst();
+
+        //Position after the last row means the end of the results
+        while (!recordSet.isAfterLast()) {
+
+            // null could happen if we used our empty constructor
+            if (recordSet.getString(recordSet.getColumnIndex("alarmname")) != null) {
+
+                alarms.add(new Alarm(
+                        recordSet.getString(recordSet.getColumnIndex("alarmname")),
+                        new LatLng(recordSet.getInt(recordSet.getColumnIndex("lat")), recordSet.getColumnIndex("lng"))
+                        //additional alarm stuff goes here
+                ));
+
+                recordSet.moveToNext();
+            }
+        }
+        db.close();
+
+
+        return alarms;
     }
 
     public String databaseNamesToString() {

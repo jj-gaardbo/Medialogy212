@@ -1,5 +1,6 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -52,4 +53,8 @@ public class dataBaseOverview extends AppCompatActivity {
     }
 
 
+    public void gotoCardsActivity(View view) {
+        Intent gotoCards = new Intent(this, CardsTest.class);
+        this.startActivity(gotoCards);
+    }
 }

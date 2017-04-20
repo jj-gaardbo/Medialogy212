@@ -70,4 +70,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:text="Database content" />
+
+    <Button
+        android:id="@+id/gotoCardsTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gotoCards"
+        android:onClick="gotoCardsActivity"
+        android:layout_alignBottom="@+id/dataViewer"
+        android:layout_alignEnd="@+id/dataViewer" />
 </RelativeLayout>
