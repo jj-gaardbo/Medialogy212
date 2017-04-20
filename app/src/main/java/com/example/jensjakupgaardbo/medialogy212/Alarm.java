@@ -1,23 +1,25 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 // class for use in the database of the app, this is the base class that tells us what to save about the alarms
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Alarm implements Serializable {
+import com.google.android.gms.maps.model.LatLng;
+public class Alarm implements Serializable{
 
     //these are the attributes we want to save in each alarm
     private int _id;
     private String _alarmname;
     private ArrayList<Time> times = new ArrayList<>();
+    private LatLng _latlng;
 
     public Alarm() {
 
     }
 
-    public Alarm(String alarmname) {
+    public Alarm(String alarmname, LatLng location) {
         this._alarmname = alarmname;
+        this._latlng = location;
     }
 
 
@@ -45,4 +47,11 @@ public class Alarm implements Serializable {
         this.times = times;
     }
 
+    public LatLng get_latlng() {
+        return _latlng;
+    }
+
+    public void set_latlng(LatLng _latlng) {
+        this._latlng = _latlng;
+    }
 }

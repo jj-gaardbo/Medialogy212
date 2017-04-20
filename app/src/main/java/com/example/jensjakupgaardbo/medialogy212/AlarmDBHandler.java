@@ -1,4 +1,6 @@
 package com.example.jensjakupgaardbo.medialogy212;
+//// TODO: 19-04-2017 Latitude cannot store negative coordiantes, wheres longitude can
+
 
 //This is the database handler, it does what its name implies,
 //it has a whole bunch of mysql in it, if you have any questions you can bring em to me(Rasmus)
@@ -14,11 +16,14 @@ import android.content.ContentValues;
 
 public class AlarmDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "alarmDB.db"; // names the file that the data is saved to
     public static final String TABLE_ALARMS = "alarms";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ALARMNAME = "alarmname";
+    public static final String COLUMN_LAT = "lat";
+    public static final String COLUMN_LNG = "lng";
+
 
 
     public AlarmDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -29,7 +34,9 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_ALARMS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_ALARMNAME + " TEXT " +
+                COLUMN_ALARMNAME + " TEXT, " +
+                COLUMN_LAT + " REAL, " +
+                COLUMN_LNG + " REAL" +
                 ");";
         db.execSQL(query);
     }
@@ -44,6 +51,8 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public void addAlarm(Alarm alarm){
         ContentValues values = new ContentValues();
         values.put(COLUMN_ALARMNAME, alarm.get_alarmname() );
+        values.put(COLUMN_LAT, alarm.get_latlng().latitude);
+        values.put(COLUMN_LNG, alarm.get_latlng().longitude);
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_ALARMS,null,values);
         db.close();
@@ -55,7 +64,7 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + "=\"" + alarmname + "\";");
     }
 
-    public String databaseToString() {
+    public String databaseNamesToString() {
         String dbString = "";
 
 
@@ -75,6 +84,8 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
 
 
                 dbString += recordSet.getString(recordSet.getColumnIndex("alarmname"));
+                dbString += recordSet.getString(recordSet.getColumnIndex("lat"));
+                dbString += recordSet.getString(recordSet.getColumnIndex("lng"));
                 dbString += "\n";
             }
 
@@ -84,6 +95,10 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
 
         return dbString;
     }
+
+  /*  public String[] databaseToString(){
+
+    }*/
 
 
 }
