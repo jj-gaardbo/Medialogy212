@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class Tab1 extends Fragment {
+    
     public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle SavedInstanceState)  {
-        View rootView = inflater.inflate(R.layout.fragment_tab1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_tab1, container);
+
 
         return rootView;
     }

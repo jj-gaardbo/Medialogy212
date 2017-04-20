@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener{
+
+public class MainActivity extends AppCompatActivity{
 
     private ViewPager viewPager;
     private TabsPagerAdapter adapter;
@@ -33,8 +32,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 public void run() {
                     SharedPreferences getPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-                    boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-
                     Intent i = new Intent(getApplicationContext(), Infopage.class);
                     startActivity(i);
 
@@ -50,33 +47,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         } else {
             setContentView(R.layout.activity_main);
-            viewPager = (ViewPager) findViewById(R.id.view_pager);
-            actionBar = getSupportActionBar();
-            adapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-            viewPager.setAdapter(adapter);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-            for(String tabName : tabs) {
-                actionBar.addTab(actionBar.newTab().setText(tabName).setTabListener(this));
-            }
-
-            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-                @Override
-                public void onPageSelected(int pos) {
-                    actionBar.setSelectedNavigationItem(pos);
-                }
-                @Override
-                public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
 
         }
 
@@ -100,19 +71,5 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         startActivity(i);
     }
 
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-
-    }
 }
 

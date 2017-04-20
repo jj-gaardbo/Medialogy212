@@ -28,6 +28,7 @@ public class Infopage extends AppIntro {
     @Override
     public void onNextPressed() {
         // Do something when users tap on Next button.
+
     }
 
     @Override

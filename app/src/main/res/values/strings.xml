@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Medialogy212</string>
     <string name="app_intro">IntroPage</string>
+    <string name="google_maps_key">AIzaSyAC2EsM3X4w7ZuF_8V1gy54hUmyps4l374</string>
 
-    <string name="google_maps_key">213123123123123</string>
     
     <!-- Alarm edit screen -->
     <string name="day_mon">Mon</string>
@@ -16,5 +16,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_tabbed_main">tabbedMain</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

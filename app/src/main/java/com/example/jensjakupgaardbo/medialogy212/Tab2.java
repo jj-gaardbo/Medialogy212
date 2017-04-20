@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 public class Tab2 extends Fragment {
     public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle SavedInstanceState)  {
         View rootView = inflater.inflate(R.layout.fragment_tab2, container, false);
-
         return rootView;
     }
 }
