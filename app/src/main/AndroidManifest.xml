@@ -41,11 +41,12 @@
         <activity android:name=".CardsTest" />
         <activity
             android:name=".tabbedMain"
-<<<<<<< HEAD
+
             android:label="@string/title_activity_tabbed_main"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Gallery"></activity>
-=======
+        <activity
+            android:name=".Gallery"
+
             android:label="AlarmApp"
             android:theme="@style/AppTheme">
 
@@ -55,7 +56,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
->>>>>>> dd0adb0c896c62a8fb4e448904f7a80a5d4568e1
+
     </application>
 
 </manifest>
