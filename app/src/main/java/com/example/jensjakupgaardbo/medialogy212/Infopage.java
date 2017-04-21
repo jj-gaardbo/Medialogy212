@@ -1,5 +1,6 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -34,7 +35,8 @@ public class Infopage extends AppIntro {
     @Override
     public void onDonePressed() {
         // Do something when users tap on Done button.
-        setContentView(R.layout.activity_main);
+        Intent i = new Intent(getApplicationContext(), tabbedMain.class);
+        startActivity(i);
     }
 
     @Override

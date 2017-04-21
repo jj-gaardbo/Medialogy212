@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="16dp"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="com.example.jensjakupgaardbo.medialogy212.AlarmActivity">
 
     <Button
@@ -19,4 +24,15 @@
             android:id="@+id/timesList"
             android:layout_above="@+id/add_alarm" android:layout_alignParentStart="true"
             android:layout_alignParentTop="true" android:layout_marginTop="258dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Alarm name"
+            android:ems="10"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/alarm_name"
+            android:layout_alignParentEnd="true"
+            android:cursorVisible="true"/>
 </RelativeLayout>
