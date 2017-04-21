@@ -41,8 +41,9 @@
         <activity android:name=".CardsTest" />
         <activity
             android:name=".tabbedMain"
-            android:label="@string/title_activity_tabbed_main"
+            android:label="AlarmApp"
             android:theme="@style/AppTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
