@@ -171,20 +171,37 @@ public class tabbedMain extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Alarms";
                 case 1:
-                    return "SECTION 2";
+                    return "Settings";
                 case 2:
                     return "SECTION 3";
             }
             return null;
         }
+    }
+
+    public void nextPage(View view) {
+                Intent intent = new Intent(getApplicationContext(), ActivityVideoPage.class);
+                startActivity(intent);
+    }
+
+    public void gotoAlarm(View view) {
+        Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);
+        startActivity(openAlarmPage);
+
+    }
+
+    public void goToIntro(View view) {
+        Intent i = new Intent(getApplicationContext(), Infopage.class);
+        //pack stuff with it
+        startActivity(i);
     }
 }
