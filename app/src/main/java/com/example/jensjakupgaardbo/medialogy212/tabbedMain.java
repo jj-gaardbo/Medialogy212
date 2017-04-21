@@ -190,9 +190,9 @@ public class tabbedMain extends AppCompatActivity {
         }
     }
 
-    public void nextPage(View view) {
-                Intent intent = new Intent(getApplicationContext(), ActivityVideoPage.class);
-                startActivity(intent);
+    public void goToGallery(View view) {
+        Intent intent = new Intent(getApplicationContext(), Gallery.class);
+        startActivity(intent);
     }
 
     public void gotoAlarm(View view) {

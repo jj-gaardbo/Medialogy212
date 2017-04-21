@@ -34,11 +34,25 @@ public class TimeAdapter extends ArrayAdapter{
             // Populate the data into the template view using the data object
             time_wakeupTime.setText(time.getWakeUp());
             time_duration.setText(String.valueOf(time.getDuration()));
-            time_days.setText("days");
+            time_days.setText(convertDaysToString(time));
         }
 
         // Return the completed view to render on screen
         return convertView;
 
     }
+    private String convertDaysToString(Time time){
+        boolean[] days = time.getDays();
+        StringBuilder str = new StringBuilder();
+        String[] dayStrings = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        for(int i = 0; i < days.length; i++){
+            if(days[i]){
+                str.append(dayStrings[i]);
+                str.append(", ");
+            }
+        }
+        String dayString = str.toString().trim();
+        return dayString.substring(0, dayString.length()-1);
+    }
+
 }
