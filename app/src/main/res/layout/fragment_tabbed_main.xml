@@ -8,11 +8,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jensjakupgaardbo.medialogy212.tabbedMain$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
+
+    <Button
+        android:id="@+id/goToAlarms"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:text="Alarms"
+        android:onClick="gotoAlarm"
+        />
 
-
+    <Button
+        android:id="@+id/button_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:elevation="0dp"
+        android:onClick="goToGallery"
+        android:text="Gallery"
+        android:layout_alignBaseline="@+id/goToAlarms"
+        android:layout_alignBottom="@+id/goToAlarms"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp" />
 
 </RelativeLayout>

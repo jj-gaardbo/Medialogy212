@@ -70,7 +70,7 @@ public class tabbedMain extends AppCompatActivity {
 
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            // Create the adapter that will return a fragment for each of the three
+            // Create the adapter that will return a fragment for each of the two
             // primary sections of the activity.
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -85,7 +85,7 @@ public class tabbedMain extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "Shitsnacks", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             });
@@ -142,11 +142,13 @@ public class tabbedMain extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_tabbed_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView;
+            if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
+                rootView = inflater.inflate(R.layout.fragment_tabbed_settings, container, false);
+            } else {
+                rootView = inflater.inflate(R.layout.fragment_tabbed_main, container, false);
+            }
             return rootView;
         }
     }
@@ -188,15 +190,14 @@ public class tabbedMain extends AppCompatActivity {
         }
     }
 
-    public void nextPage(View view) {
-                Intent intent = new Intent(getApplicationContext(), ActivityVideoPage.class);
-                startActivity(intent);
+    public void goToGallery(View view) {
+        Intent intent = new Intent(getApplicationContext(), Gallery.class);
+        startActivity(intent);
     }
 
     public void gotoAlarm(View view) {
         Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);
         startActivity(openAlarmPage);
-
     }
 
     public void goToIntro(View view) {

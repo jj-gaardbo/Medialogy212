@@ -39,17 +39,30 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".CardsTest" />
+
+
         <activity
             android:name=".tabbedMain"
-            android:label="AlarmApp"
-            android:theme="@style/AppTheme">
 
+            android:label="@string/title_activity_tabbed_main"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+
+        <activity
+            android:name=".Gallery"
+
+            android:label="AlarmApp"
+            android:theme="@style/AppTheme">
+
+        </activity>
+
     </application>
 
 </manifest>
