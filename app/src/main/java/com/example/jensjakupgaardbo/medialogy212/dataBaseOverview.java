@@ -1,9 +1,11 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,6 +38,9 @@ public class dataBaseOverview extends AppCompatActivity {
         Alarm alarmToAdd = new Alarm(nameInput.getText().toString(), new LatLng(Double.parseDouble(latInput.getText().toString()), Double.parseDouble(lngInput.getText().toString())));
         dbHandler.addAlarm(alarmToAdd);
         printDatabase();
+        /*nameInput.clearFocus();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);*/
     }
 
     public void removeButtonClicked(View view){

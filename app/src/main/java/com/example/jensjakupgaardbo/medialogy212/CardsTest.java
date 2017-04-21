@@ -19,16 +19,15 @@ public class CardsTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_test);
         AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,7);
+        final ArrayList<Alarm> alarms = dbHandler.getAlarms();
 
-
-        ListAdapter cardAdapter = new CardsAdapter(this,dbHandler.getAlarms());
+        ListAdapter cardAdapter = new CardsAdapter(this,alarms);
         ListView editList = (ListView) findViewById(R.id.cardListView);
         editList.setAdapter(cardAdapter);
-
         editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = String.valueOf(parent.getItemAtPosition(position));
+                String value =  alarms.get(position).get_alarmname();;
                 Toast.makeText(CardsTest.this, value, Toast.LENGTH_SHORT).show();
 
             }
