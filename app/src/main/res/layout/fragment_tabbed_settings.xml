@@ -8,15 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jensjakupgaardbo.medialogy212.tabbedMain$PlaceholderFragment">
 
-
-    <Button
-        android:id="@+id/goToAlarms"
+    <TextView
+        android:id="@+id/section_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:text="Alarms"
-        android:onClick="gotoAlarm"
+        android:text="shit"
         />
+
+
+
 </RelativeLayout>
