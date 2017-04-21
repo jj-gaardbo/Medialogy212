@@ -9,6 +9,7 @@ public class Alarm implements Serializable{
 
     //these are the attributes we want to save in each alarm
     private int _id;
+    private boolean active = false;
     private String _alarmname;
     private ArrayList<Time> times = new ArrayList<>();
     private LatLng _latlng;
