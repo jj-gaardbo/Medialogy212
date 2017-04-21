@@ -3,7 +3,8 @@
     <string name="app_intro">IntroPage</string>
     <string name="google_maps_key">AIzaSyAC2EsM3X4w7ZuF_8V1gy54hUmyps4l374</string>
 
-    
+    <string name="play_button">Play</string>
+
     <!-- Alarm edit screen -->
     <string name="day_mon">Mon</string>
     <string name="day_tue">Tue</string>

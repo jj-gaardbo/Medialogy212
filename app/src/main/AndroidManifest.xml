@@ -47,11 +47,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".CardsTest"></activity>
+        <activity android:name=".CardsTest" />
         <activity
             android:name=".tabbedMain"
             android:label="@string/title_activity_tabbed_main"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Gallery"></activity>
     </application>
 
 </manifest>
