@@ -52,7 +52,7 @@
         <activity
             android:name=".Gallery"
             android:label="AlarmApp"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".alarmTimeTest" />
 
         <receiver android:name=".AlarmReceiver">
@@ -63,7 +63,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".ActivityVideoPage2"></activity>
     </application>
 
 </manifest>
