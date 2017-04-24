@@ -11,11 +11,6 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="com.example.jensjakupgaardbo.medialogy212.AlarmActivity_addAlarm">
 
-    <Button
-            android:text="Save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/save_time" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
     <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +53,7 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_mon" tools:text="Mon"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
         <ToggleButton
                 android:textOn="@string/day_tue"
@@ -66,6 +62,7 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_tue" tools:text="Tue"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
         <ToggleButton
                 android:textOn="@string/day_wed"
@@ -74,6 +71,7 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_wed" tools:text="Wed"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
         <ToggleButton
                 android:textOn="@string/day_thu"
@@ -82,6 +80,7 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_thu" tools:text="Thu"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
         <ToggleButton
                 android:textOn="@string/day_fri"
@@ -90,6 +89,7 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_fri" tools:text="Fri"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
         <ToggleButton
                 android:textOn="@string/day_sat"
@@ -98,6 +98,7 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_sat" tools:text="Sat"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
         <ToggleButton
                 android:textOn="@string/day_sun"
@@ -106,8 +107,23 @@
                 android:layout_width="49dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/day_sun" tools:text="Sun"
+                android:onClick="refreshDays"
                 android:checked="false" android:textSize="10sp"/>
 
 
     </LinearLayout>
+    <Button
+            android:text="Save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_time" android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/sleep_duration_label"/>
+    <Button
+            android:text="Delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/save_time"
+            android:layout_alignParentStart="true"
+            android:id="@+id/remove_time"
+            android:onClick="deleteTime"/>
 </RelativeLayout>
