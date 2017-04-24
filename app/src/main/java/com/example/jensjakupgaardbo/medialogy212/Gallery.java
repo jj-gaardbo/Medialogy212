@@ -18,7 +18,7 @@ public class Gallery extends AppCompatActivity {
         gridView.setAdapter(new GalleryImageAdapter(this));
     }
 
-
+    //TODO compress videos
     public void goToVideo(View view) {
         Intent intent = new Intent(getApplicationContext(), ActivityVideoPage.class);
         startActivity(intent);
