@@ -10,10 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.util.ArrayList;
 
@@ -71,6 +68,14 @@ public class AlarmActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.timesList);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Time time = (Time) adapterView.getItemAtPosition(i);
+                openAddTime(time);
+            }
+        });
+
         //Listening to button event
         addTime.setOnClickListener(new View.OnClickListener() {
             public void onClick(View args) {
@@ -83,6 +88,13 @@ public class AlarmActivity extends AppCompatActivity {
     private void openAddTime(){
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
         addAlarmScreen.putExtra("activeAlarm", alarm);
+        startActivity(addAlarmScreen);
+    }
+
+    private void openAddTime(Time time){
+        Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
+        addAlarmScreen.putExtra("activeAlarm", alarm);
+        addAlarmScreen.putExtra("edit_time", time);
         startActivity(addAlarmScreen);
     }
 
