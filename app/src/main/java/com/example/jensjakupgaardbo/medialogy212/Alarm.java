@@ -22,6 +22,7 @@ public class Alarm implements Serializable{
     public Alarm(String alarmname, LatLng location) {
         this._alarmname = alarmname;
         this._latlng = location;
+
     }
 
 
