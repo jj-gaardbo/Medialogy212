@@ -1,11 +1,10 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,7 +26,7 @@ public class CardsTest extends AppCompatActivity {
         editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value =  alarms.get(position).get_alarmname();;
+                String value =  alarms.get(position).get_alarmname();
                 Toast.makeText(CardsTest.this, value, Toast.LENGTH_SHORT).show();
 
             }
