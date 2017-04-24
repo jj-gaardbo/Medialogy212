@@ -82,7 +82,7 @@ public class tabbedMain extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent miintent = new Intent(tabbedMain.this, MapsActivity.class);
+                    Intent miintent = new Intent(getApplicationContext(), PlaceActivity.class);
                     startActivity(miintent);
                 }
             });
