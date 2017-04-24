@@ -8,25 +8,27 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 
 // This class handles all the database activities
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.Cursor;
-import android.content.Context;
-import android.content.ContentValues;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
 public class AlarmDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "alarmDB.db"; // names the file that the data is saved to
     public static final String TABLE_ALARMS = "alarms";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ALARMNAME = "alarmname";
-    public static final String COLUMN_LAT = "lat";
-    public static final String COLUMN_LNG = "lng";
+    public static final String COLUMN_DATA = "data";
+
 
 
 
@@ -39,8 +41,7 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_ALARMS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ALARMNAME + " TEXT, " +
-                COLUMN_LAT + " REAL, " +
-                COLUMN_LNG + " REAL" +
+                COLUMN_DATA + " TEXT " +
                 ");";
         db.execSQL(query);
     }
@@ -55,8 +56,9 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public void addAlarm(Alarm alarm){
         ContentValues values = new ContentValues();
         values.put(COLUMN_ALARMNAME, alarm.get_alarmname() );
-        values.put(COLUMN_LAT, alarm.get_latlng().latitude);
-        values.put(COLUMN_LNG, alarm.get_latlng().longitude);
+        Gson gson = new GsonBuilder().create();
+        String string = gson.toJson(alarm);
+        values.put(COLUMN_DATA, string);
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_ALARMS,null,values);
         db.close();
@@ -101,6 +103,7 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public ArrayList<Alarm> getAlarms(){                //returns all alarms in the database as an arraylist
         ArrayList<Alarm> alarms = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
+        Gson gson = new GsonBuilder().create();
 
         String query = "SELECT * FROM " + TABLE_ALARMS + " WHERE 1";
         //Cursor points to a location in your results
@@ -113,12 +116,10 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
 
             // null could happen if we used our empty constructor
             if (recordSet.getString(recordSet.getColumnIndex("alarmname")) != null) {
+                String alarmData = recordSet.getString(recordSet.getColumnIndex("data"));
+                Alarm gottenAlarm = gson.fromJson(alarmData,Alarm.class);
+                alarms.add(gottenAlarm);
 
-                alarms.add(new Alarm(
-                        recordSet.getString(recordSet.getColumnIndex("alarmname")),
-                        new LatLng(recordSet.getInt(recordSet.getColumnIndex("lat")), recordSet.getColumnIndex("lng"))
-                        //additional alarm stuff goes here
-                ));
 
                 recordSet.moveToNext();
             }
@@ -129,41 +130,6 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         return alarms;
     }
 
-    public String databaseNamesToString() {
-        String dbString = "";
-
-
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_ALARMS + " WHERE 1";
-
-        //Cursor points to a location in your results
-        Cursor recordSet = db.rawQuery(query, null);
-        //Move to the first row in your results
-        recordSet.moveToFirst();
-
-        //Position after the last row means the end of the results
-        while (!recordSet.isAfterLast()) {
-
-            // null could happen if we used our empty constructor
-            if (recordSet.getString(recordSet.getColumnIndex("alarmname")) != null) {
-
-
-                dbString += recordSet.getString(recordSet.getColumnIndex("alarmname"));
-                dbString += recordSet.getString(recordSet.getColumnIndex("lat"));
-                dbString += recordSet.getString(recordSet.getColumnIndex("lng"));
-                dbString += "\n";
-            }
-
-            recordSet.moveToNext();
-        }
-        db.close();
-
-        return dbString;
-    }
-
-  /*  public String[] databaseToString(){
-
-    }*/
 
 
 }

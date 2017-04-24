@@ -1,15 +1,15 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 public class dataBaseOverview extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class dataBaseOverview extends AppCompatActivity {
         latInput = (EditText) findViewById(R.id.pinLat);
         lngInput = (EditText) findViewById(R.id.pinLng);
         dataViewer = (TextView) findViewById(R.id.dataViewer);
-        dbHandler = new AlarmDBHandler(this,null,null,7);
+        dbHandler = new AlarmDBHandler(this,null,null,8);
 
         printDatabase();
     }
@@ -50,8 +50,14 @@ public class dataBaseOverview extends AppCompatActivity {
     }
 
     public void printDatabase() {
-        String dbString = dbHandler.databaseNamesToString();
-        dataViewer.setText(dbString);
+        ArrayList<String> dbString = dbHandler.getAlarmNames();
+        String inString = "";
+        for(String i : dbString){
+            inString += i + "\n";
+        }
+
+
+        dataViewer.setText(inString);
         nameInput.setText("");
         latInput.setText("50");
         lngInput.setText("20");
