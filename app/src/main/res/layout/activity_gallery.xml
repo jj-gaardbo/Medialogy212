@@ -12,7 +12,7 @@
     android:paddingTop="0dp"
     tools:context="com.example.jensjakupgaardbo.medialogy212.Gallery">
 
-    <GridView
+   <!-- <GridView
         android:id="@+id/gridView"
         android:layout_width="368dp"
         android:layout_height="551dp"
@@ -24,7 +24,44 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        tools:layout_editor_absoluteY="8dp" />-->
+
+    <Button
+        android:id="@+id/fireButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/fire"
+        android:onClick="goToFire" />
+
+    <Button
+        android:id="@+id/rainButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/rain"
+        android:onClick="goToRain"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"/>
+
+
+
+   <!-- <Button
+        android:id="@+id/button_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:elevation="0dp"
+        android:onClick="goToVideo"
+        android:text="Video"
+        android:layout_alignBaseline="@+id/goToAlarms"
+        android:layout_alignBottom="@+id/goToAlarms"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp" />-->
+
 </RelativeLayout>
 
 

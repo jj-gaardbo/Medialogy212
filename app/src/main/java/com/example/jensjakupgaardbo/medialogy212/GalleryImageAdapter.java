@@ -1,4 +1,4 @@
-package com.example.jensjakupgaardbo.medialogy212;
+/*package com.example.jensjakupgaardbo.medialogy212;
 
 //package com.journaldev.galleryview;
 
@@ -44,7 +44,7 @@ public class GalleryImageAdapter extends BaseAdapter {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new GridView.LayoutParams(240, 240));
         return imageView;
-    }
+    }*/
 
 
 
@@ -92,6 +92,6 @@ public class GalleryImageAdapter extends BaseAdapter {
             R.drawable.fire,
             R.drawable.rain
 
-    };*/
+    };
 
-}
+}*/

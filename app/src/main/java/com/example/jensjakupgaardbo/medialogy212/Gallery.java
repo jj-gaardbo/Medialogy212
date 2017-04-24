@@ -13,14 +13,19 @@ public class Gallery extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        GridView gridView = (GridView) findViewById(R.id.gridView);
+      /*  GridView gridView = (GridView) findViewById(R.id.gridView);
 
-        gridView.setAdapter(new GalleryImageAdapter(this));
+        gridView.setAdapter(new GalleryImageAdapter(this));*/
     }
 
 
-    public void goToVideo(View view) {
+    public void goToFire(View view) {
         Intent intent = new Intent(getApplicationContext(), ActivityVideoPage.class);
+        startActivity(intent);
+    }
+
+    public void goToRain(View view) {
+        Intent intent = new Intent(getApplicationContext(), ActivityVideoPage2.class);
         startActivity(intent);
     }
 }

@@ -14,12 +14,15 @@ public class ActivityVideoPage extends AppCompatActivity {
         setContentView(R.layout.activity_video_page);
     }
 
-    public void onButtonClick(View v) {
+    public void startFire(View v) {
         VideoView videoview = (VideoView) findViewById(R.id.videoView);
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bonfire);
         videoview.setVideoURI(uri);
         videoview.start();
     }
+
+
+
     }
 
 
