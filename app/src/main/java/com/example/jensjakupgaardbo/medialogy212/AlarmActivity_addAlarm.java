@@ -149,20 +149,25 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
             time = new Time(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()), duration.getValue(), days);
             times.add(time);
         }
-        Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
-        alarmScreen.putExtra("activeAlarm", parentAlarm);
-        startActivity(alarmScreen);
+        goToAlarmPage();
     }
 
     public void deleteTime(View view){
         ArrayList<Time> times = parentAlarm.getTimes();
         for(int i = 0; i < times.size(); i++) {
+            String eId = eTime.getTimeID();
+            String delId = times.get(i).getTimeID();
             if(eTime.getTimeID().equals(times.get(i).getTimeID())){
                 times.remove(i);
-                Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
-                startActivity(alarmScreen);
+                goToAlarmPage();
             }
         }
+    }
+
+    private void goToAlarmPage(){
+        Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
+        alarmScreen.putExtra("activeAlarm", parentAlarm);
+        startActivity(alarmScreen);
     }
 
 }
