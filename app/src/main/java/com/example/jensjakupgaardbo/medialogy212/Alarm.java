@@ -11,7 +11,7 @@ public class Alarm implements Serializable{
     private int _id;
     private boolean active = false;
     private String _alarmname;
-    private ArrayList<Time> times = new ArrayList<>();
+    private ArrayList<AlarmTime> alarmTimes = new ArrayList<>();
     private LatLng _latlng;
     boolean hasFullWeek = false;
 
@@ -42,12 +42,12 @@ public class Alarm implements Serializable{
         this._alarmname = _alarmname;
     }
 
-    public ArrayList<Time> getTimes() {
-        return times;
+    public ArrayList<AlarmTime> getAlarmTimes() {
+        return alarmTimes;
     }
 
-    public void setTimes(ArrayList<Time> times) {
-        this.times = times;
+    public void setAlarmTimes(ArrayList<AlarmTime> alarmTimes) {
+        this.alarmTimes = alarmTimes;
     }
 
     public LatLng get_latlng() {

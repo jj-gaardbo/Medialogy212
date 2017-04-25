@@ -8,7 +8,6 @@ import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class AlarmActivity_addAlarm extends AppCompatActivity {
 
@@ -19,7 +18,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     Alarm parentAlarm;
     TimePicker wake_time;
     NumberPicker duration;
-    Time eTime;
+    AlarmTime eAlarmTime;
     List<ToggleButton> dayBtns = new ArrayList<>();
     boolean[] days = new boolean[7];
     Button deleteBtn;
@@ -54,14 +53,14 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         deleteBtn = (Button) findViewById(R.id.remove_time);
         deleteBtn.setVisibility(View.GONE);
 
-        eTime = (Time) getIntent().getSerializableExtra("edit_time");
-        if(eTime != null){
+        eAlarmTime = (AlarmTime) getIntent().getSerializableExtra("edit_time");
+        if(eAlarmTime != null){
             deleteBtn.setVisibility(View.VISIBLE);
             editing = true;
-            wake_time.setHour(Integer.parseInt(eTime.getWakeUp().substring(0,2)));
-            wake_time.setMinute(Integer.parseInt(eTime.getWakeUp().substring(3,5)));
-            duration.setValue(eTime.getDuration());
-            days = eTime.getDays();
+            wake_time.setHour(Integer.parseInt(eAlarmTime.getWakeUp().substring(0,2)));
+            wake_time.setMinute(Integer.parseInt(eAlarmTime.getWakeUp().substring(3,5)));
+            duration.setValue(eAlarmTime.getDuration());
+            days = eAlarmTime.getDays();
         }
 
         Button btnSaveTime = (Button) findViewById(R.id.save_time);
@@ -72,7 +71,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
                 saveTime();
             }
         });
-        checkDays(false);
+        checkDays();
 
         if(editing){
             reEnableDays();
@@ -82,23 +81,23 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
 
     //Check the days that the currently edited time has
     private void reEnableDays(){
-        for(int i = 0; i < eTime.getDays().length; i++){
-            if(eTime.days[i]) {
+        for(int i = 0; i < eAlarmTime.getDays().length; i++){
+            if(eAlarmTime.days[i]) {
                 dayBtns.get(i).setEnabled(true);
                 dayBtns.get(i).setChecked(true);
             }
         }
     }
 
-    private void checkDays(boolean update){
+    private void checkDays(){
 
         //Create an array that holds the indexes of used days in the current alarm
         List<Integer> disableIndexes = new ArrayList<>();
 
         //Disable the days that are already used unless you are currently editing an existing time
-        ArrayList<Time> times = parentAlarm.getTimes();
-        for(int t = 0; t < times.size(); t++){
-            boolean[] usedDays = times.get(t).getDays();
+        ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
+        for(int t = 0; t < alarmTimes.size(); t++){
+            boolean[] usedDays = alarmTimes.get(t).getDays();
             for(int d = 0; d < usedDays.length; d++){
                 if(usedDays[d]){
                     disableIndexes.add(d);
@@ -109,17 +108,11 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         for(int i = 0; i < dayBtns.size(); i++){
             if(disableIndexes.contains(i)){
                 dayBtns.get(i).setEnabled(false);
-            } else if(dayBtns.get(i).isChecked()){
+            }
+            else if(dayBtns.get(i).isChecked()){
                 disableIndexes.add(i);
                 dayBtns.get(i).setEnabled(false);
             }
-            if(update){
-                days[i] = dayBtns.get(i).isChecked();
-            }
-        }
-
-        if(disableIndexes.size() >= 7){
-            parentAlarm.hasFullWeek = true;
         }
 
     }
@@ -133,36 +126,41 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     }
 
     private void saveTime(){
-        checkDays(true);
-        ArrayList<Time> times = parentAlarm.getTimes();
-        Time time;
+        checkDays();
+        ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
+        AlarmTime alarmTime;
         if(editing){
-            eTime.setWakeUp(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()));
-            eTime.setDuration(duration.getValue());
-            eTime.setDays(days);
-            for(int i = 0; i < times.size(); i++) {
-                if(eTime.getTimeID().equals(times.get(i).getTimeID())){
-                    times.set(i, eTime);
+            eAlarmTime.setWakeUp(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()));
+            eAlarmTime.setDuration(duration.getValue());
+            eAlarmTime.setDays(days);
+            for(int i = 0; i < alarmTimes.size(); i++) {
+                if(eAlarmTime.getTimeID().equals(alarmTimes.get(i).getTimeID())){
+                    alarmTimes.set(i, eAlarmTime);
                 }
             }
         } else {
-            time = new Time(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()), duration.getValue(), days);
-            times.add(time);
+            alarmTime = new AlarmTime(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()), duration.getValue(), days);
+            alarmTimes.add(alarmTime);
         }
-        Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
-        alarmScreen.putExtra("activeAlarm", parentAlarm);
-        startActivity(alarmScreen);
+        goToAlarmPage();
     }
 
     public void deleteTime(View view){
-        ArrayList<Time> times = parentAlarm.getTimes();
-        for(int i = 0; i < times.size(); i++) {
-            if(eTime.getTimeID().equals(times.get(i).getTimeID())){
-                times.remove(i);
-                Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
-                startActivity(alarmScreen);
+        ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
+        for(int i = 0; i < alarmTimes.size(); i++) {
+            String eId = eAlarmTime.getTimeID();
+            String delId = alarmTimes.get(i).getTimeID();
+            if(eAlarmTime.getTimeID().equals(alarmTimes.get(i).getTimeID())){
+                alarmTimes.remove(i);
+                goToAlarmPage();
             }
         }
+    }
+
+    private void goToAlarmPage(){
+        Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
+        alarmScreen.putExtra("activeAlarm", parentAlarm);
+        startActivity(alarmScreen);
     }
 
 }
