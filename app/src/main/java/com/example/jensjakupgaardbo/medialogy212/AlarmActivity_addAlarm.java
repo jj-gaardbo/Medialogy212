@@ -72,7 +72,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
                 saveTime();
             }
         });
-        checkDays(false);
+        checkDays();
 
         if(editing){
             reEnableDays();
@@ -90,7 +90,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         }
     }
 
-    private void checkDays(boolean update){
+    private void checkDays(){
 
         //Create an array that holds the indexes of used days in the current alarm
         List<Integer> disableIndexes = new ArrayList<>();
@@ -109,17 +109,11 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         for(int i = 0; i < dayBtns.size(); i++){
             if(disableIndexes.contains(i)){
                 dayBtns.get(i).setEnabled(false);
-            } else if(dayBtns.get(i).isChecked()){
+            }
+            else if(dayBtns.get(i).isChecked()){
                 disableIndexes.add(i);
                 dayBtns.get(i).setEnabled(false);
             }
-            if(update){
-                days[i] = dayBtns.get(i).isChecked();
-            }
-        }
-
-        if(disableIndexes.size() >= 7){
-            parentAlarm.hasFullWeek = true;
         }
 
     }
@@ -133,7 +127,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     }
 
     private void saveTime(){
-        checkDays(true);
+        checkDays();
         ArrayList<Time> times = parentAlarm.getTimes();
         Time time;
         if(editing){

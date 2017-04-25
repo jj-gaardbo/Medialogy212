@@ -2,6 +2,7 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -19,7 +20,7 @@ public class AlarmActivity extends AppCompatActivity {
     Alarm alarm;
     EditText nameInput;
     TimeAdapter adapter;
-    Button addTime;
+    FloatingActionButton addTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class AlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm);
 
         alarm = (getIntent().getSerializableExtra("activeAlarm") != null) ? (Alarm) getIntent().getSerializableExtra("activeAlarm") : new Alarm();
-        addTime = (Button) findViewById(R.id.add_alarm);
+        addTime = (FloatingActionButton) findViewById(R.id.add_alarm);
         nameInput = (EditText) findViewById(R.id.alarm_name);
 
         if(alarm.get_alarmname() != null){
@@ -56,10 +57,13 @@ public class AlarmActivity extends AppCompatActivity {
             }
         });
 
+        checkForFullWeek();
 
         //Hide button if the whole week has been assigned an alarm
         if(alarm.hasFullWeek){
             addTime.setVisibility(View.GONE);
+        } else {
+            addTime.setVisibility(View.VISIBLE);
         }
 
         if(adapter == null){
@@ -83,6 +87,21 @@ public class AlarmActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    //Run a check to see if the alarm has used up all the week days
+    private void checkForFullWeek(){
+        int countDays = 0;
+        ArrayList<Time> times = this.alarm.getTimes();
+        for(int t = 0; t < times.size(); t++){
+            boolean[] usedDays = times.get(t).getDays();
+            for(int d = 0; d < usedDays.length; d++){
+                if(usedDays[d]){
+                    countDays++;
+                }
+            }
+        }
+        this.alarm.hasFullWeek = (countDays >= 7);
     }
 
     private void openAddTime(){
