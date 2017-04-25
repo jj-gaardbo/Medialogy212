@@ -3,14 +3,14 @@ package com.example.jensjakupgaardbo.medialogy212;
 import java.io.Serializable;
 import java.util.Random;
 
-public class Time implements Serializable{
+public class AlarmTime implements Serializable{
 
     String timeID;
     String wakeUp;
     int duration;
     boolean[] days = new boolean[7];
 
-    public Time(String wakeUp, int duration, boolean[] days) {
+    public AlarmTime(String wakeUp, int duration, boolean[] days) {
         this.timeID = generateID();
         this.wakeUp = wakeUp;
         this.duration = duration;
