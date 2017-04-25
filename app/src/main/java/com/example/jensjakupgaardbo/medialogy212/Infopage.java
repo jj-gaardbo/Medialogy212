@@ -47,5 +47,6 @@ public class Infopage extends AppIntro {
     @Override
     public void onSlideChanged() {
         // Do something when slide is changed
+
     }
 }

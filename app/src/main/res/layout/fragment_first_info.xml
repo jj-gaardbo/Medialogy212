@@ -4,13 +4,19 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="@color/cardview_dark_background"
-    tools:context="layout.firstInfoFragment">
+    tools:context="layout.firstInfoFragment"
+    android:weightSum="1">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_width="208dp"
         android:layout_height="wrap_content"
-        android:textColor="#fff"
+        android:lineSpacingExtra="14sp"
+        android:text="@string/app_intro"
+        android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Intro 1"/>
+        android:textColor="#fff"
+        android:textSize="30sp"
+        android:layout_weight="0.45" />
 
 </LinearLayout>
