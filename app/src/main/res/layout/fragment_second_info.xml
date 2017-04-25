@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/primary_dark_material_dark_1"
+    tools:context="layout.firstInfoFragment"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="208dp"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="14sp"
+        android:text="Sleep is gud, you want a lot of it"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#fff"
+        android:textSize="30sp"
+        android:layout_weight="0.45" />
+
+</LinearLayout>

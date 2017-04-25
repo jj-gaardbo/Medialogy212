@@ -8,6 +8,7 @@ import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
 import layout.firstInfoFragment;
+import layout.secondInfoFragment;
 
 
 public class Infopage extends AppIntro {
@@ -19,10 +20,11 @@ public class Infopage extends AppIntro {
         showSkipButton(false);
 
         addSlide(new firstInfoFragment());
+        addSlide(new secondInfoFragment());
 
-        addSlide(AppIntroFragment.newInstance("Importance of sleep", "Sleep real important yo", R.mipmap.shit, Color.parseColor("#c0392b")));
-        addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#e74c3c")));
-        addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#f74c3c")));
+        //addSlide(AppIntroFragment.newInstance("Importance of sleep", "Sleep real important yo", R.mipmap.shit, Color.parseColor("#c0392b")));
+        //addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#e74c3c")));
+        //addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#f74c3c")));
 
     }
 
