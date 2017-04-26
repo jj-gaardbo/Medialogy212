@@ -10,16 +10,17 @@
         android:id="@+id/cardListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/refreshListViewButton">
+        android:layout_below="@+id/addAlarmBtn">
 
     </ListView>
 
     <Button
-        android:id="@+id/refreshListViewButton"
+        android:id="@+id/addAlarmBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="41dp"
-        android:text="Button"
+        android:onClick="goToAddAlarm"
+        android:text="Add alarm"
         android:layout_alignBaseline="@+id/buttonGotoDatabase"
         android:layout_alignBottom="@+id/buttonGotoDatabase"
         android:layout_alignParentEnd="true" />

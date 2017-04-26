@@ -81,11 +81,26 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + "=\"" + alarmname + "\";");
     }
 
-    public void updateAlarm(String alarmname, Alarm alarm){
+    public String getAlarmID(String name){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + " LIKE '" +name+"';";
+        Cursor cursor = db.rawQuery(query, null);
+
+        String id = cursor.getString(
+                cursor.getColumnIndexOrThrow(COLUMN_ID)
+        );
+        return id;
+    }
+
+    public void updateAlarm(String oldAlarmName, Alarm alarm){
+        /*
+        String id = getAlarmID(oldAlarmName);
         SQLiteDatabase db = getWritableDatabase();
         Gson gson = new GsonBuilder().create();
         String alarmString = gson.toJson(alarm);
-        db.execSQL("UPDATE "+ TABLE_ALARMS + " SET " + COLUMN_DATA + "=\""+ alarmString + "\" WHERE" + COLUMN_ALARMNAME + "=\"" + alarmname + "\"");
+        String updateQuery = "UPDATE "+ TABLE_ALARMS + " SET " + COLUMN_DATA + "='"+ alarmString + "', " + COLUMN_ALARMNAME + "='"+alarm.get_alarmname()+"' WHERE " + COLUMN_ID + "='" + getAlarmID(oldAlarmName) + "';";
+        db.execSQL(updateQuery);
+        */
     }
 
     public ArrayList<String> getAlarmNames() {

@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 public class AlarmActivity extends AppCompatActivity {
 
+    boolean editing;
+    String oldAlarmName = "";
+
     Alarm alarm;
     EditText nameInput;
     TimeAdapter adapter;
@@ -26,7 +29,13 @@ public class AlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
+        editing = getIntent().getBooleanExtra("editing", false);
         alarm = (getIntent().getSerializableExtra("activeAlarm") != null) ? (Alarm) getIntent().getSerializableExtra("activeAlarm") : new Alarm();
+        if(getIntent().getStringExtra("editing_name") != null){
+            oldAlarmName = getIntent().getStringExtra("editing_name");
+        } else if(editing){
+            oldAlarmName = alarm.get_alarmname();
+        }
         addTime = (FloatingActionButton) findViewById(R.id.add_alarm);
         nameInput = (EditText) findViewById(R.id.alarm_name);
 
@@ -48,10 +57,10 @@ public class AlarmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     in.hideSoftInputFromWindow(nameInput.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                    alarm.set_alarmName(v.getText().toString());
                     nameInput.setCursorVisible(false);
                     addTime.setVisibility(View.VISIBLE);
                 }
+                alarm.set_alarmName(v.getText().toString());
                 return false;
             }
         });
@@ -70,7 +79,6 @@ public class AlarmActivity extends AppCompatActivity {
         }
         ListView listView = (ListView) findViewById(R.id.timesList);
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -113,10 +121,13 @@ public class AlarmActivity extends AppCompatActivity {
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
         addAlarmScreen.putExtra("activeAlarm", alarm);
         addAlarmScreen.putExtra("edit_time", alarmTime);
+        addAlarmScreen.putExtra("editing_parent", editing);
+        addAlarmScreen.putExtra("editing_name", oldAlarmName);
         startActivity(addAlarmScreen);
     }
 
     public String isValid(){
+        ArrayList<AlarmTime> test = this.alarm.getAlarmTimes();
         if(this.alarm.get_alarmname() == null) {
             return "missing_alarm_name";
         } else if(this.alarm.getAlarmTimes().size() <= 0){
@@ -129,7 +140,7 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     public void cancelAlarm(View view){
-        startActivity(new Intent(getApplicationContext(), dataBaseOverview.class));
+        startActivity(new Intent(getApplicationContext(), CardsTest.class));
     }
 
     public void saveAlarm(View view){
@@ -137,8 +148,12 @@ public class AlarmActivity extends AppCompatActivity {
         switch(isValid()){
             case "valid":
                 AlarmDBHandler alarmDBHandler = new AlarmDBHandler(getApplicationContext(), this.alarm.get_alarmname(), null, 8);
-                alarmDBHandler.addAlarm(this.alarm);
-                startActivity(new Intent(getApplicationContext(), dataBaseOverview.class));
+                if(editing){
+                    alarmDBHandler.updateAlarm(oldAlarmName, this.alarm);
+                } else {
+                    alarmDBHandler.addAlarm(this.alarm);
+                }
+                startActivity(new Intent(getApplicationContext(), CardsTest.class));
                 break;
 
             case "no_times_set":
