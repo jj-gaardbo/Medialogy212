@@ -51,10 +51,14 @@ public class Alarm implements Serializable{
     }
 
     public LatLng get_latlng() {
+
+
+
         return _latlng;
     }
 
     public void set_latlng(LatLng _latlng) {
         this._latlng = _latlng;
     }
+
 }

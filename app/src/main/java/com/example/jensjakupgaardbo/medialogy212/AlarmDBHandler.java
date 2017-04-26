@@ -38,7 +38,7 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_ALARMS + "(" +
+        String query = "CREATE TABLE IF NOT EXISTS" + TABLE_ALARMS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ALARMNAME + " TEXT, " +
                 COLUMN_DATA + " TEXT " +
@@ -50,6 +50,17 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALARMS);
         onCreate(db);
+    }
+
+    public boolean alarmExists(String name){
+        boolean exists = false;
+        ArrayList<String> names = getAlarmNames();
+        for(int i = 0; i < names.size(); i++){
+            if(names.get(i).equals(name)){
+                exists = true;
+            }
+        }
+        return exists;
     }
 
     //add a new row to database
@@ -68,6 +79,13 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
     public void deleteAlarm(String alarmname){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + "=\"" + alarmname + "\";");
+    }
+
+    public void updateAlarm(String alarmname, Alarm alarm){
+        SQLiteDatabase db = getWritableDatabase();
+        Gson gson = new GsonBuilder().create();
+        String alarmString = gson.toJson(alarm);
+        db.execSQL("UPDATE "+ TABLE_ALARMS + " SET " + COLUMN_DATA + "=\""+ alarmString + "\" WHERE" + COLUMN_ALARMNAME + "=\"" + alarmname + "\"");
     }
 
     public ArrayList<String> getAlarmNames() {
