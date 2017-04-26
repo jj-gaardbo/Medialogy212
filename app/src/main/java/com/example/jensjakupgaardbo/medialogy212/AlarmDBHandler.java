@@ -38,7 +38,7 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_ALARMS + "(" +
+        String query = "CREATE TABLE IF NOT EXISTS" + TABLE_ALARMS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ALARMNAME + " TEXT, " +
                 COLUMN_DATA + " TEXT " +
