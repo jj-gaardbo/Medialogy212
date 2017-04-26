@@ -19,6 +19,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.*;
 
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 public class PlaceActivity extends AppCompatActivity {
 
@@ -81,19 +82,19 @@ public class PlaceActivity extends AppCompatActivity {
         }
     }
 
+    //Variable for getting text to Rasmut LatLng thingie
+   // final TextView gettingLoc = (TextView) findViewById(R.id.tvPlaceName);
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(PlaceActivity.this, data);
-                placeNameText.setText(place.getName());
-                placeAddressText.setText(place.getAddress());
-                if (place.getAttributions() == null) {
-                    attributionText.loadData("no attribution", "text/html; charset=utf-8", "UFT-8");
-                } else {
-                    attributionText.loadData(place.getAttributions().toString(), "text/html; charset=utf-8", "UFT-8");
-                }
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                //  place.getLatLng();
+                // Here, get the position of the place, mark it in map and moveCamera to that, couple lines of code.
             }
         }
     }
