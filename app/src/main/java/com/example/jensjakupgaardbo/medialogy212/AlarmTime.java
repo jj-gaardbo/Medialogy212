@@ -56,4 +56,17 @@ public class AlarmTime implements Serializable{
         this.days = days;
     }
 
+    public String getBedTime() {
+        String[] timeParts = wakeUp.split(":");
+        int hour = Integer.parseInt( timeParts[0]);
+
+        hour -= duration;
+        if(hour < 0){
+            hour = 24 + hour;
+            return  Integer.toString(hour)+ ":" + timeParts[1];
+        }
+
+        return  "0" + Integer.toString(hour)+ ":" + timeParts[1];
+
+    }
 }

@@ -1,10 +1,10 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 // class for use in the database of the app, this is the base class that tells us what to save about the alarms
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import com.google.android.gms.maps.model.LatLng;
 public class Alarm implements Serializable{
 
     //these are the attributes we want to save in each alarm
@@ -26,7 +26,7 @@ public class Alarm implements Serializable{
     }
 
     public String getWakeTimeOfDay(int dayOfWeek){
-        String alarmTime = "no alarm set for today";
+        String alarmTime = "set for today";
         for(AlarmTime t : alarmTimes){
             if(t.days[dayOfWeek] = true && isActive()){
                 alarmTime = t.getWakeUp();
@@ -74,5 +74,19 @@ public class Alarm implements Serializable{
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getBedTime(int dayOfWeek) {
+        String bedtime = "No alarm";
+        for(AlarmTime t : alarmTimes){
+            if(t.days[dayOfWeek] = true && isActive()){
+                bedtime = t.getBedTime();
+                break;
+            }
+
+        }
+
+
+        return bedtime;
     }
 }
