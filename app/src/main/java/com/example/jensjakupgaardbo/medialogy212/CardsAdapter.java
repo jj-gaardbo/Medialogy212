@@ -27,9 +27,9 @@ class CardsAdapter extends ArrayAdapter<Alarm> {
 
         TextView nearMarkerTextView = (TextView) customView.findViewById(R.id.nearMarkerTextVIew);
         TextView wakeUptime = (TextView) customView.findViewById(R.id.wakeUpTextView);
-        TextView gotoBedTextView  = (TextView) customView.findViewById(R.id.gotobedTextView);
+        TextView gotoBedTextView  = (TextView) customView.findViewById(R.id.gotoBedTextView);
 
-        alarmTextView.setText((CharSequence) singleAlarm.get_alarmname());
+        alarmTextView.setText( singleAlarm.get_alarmname());
         nearMarkerTextView.setText("Near Marker");
         wakeUptime.setText(singleAlarm.getWakeTimeOfDay(2));
         gotoBedTextView.setText(singleAlarm.getBedTime(2));

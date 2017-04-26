@@ -28,7 +28,7 @@ public class Alarm implements Serializable{
     public String getWakeTimeOfDay(int dayOfWeek){
         String alarmTime = "set for today";
         for(AlarmTime t : alarmTimes){
-            if(t.days[dayOfWeek] = true && isActive()){
+            if(t.days[dayOfWeek]){
                 alarmTime = t.getWakeUp();
                 break;
             }
@@ -79,7 +79,7 @@ public class Alarm implements Serializable{
     public String getBedTime(int dayOfWeek) {
         String bedtime = "No alarm";
         for(AlarmTime t : alarmTimes){
-            if(t.days[dayOfWeek] = true && isActive()){
+            if(t.days[dayOfWeek]){
                 bedtime = t.getBedTime();
                 break;
             }
