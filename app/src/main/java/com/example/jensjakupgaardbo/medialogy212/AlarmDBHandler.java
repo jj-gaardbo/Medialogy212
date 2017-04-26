@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class AlarmDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "alarmDB.db"; // names the file that the data is saved to
     public static final String TABLE_ALARMS = "alarms";
     public static final String COLUMN_ID = "_id";
@@ -38,7 +38,7 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE IF NOT EXISTS" + TABLE_ALARMS + "(" +
+        String query = "CREATE TABLE IF NOT EXISTS " + TABLE_ALARMS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ALARMNAME + " TEXT, " +
                 COLUMN_DATA + " TEXT " +
