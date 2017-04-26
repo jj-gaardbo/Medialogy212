@@ -58,7 +58,7 @@
         android:layout_width="320dp"
         android:layout_height="137dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/press_the_button_below_to_choose_a_location_for_your_new_alarm_after_that_confirm_in_order_to_assaign_the_location_to_the_alarm"
+        android:text="@string/pressToPlace"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         app:layout_constraintBottom_toBottomOf="parent"
