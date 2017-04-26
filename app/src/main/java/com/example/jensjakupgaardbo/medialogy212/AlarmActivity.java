@@ -90,7 +90,11 @@ public class AlarmActivity extends AppCompatActivity {
         //Listening to button event
         addTime.setOnClickListener(new View.OnClickListener() {
             public void onClick(View args) {
-                openAddTime();
+                if(editing){
+                    openAddTime(alarm);
+                } else {
+                    openAddTime();
+                }
             }
         });
 
@@ -111,12 +115,23 @@ public class AlarmActivity extends AppCompatActivity {
         this.alarm.hasFullWeek = (countDays >= 7);
     }
 
+    //Open the add time activity when creating a new alarm
     private void openAddTime(){
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
         addAlarmScreen.putExtra("activeAlarm", alarm);
         startActivity(addAlarmScreen);
     }
 
+    //Open the add time activity when the alarm is being edited
+    private void openAddTime(Alarm alarm){
+        Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
+        addAlarmScreen.putExtra("activeAlarm", alarm);
+        addAlarmScreen.putExtra("editing_parent", editing);
+        addAlarmScreen.putExtra("editing_name", oldAlarmName);
+        startActivity(addAlarmScreen);
+    }
+
+    //Open the add time activity when alarm already contains other times
     private void openAddTime(AlarmTime alarmTime){
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
         addAlarmScreen.putExtra("activeAlarm", alarm);
@@ -126,13 +141,13 @@ public class AlarmActivity extends AppCompatActivity {
         startActivity(addAlarmScreen);
     }
 
+    //Checks if the alarm has the required data for saving
     public String isValid(){
-        ArrayList<AlarmTime> test = this.alarm.getAlarmTimes();
         if(this.alarm.get_alarmname() == null) {
             return "missing_alarm_name";
         } else if(this.alarm.getAlarmTimes().size() <= 0){
             return "no_times_set";
-        } else if((new AlarmDBHandler(getApplicationContext(), "", null, 8)).alarmExists(this.alarm.get_alarmname())){
+        } else if(!editing && (new AlarmDBHandler(getApplicationContext(), "", null, 8)).alarmExists(this.alarm.get_alarmname())){
             return "alarm_name_exists";
         } else {
             return "valid";
