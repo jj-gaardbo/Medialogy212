@@ -2,6 +2,9 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +14,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
 
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private GoogleMap googleMap;
     boolean editing;
     String oldAlarmName = "";
 
@@ -25,9 +31,55 @@ public class AlarmActivity extends AppCompatActivity {
     FloatingActionButton addTime;
 
     @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+        setUpMap();
+    }
+
+    public void setUpMap(){
+        LatLng location = new LatLng(55.663531,12.457357);
+
+        CameraUpdate center=
+                CameraUpdateFactory.newLatLng(location);
+        googleMap.moveCamera(center);
+        googleMap.setMinZoomPreference(15);
+        googleMap.setMaxZoomPreference(18);
+        googleMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title("Hello world"));
+
+        // draw circle
+        int d = 500; // diameter
+        Bitmap bm = Bitmap.createBitmap(d, d, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint();
+        p.setColor(getResources().getColor(R.color.cardview_dark_background));
+        c.drawCircle(d/2, d/2, d/2, p);
+
+        // generate BitmapDescriptor from circle Bitmap
+        BitmapDescriptor bmD = BitmapDescriptorFactory.fromBitmap(bm);
+        int radiusM = 150;
+
+        googleMap.addGroundOverlay(new GroundOverlayOptions().
+                image(bmD).
+                position(location,radiusM*2,radiusM*2).
+                transparency(0.4f));
+
+        googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                        this, R.raw.map_style_json));
+
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_fragment_alarm);
+        mapFragment.getMapAsync(this);
 
         editing = getIntent().getBooleanExtra("editing", false);
         alarm = (getIntent().getSerializableExtra("activeAlarm") != null) ? (Alarm) getIntent().getSerializableExtra("activeAlarm") : new Alarm();

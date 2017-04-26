@@ -9,6 +9,13 @@
     android:focusableInTouchMode="true"
     tools:context="com.example.jensjakupgaardbo.medialogy212.AlarmActivity">
 
+    <fragment
+            android:id="@+id/map_fragment_alarm"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/alarm_name" android:layout_alignParentStart="true"
+            android:layout_marginBottom="235dp" android:layout_above="@+id/add_alarm"/>
 
     <ListView
             android:layout_width="match_parent"
@@ -17,7 +24,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" android:layout_marginTop="258dp" android:scrollbars="none"
+            android:layout_alignParentTop="true" android:layout_marginTop="340dp" android:scrollbars="none"
             android:layout_alignBottom="@+id/add_alarm" android:layout_marginBottom="38dp"/>
     <EditText
             android:layout_width="wrap_content"

@@ -45,9 +45,17 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
+        <!--
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDIsXli56Q8gwSecgXwxJshxWA7fJNKQ4Y" />
+            -->
+
+        <!-- JJ : I added this new API-key because the other API-key apparently did not have the right API enabled in the Google Developer Console -->
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyB3kiMR1N-KbY4sh_tIEDs_jxt8uJ0jbgE"/>
+
 
         <activity android:name=".CardsTest" />
         <activity
