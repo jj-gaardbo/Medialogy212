@@ -70,6 +70,13 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + "=\"" + alarmname + "\";");
     }
 
+    public void updateAlarm(String alarmname, Alarm alarm){
+        SQLiteDatabase db = getWritableDatabase();
+        Gson gson = new GsonBuilder().create();
+        String alarmString = gson.toJson(alarm);
+        db.execSQL("UPDATE "+ TABLE_ALARMS + " SET " + COLUMN_DATA + "=\""+ alarmString + "\" WHERE" + COLUMN_ALARMNAME + "=\"" + alarmname + "\"");
+    }
+
     public ArrayList<String> getAlarmNames() {
         ArrayList<String> alarmNames = new ArrayList<>();
 
