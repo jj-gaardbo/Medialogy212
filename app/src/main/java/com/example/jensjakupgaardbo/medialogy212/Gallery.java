@@ -25,7 +25,7 @@ public class Gallery extends AppCompatActivity {
     }
 
     public void goToRain(View view) {
-        Intent intent = new Intent(getApplicationContext(), ActivityVideoPage2.class);
-        startActivity(intent);
+        Intent intentRain = new Intent(getApplicationContext(), ActivityVideoPage2.class);
+        startActivity(intentRain);
     }
 }

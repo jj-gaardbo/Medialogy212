@@ -25,7 +25,17 @@ public class Alarm implements Serializable{
 
     }
 
+    public String getWakeTimeOfDay(int dayOfWeek){
+        String alarmTime = "no alarm set for today";
+        for(AlarmTime t : alarmTimes){
+            if(t.days[dayOfWeek] = true && isActive()){
+                alarmTime = t.getWakeUp();
+                break;
+            }
+        }
+        return alarmTime;
 
+    }
     //getters and setters, use these to get or modify the data in the database
     public int get_id() {
         return _id;
@@ -51,13 +61,18 @@ public class Alarm implements Serializable{
     }
 
     public LatLng get_latlng() {
-
-
-
         return _latlng;
     }
 
     public void set_latlng(LatLng _latlng) {
         this._latlng = _latlng;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

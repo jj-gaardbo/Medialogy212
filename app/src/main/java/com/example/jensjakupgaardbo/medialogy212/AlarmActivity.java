@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -117,10 +116,48 @@ public class AlarmActivity extends AppCompatActivity {
         startActivity(addAlarmScreen);
     }
 
-    public void saveAlarm(View view){
-        AlarmDBHandler alarmDBHandler = new AlarmDBHandler(getApplicationContext(), this.alarm.get_alarmname(), null, 8);
-        alarmDBHandler.addAlarm(this.alarm);
+    public String isValid(){
+        if(this.alarm.get_alarmname() == null) {
+            return "missing_alarm_name";
+        } else if(this.alarm.getAlarmTimes().size() <= 0){
+            return "no_times_set";
+        } else if((new AlarmDBHandler(getApplicationContext(), "", null, 8)).alarmExists(this.alarm.get_alarmname())){
+            return "alarm_name_exists";
+        } else {
+            return "valid";
+        }
+    }
+
+    public void cancelAlarm(View view){
         startActivity(new Intent(getApplicationContext(), dataBaseOverview.class));
+    }
+
+    public void saveAlarm(View view){
+        String errorString = "";
+        switch(isValid()){
+            case "valid":
+                AlarmDBHandler alarmDBHandler = new AlarmDBHandler(getApplicationContext(), this.alarm.get_alarmname(), null, 8);
+                alarmDBHandler.addAlarm(this.alarm);
+                startActivity(new Intent(getApplicationContext(), dataBaseOverview.class));
+                break;
+
+            case "no_times_set":
+                errorString = "The alarm needs at least one time to be set";
+                break;
+
+            case "missing_alarm_name":
+                errorString = "The alarm needs a name";
+                break;
+
+            case "alarm_name_exists":
+                errorString = "The name already exists. Please add a unique alarm name.";
+                break;
+        }
+
+        if(!errorString.equals("")){
+            Toast.makeText(this, errorString, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

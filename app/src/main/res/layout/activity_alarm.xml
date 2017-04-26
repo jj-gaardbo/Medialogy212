@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:text="Alarm name"
+            android:hint="Alarm name"
             android:ems="10"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -64,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cancel"
+                android:onClick="cancelAlarm"
                 android:layout_gravity="left|center_vertical"
                 android:layout_alignParentStart="true"
                 />
