@@ -26,6 +26,9 @@
             android:name=".ActivityVideoPage"
             android:label="@string/app_name" />
         <activity
+            android:name=".ActivityVideoPage2"
+            android:label="@string/app_name" />
+        <activity
             android:name=".Infopage"
             android:label="@string/app_intro" />
         <activity android:name=".AlarmActivity" />
