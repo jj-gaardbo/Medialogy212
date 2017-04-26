@@ -52,6 +52,17 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public boolean alarmExists(String name){
+        boolean exists = false;
+        ArrayList<String> names = getAlarmNames();
+        for(int i = 0; i < names.size(); i++){
+            if(names.get(i).equals(name)){
+                exists = true;
+            }
+        }
+        return exists;
+    }
+
     //add a new row to database
     public void addAlarm(Alarm alarm){
         ContentValues values = new ContentValues();

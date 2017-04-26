@@ -57,4 +57,5 @@ public class Alarm implements Serializable{
     public void set_latlng(LatLng _latlng) {
         this._latlng = _latlng;
     }
+
 }
