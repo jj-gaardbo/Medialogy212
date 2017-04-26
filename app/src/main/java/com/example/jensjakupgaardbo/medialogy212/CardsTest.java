@@ -17,10 +17,8 @@ public class CardsTest extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_test);
-        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,10);
+        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,11);
         final ArrayList<Alarm> alarms = dbHandler.getAlarms();
-
-        Button addAlarm = (Button) findViewById(R.id.addAlarmBtn);
 
 
         if(cardAdapter == null){
