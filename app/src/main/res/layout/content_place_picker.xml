@@ -48,9 +48,9 @@
         android:layout_height="wrap_content"
         android:text="Attribution"
         android:textSize="16sp"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="466dp" />
+        tools:layout_editor_absoluteY="490dp" />
 
 </android.support.constraint.ConstraintLayout>

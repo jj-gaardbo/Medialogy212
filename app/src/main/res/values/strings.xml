@@ -23,5 +23,10 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_place_picker">PlacePicker</string>
+    <string name="attribution">Attribution</string>
+    <string name="press_the_button_below_to_choose_a_location_for_your_new_alarm_after_that_confirm_in_order_to_assaign_the_location_to_the_alarm">/Press the button below to choose a location for your new alarm. After that confirm in order to assaign the location to the alarm</string>
+    <string name="place_address">Place Address</string>
+    <string name="place_name">Place Name</string>
+    <string name="choose_a_location">Choose a location</string>
 
 </resources>

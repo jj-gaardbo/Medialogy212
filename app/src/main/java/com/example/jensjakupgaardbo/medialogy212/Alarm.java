@@ -51,6 +51,9 @@ public class Alarm implements Serializable{
     }
 
     public LatLng get_latlng() {
+
+
+
         return _latlng;
     }
 
