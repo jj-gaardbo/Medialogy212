@@ -59,7 +59,7 @@ public class dataBaseOverview extends AppCompatActivity {
 
         dataViewer.setText(inString);
         nameInput.setText("");
-        latInput.setText("50");
+        //latInput.getText(get)
         lngInput.setText("20");
     }
 
