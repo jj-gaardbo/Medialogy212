@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -114,6 +115,12 @@ public class AlarmActivity extends AppCompatActivity {
         addAlarmScreen.putExtra("activeAlarm", alarm);
         addAlarmScreen.putExtra("edit_time", alarmTime);
         startActivity(addAlarmScreen);
+    }
+
+    public void saveAlarm(View view){
+        AlarmDBHandler alarmDBHandler = new AlarmDBHandler(getApplicationContext(), this.alarm.get_alarmname(), null, 8);
+        alarmDBHandler.addAlarm(this.alarm);
+        startActivity(new Intent(getApplicationContext(), dataBaseOverview.class));
     }
 
 }
