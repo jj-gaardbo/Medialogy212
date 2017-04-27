@@ -32,6 +32,10 @@ public class CardsTest extends AppCompatActivity {
                 Alarm alarm =  alarms.get(position);
                 Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
                 intent.putExtra("activeAlarm", alarm);
+                if(alarm.get_latlng() != null){
+                    intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+                    alarm.set_latlng(null);
+                }
                 intent.putExtra("editing", true);
                 startActivity(intent);
             }

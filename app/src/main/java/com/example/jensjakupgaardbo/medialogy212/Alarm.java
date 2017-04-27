@@ -89,4 +89,16 @@ public class Alarm implements Serializable{
 
         return bedtime;
     }
+
+    public static LatLng reconvertLocation(Alarm alarm, double[] alarmLocationConverted){
+        return new LatLng(alarmLocationConverted[0], alarmLocationConverted[1]);
+    }
+
+    public static double[] getConvertedLocation(LatLng location){
+        double[] locationArray = new double[2];
+        locationArray[0] = location.latitude;
+        locationArray[1] = location.longitude;
+        return locationArray;
+    }
+
 }

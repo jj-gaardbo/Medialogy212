@@ -8,6 +8,7 @@ import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AlarmActivity_addAlarm extends AppCompatActivity {
 
@@ -16,6 +17,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     private static final int SLEEP_DURATION_DEFAULT_VALUE = 7;
     boolean editing;
     Alarm parentAlarm;
+    double[] parentAlarmLocation;
     TimePicker wake_time;
     NumberPicker duration;
     AlarmTime eAlarmTime;
@@ -25,12 +27,14 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     boolean editing_parent;
     String editing_name = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_add_alarm);
 
         parentAlarm = (parentAlarm == null) ? (Alarm) getIntent().getSerializableExtra("activeAlarm") : null;
+        parentAlarmLocation = (parentAlarmLocation == null) ? getIntent().getDoubleArrayExtra("activeAlarmLocation") : null;
 
         editing_parent = getIntent().getBooleanExtra("editing_parent", false);
         editing_name = getIntent().getStringExtra("editing_name");
@@ -38,8 +42,8 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         wake_time = (TimePicker) findViewById(R.id.wake_time);
         wake_time.setIs24HourView(true);
         //TODO Find way to make this backwards compatible
-        wake_time.setHour(7);
-        wake_time.setMinute(0);
+        wake_time.setCurrentHour(7);
+        wake_time.setCurrentMinute(0);
 
         duration = (NumberPicker) findViewById(R.id.sleep_duration);
         duration.setMinValue(SLEEP_DURATION_MIN_VALUE);
@@ -63,8 +67,8 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         if(eAlarmTime != null){
             deleteBtn.setVisibility(View.VISIBLE);
             editing = true;
-            wake_time.setHour(Integer.parseInt(eAlarmTime.getWakeUp().substring(0,2)));
-            wake_time.setMinute(Integer.parseInt(eAlarmTime.getWakeUp().substring(3,5)));
+            wake_time.setCurrentHour(Integer.parseInt(eAlarmTime.getWakeUp().substring(0,2)));
+            wake_time.setCurrentMinute(Integer.parseInt(eAlarmTime.getWakeUp().substring(3,5)));
             duration.setValue(eAlarmTime.getDuration());
             days = eAlarmTime.getDays();
         }
@@ -136,7 +140,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
         AlarmTime alarmTime;
         if(editing){
-            eAlarmTime.setWakeUp(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()));
+            eAlarmTime.setWakeUp(String.format(Locale.ENGLISH, "%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()));
             eAlarmTime.setDuration(duration.getValue());
             eAlarmTime.setDays(days);
             for(int i = 0; i < alarmTimes.size(); i++) {
@@ -145,7 +149,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
                 }
             }
         } else {
-            alarmTime = new AlarmTime(String.format("%02d:%02d", wake_time.getHour(), wake_time.getMinute()), duration.getValue(), days);
+            alarmTime = new AlarmTime(String.format(Locale.ENGLISH,"%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()), duration.getValue(), days);
             alarmTimes.add(alarmTime);
         }
         goToAlarmPage();
@@ -164,9 +168,11 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     private void goToAlarmPage(){
         Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
         alarmScreen.putExtra("activeAlarm", parentAlarm);
+        if(parentAlarmLocation != null){
+            alarmScreen.putExtra("activeAlarmLocation", parentAlarmLocation);
+        }
         alarmScreen.putExtra("editing", editing_parent);
         alarmScreen.putExtra("editing_name", editing_name);
-
         startActivity(alarmScreen);
     }
 

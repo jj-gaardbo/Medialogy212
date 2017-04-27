@@ -1,6 +1,5 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,18 +22,12 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
 
-public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener {
+public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapClickListener {
 
     private static final String TAG = AlarmActivity.class.getSimpleName();
 
@@ -47,79 +40,31 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     TimeAdapter adapter;
     FloatingActionButton addTime;
 
+    double[] alarmLocationConverted;
     private final static int PLACE_PICKER_REQUEST = 1;
     private boolean locationPerm = false;
-    public LatLng lastLoc;
-    CameraUpdate center;
-    boolean resumed = false;
 
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-
-
         updateLocationUI();
         setUpMap();
     }
 
     public void setUpMap() {
-        //Clearing maps to update with new markers and such
-        if(!resumed) {
-            lastLoc = new LatLng(55.6503358, 12.5410666);
-            resumed = true;
-        }
-
             googleMap.clear();
-            LatLng location = lastLoc;
-
-            center = CameraUpdateFactory.newLatLng(location);
-            //googleMap.moveCamera(center);
-            googleMap.animateCamera(center);
+            getLocation();
             googleMap.setMinZoomPreference(10);
             googleMap.setMaxZoomPreference(30);
-
-
-            googleMap.addMarker(new MarkerOptions()
-                    .draggable(true)
-                    .position(location)
-                    .title("Coords: " + location));
-
-            // draw circle
-            int d = 500; // diameter
-            Bitmap bm = Bitmap.createBitmap(d, d, Bitmap.Config.ARGB_8888);
-            Canvas c = new Canvas(bm);
-            Paint p = new Paint();
-            p.setColor(getResources().getColor(R.color.cardview_dark_background));
-            c.drawCircle(d / 2, d / 2, d / 2, p);
-
-            // generate BitmapDescriptor from circle Bitmap
-            BitmapDescriptor bmD = BitmapDescriptorFactory.fromBitmap(bm);
-            int radiusM = 150;
-
-            googleMap.addGroundOverlay(new GroundOverlayOptions().
-                    image(bmD).
-                    position(location, radiusM * 2, radiusM * 2).
-                    transparency(0.4f));
-
-            googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.map_style_json));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_json));
             googleMap.setOnMarkerDragListener(this);
             googleMap.setOnMapClickListener(this);
-            googleMap.setOnMyLocationButtonClickListener(this);
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Retrieve location and camera position from saved instance state.
-        if (savedInstanceState != null) {
-            lastLoc = savedInstanceState.getParcelable("location");
-            center = savedInstanceState.getParcelable("camera_pos");
-            setUpMap();
-        }
 
         setContentView(R.layout.activity_alarm);
 
@@ -127,9 +72,14 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map_fragment_alarm);
         mapFragment.getMapAsync(this);
 
-
         editing = getIntent().getBooleanExtra("editing", false);
         alarm = (getIntent().getSerializableExtra("activeAlarm") != null) ? (Alarm) getIntent().getSerializableExtra("activeAlarm") : new Alarm();
+
+        alarmLocationConverted = (alarmLocationConverted == null) ? getIntent().getDoubleArrayExtra("activeAlarmLocation") : null;
+        if(alarmLocationConverted != null){
+            alarm.set_latlng(Alarm.reconvertLocation(alarm, alarmLocationConverted));
+        }
+
         if (getIntent().getStringExtra("editing_name") != null) {
             oldAlarmName = getIntent().getStringExtra("editing_name");
         } else if (editing) {
@@ -222,9 +172,15 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
         this.alarm.hasFullWeek = (countDays >= 7);
     }
 
+
+
     //Open the add time activity when creating a new alarm
     private void openAddTime() {
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
+        if(alarm.get_latlng() != null){
+            addAlarmScreen.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+            alarm.set_latlng(null);
+        }
         addAlarmScreen.putExtra("activeAlarm", alarm);
         startActivity(addAlarmScreen);
     }
@@ -233,6 +189,10 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     private void openAddTime(Alarm alarm) {
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
         addAlarmScreen.putExtra("activeAlarm", alarm);
+        if(alarm.get_latlng() != null){
+            addAlarmScreen.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+            alarm.set_latlng(null);
+        }
         addAlarmScreen.putExtra("editing_parent", editing);
         addAlarmScreen.putExtra("editing_name", oldAlarmName);
         startActivity(addAlarmScreen);
@@ -242,6 +202,10 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     private void openAddTime(AlarmTime alarmTime) {
         Intent addAlarmScreen = new Intent(getApplicationContext(), AlarmActivity_addAlarm.class);
         addAlarmScreen.putExtra("activeAlarm", alarm);
+        if(alarm.get_latlng() != null){
+            addAlarmScreen.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+            alarm.set_latlng(null);
+        }
         addAlarmScreen.putExtra("edit_time", alarmTime);
         addAlarmScreen.putExtra("editing_parent", editing);
         addAlarmScreen.putExtra("editing_name", oldAlarmName);
@@ -252,6 +216,8 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     public String isValid() {
         if (this.alarm.get_alarmname() == null) {
             return "missing_alarm_name";
+        } else if (this.alarm.get_latlng() == null){
+            return "no_location";
         } else if (this.alarm.getAlarmTimes().size() <= 0) {
             return "no_times_set";
         } else if (!editing && (new AlarmDBHandler(getApplicationContext(), "", null, 8)).alarmExists(this.alarm.get_alarmname())) {
@@ -270,19 +236,17 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
                     public void onClick(DialogInterface dialog, int whichButton) {
                         AlarmDBHandler dbHandler = new AlarmDBHandler(getApplicationContext(), alarm.get_alarmname(), null, 0);
                         dbHandler.deleteAlarm(alarm.get_alarmname());
-                        startActivity(new Intent(getApplicationContext(), CardsTest.class));
+                        startActivity(new Intent(getApplicationContext(), tabbedMain.class));
                     }
                 })
                 .setNegativeButton(android.R.string.no, null).show();
     }
 
     public void cancelAlarm(View view) {
-        startActivity(new Intent(getApplicationContext(), CardsTest.class));
+        startActivity(new Intent(getApplicationContext(), tabbedMain.class));
     }
 
     public void saveAlarm(View view) {
-        //TODO Jens when saving simply use the lastLoc LatLng object, it will hold the current marker location and such
-
         String errorString = "";
         switch (isValid()) {
             case "valid":
@@ -292,7 +256,11 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
                 } else {
                     alarmDBHandler.addAlarm(this.alarm);
                 }
-                startActivity(new Intent(getApplicationContext(), CardsTest.class));
+                startActivity(new Intent(getApplicationContext(), tabbedMain.class));
+                break;
+
+            case "no_location":
+                errorString = "The alarm needs a location. Add a location using the map.";
                 break;
 
             case "no_times_set":
@@ -312,6 +280,34 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             Toast.makeText(this, errorString, Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    //Retrieving the pos of the device
+    public LatLng getLocation() {
+        LatLng location;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationPerm = true;
+            } else {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PLACE_PICKER_REQUEST);
+            }
+        }
+
+        // Set the map's camera position to the current location of the device.
+        if (alarm.get_latlng() != null) {
+            location = alarm.get_latlng();
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+            addMapMarker(location);
+            drawMapMarkerRadius(location);
+
+        } else {
+            location = new LatLng(55.6503358, 12.5410666);
+            Log.d(TAG, "Current location is null. Using defaults.");
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 1));
+            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        }
+
+        return location;
     }
 
     private void updateLocationUI() {
@@ -340,51 +336,52 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
         } else {
             googleMap.setMyLocationEnabled(false);
             googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-            lastLoc = null;
         }
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
+    public void onMarkerDragStart(Marker marker) {}
 
+    @Override
+    public void onMarkerDrag(Marker marker) {}
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {}
+
+    @Override
+    public void onMapClick(LatLng pos) {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(pos));
+        this.alarm.set_latlng(pos);
+        addMapMarker(pos);
+        drawMapMarkerRadius(pos);
+    }
+
+    private void drawMapMarkerRadius(LatLng location){
+        // draw circle
+        int d = 500; // diameter
+        Bitmap bm = Bitmap.createBitmap(d, d, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint();
+        p.setColor(getResources().getColor(R.color.cardview_dark_background));
+        c.drawCircle(d / 2, d / 2, d / 2, p);
+
+        // generate BitmapDescriptor from circle Bitmap
+        BitmapDescriptor bmD = BitmapDescriptorFactory.fromBitmap(bm);
+        int radiusM = 150;
+
+        googleMap.addGroundOverlay(new GroundOverlayOptions().
+                image(bmD).
+                position(location, radiusM * 2, radiusM * 2).
+                transparency(0.4f));
+    }
+
+    private void addMapMarker(LatLng location){
+        googleMap.addMarker(new MarkerOptions()
+                .draggable(true)
+                .position(location)
+                .title("Coords: " + this.alarm.get_latlng()));
     }
 
     @Override
-    public void onMarkerDrag(Marker marker) {
-        LatLng dragPos = marker.getPosition();
-        //lastLoc = dragPos;
-        setUpMap();
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        LatLng dragPos = marker.getPosition();
-        //lastLoc = dragPos;
-        setUpMap();
-    }
-
-    @Override
-    public void onMapClick(LatLng arg0) {
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(arg0));
-        LatLng pos = arg0;
-        lastLoc = pos;
-        setUpMap();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (googleMap != null) {
-            outState.putParcelable("camera_pos", googleMap.getCameraPosition());
-            outState.putParcelable("location", lastLoc);
-            super.onSaveInstanceState(outState);
-        }
-    }
-
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        lastLoc = new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude());
-        setUpMap();
-        return false;
-    }
+    protected void onSaveInstanceState(Bundle outState) {}
 }
