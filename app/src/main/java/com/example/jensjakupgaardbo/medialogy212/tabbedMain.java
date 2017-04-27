@@ -40,8 +40,6 @@ public class tabbedMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        //Intent intent = new Intent(this, AlarmActivity.class);
-        //this.startActivity(intent);
 
         boolean isFirstStart = prefs.getBoolean("firstStart", true);
         if (isFirstStart) {
@@ -79,7 +77,7 @@ public class tabbedMain extends AppCompatActivity {
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
 
-            }
+        }
     }
 
 
