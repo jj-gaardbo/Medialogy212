@@ -56,15 +56,16 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-        //getDeviceLocation();
-        setUpMap();
+
+
         updateLocationUI();
+        setUpMap();
     }
 
     public void setUpMap() {
         //Clearing maps to update with new markers and such
         if(!resumed) {
-            lastLoc = new LatLng(55.6503358,12.5410666);
+            lastLoc = new LatLng(55.6503358, 12.5410666);
             resumed = true;
         }
 
@@ -313,37 +314,6 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-
-    //Retrieving the pos of the device
-    public void getDeviceLocation() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationPerm = true;
-            } else {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PLACE_PICKER_REQUEST);
-            }
-        }
-
-        /*
-        if (locationPerm) {
-            lastLoc = LocationServices.FusedLocationApi.getLastLocation(googleMap);
-        }*/
-
-        // Set the map's camera position to the current location of the device.
-        if (center != null) {
-            googleMap.moveCamera(center);
-        } else if (lastLoc != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(lastLoc.latitude,
-                            lastLoc.longitude), 15));
-        } else {
-            Log.d(TAG, "Current location is null. Using defaults.");
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.6503358, 12.5410666), 1));
-            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-        }
-    }
-
     private void updateLocationUI() {
         if (googleMap == null) {
             return;
@@ -414,7 +384,6 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public boolean onMyLocationButtonClick() {
         lastLoc = new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude());
-
         setUpMap();
         return false;
     }

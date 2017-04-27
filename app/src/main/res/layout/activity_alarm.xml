@@ -59,6 +59,7 @@
         android:paddingRight="16dp"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
         app:expanded="false">
 
         <RelativeLayout

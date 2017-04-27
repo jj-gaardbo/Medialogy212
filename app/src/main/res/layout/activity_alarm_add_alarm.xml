@@ -112,14 +112,17 @@
 
 
     </LinearLayout>
-    <Button
+    <ImageButton
             android:text="Save"
+            android:background="@drawable/ic_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/save_time" android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/sleep_duration_label"/>
-    <Button
+            android:id="@+id/save_time"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+    <ImageButton
             android:text="Delete"
+        android:background="@drawable/ic_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/save_time"

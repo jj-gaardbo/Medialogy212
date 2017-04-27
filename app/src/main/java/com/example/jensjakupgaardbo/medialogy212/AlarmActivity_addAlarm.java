@@ -21,7 +21,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     AlarmTime eAlarmTime;
     List<ToggleButton> dayBtns = new ArrayList<>();
     boolean[] days = new boolean[7];
-    Button deleteBtn;
+    ImageButton deleteBtn;
     boolean editing_parent;
     String editing_name = "";
 
@@ -56,7 +56,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
 
         editing = false;
 
-        deleteBtn = (Button) findViewById(R.id.remove_time);
+        deleteBtn = (ImageButton) findViewById(R.id.remove_time);
         deleteBtn.setVisibility(View.GONE);
 
         eAlarmTime = (AlarmTime) getIntent().getSerializableExtra("edit_time");
@@ -69,7 +69,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
             days = eAlarmTime.getDays();
         }
 
-        Button btnSaveTime = (Button) findViewById(R.id.save_time);
+        ImageButton btnSaveTime = (ImageButton) findViewById(R.id.save_time);
 
         //Listening to button event
         btnSaveTime.setOnClickListener(new View.OnClickListener() {
