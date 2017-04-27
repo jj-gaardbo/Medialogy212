@@ -34,6 +34,7 @@
         <activity android:name=".AlarmActivity" />
         <activity android:name=".AlarmActivity_addAlarm" />
         <activity android:name=".dataBaseOverview" />
+        <activity android:name=".PlaceActivity"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -71,11 +72,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".PlaceActivity"
-            android:label="@string/title_activity_place_picker"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
