@@ -13,10 +13,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class tabbedMain extends AppCompatActivity {
 
@@ -31,6 +34,8 @@ public class tabbedMain extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     FloatingActionButton fab;
+    //ListAdapter cardAdapter;
+    //ArrayList<Alarm> alarms;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -40,6 +45,7 @@ public class tabbedMain extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
@@ -66,6 +72,23 @@ public class tabbedMain extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_tabbed_main);
 
+/*
+            AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,11);
+            ArrayList<Alarm> nonSortedAlarms = dbHandler.getAlarms();
+
+            final ArrayList<Alarm> alarms = nonSortedAlarms;
+
+            if(cardAdapter == null){
+                cardAdapter = new CardsAdapter(this,alarms);
+            }
+            ListView editList = (ListView) findViewById(R.id.listOfCards);
+            editList.setAdapter(cardAdapter);
+            */
+
+
+
+
+
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             // Create the adapter that will return a fragment for each of the two
@@ -82,6 +105,7 @@ public class tabbedMain extends AppCompatActivity {
             fab = (FloatingActionButton) findViewById(R.id.fabAdd);
 
         }
+
     }
 
     /**
@@ -116,6 +140,32 @@ public class tabbedMain extends AppCompatActivity {
                 rootView = inflater.inflate(R.layout.fragment_tabbed_settings, container, false);
             } else {
                 rootView = inflater.inflate(R.layout.fragment_tabbed_main, container, false);
+                AlarmDBHandler dbHandler = new AlarmDBHandler(container.getContext(),null,null,11);
+                ArrayList<Alarm> nonSortedAlarms = dbHandler.getAlarms();
+
+                final ArrayList<Alarm> alarms = nonSortedAlarms;
+                //if(cardAdapter == null){
+                ListAdapter cardAdapter = new CardsAdapter(container.getContext(),alarms);
+                //}
+                ListView editList = (ListView) rootView.findViewById(R.id.listOfCards);
+                editList.setAdapter(cardAdapter);
+                editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                        Alarm alarm =  alarms.get(position);
+                                                        Intent intent = new Intent(getView().getContext(), AlarmActivity.class);
+                                                        intent.putExtra("activeAlarm", alarm);
+                                                        if(alarm.get_latlng() != null){
+                                                            intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+                                                            alarm.set_latlng(null);
+                                                        }
+                                                        intent.putExtra("editing", true);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                );
+
+                //
             }
             return rootView;
         }
@@ -172,6 +222,20 @@ public class tabbedMain extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Infopage.class);
         startActivity(i);
     }
+/*
+    public LatLng updateLKL() {   //updates the latLng last know location in shared prefs and returns a latLng object
+        SharedPreferences sharedPref = getSharedPreferences(lastKnowLocation, MODE_PRIVATE);
+        SharedPreferences.Editor updater = sharedPref.edit();
+        LatLng location = new LatLng(15, 85);
+        updater.putString(lastKnowLocation, location.toString());
+        //LocationSer
+        updater.commit();
+        return location;
+    }
 
-
+*/
 }
+
+
+
+

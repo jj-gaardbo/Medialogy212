@@ -21,21 +21,30 @@
         android:id="@+id/addAlarmBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="41dp"
         android:onClick="goToAddAlarm"
         android:text="Add alarm"
         android:layout_alignBaseline="@+id/buttonGotoDatabase"
         android:layout_alignBottom="@+id/buttonGotoDatabase"
-        android:layout_alignParentEnd="true" />
+        android:layout_toEndOf="@+id/buttonGotoDatabase" />
 
     <Button
         android:id="@+id/buttonGotoDatabase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="24dp"
         android:onClick="gotoDatabaseViewer"
         android:text="gotoDatabaseView"
-        android:layout_marginStart="43dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/setAlarmBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setAlarm"
+        android:text="setAlarm"
+        android:layout_alignBaseline="@+id/addAlarmBtn"
+        android:layout_alignBottom="@+id/addAlarmBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="23dp" />
 </RelativeLayout>

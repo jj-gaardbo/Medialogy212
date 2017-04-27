@@ -3,8 +3,6 @@ package com.example.jensjakupgaardbo.medialogy212;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.widget.Toast;
 /**
  * Created by Rasmus on 21-04-2017.
  */
