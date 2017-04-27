@@ -1,11 +1,13 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -37,7 +39,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void setUpMap(){
-        LatLng location = new LatLng(55.663531,12.457357);
+        LatLng location = new LatLng(55.6503358,12.5410666);
 
         CameraUpdate center=
                 CameraUpdateFactory.newLatLng(location);
@@ -150,6 +152,14 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
+        //Hide the delete button if a new alarm is created
+        Button deleteBtn = (Button) findViewById(R.id.delete_alarm);
+        if(editing){
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+        }
+
     }
 
     //Run a check to see if the alarm has used up all the week days
@@ -206,6 +216,20 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    public void deleteAlarm(View view){
+        new AlertDialog.Builder(this)
+                .setTitle("Title")
+                .setMessage("Are you sure you want do delete this alarm?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        AlarmDBHandler dbHandler = new AlarmDBHandler(getApplicationContext(), alarm.get_alarmname(), null, 0);
+                        dbHandler.deleteAlarm(alarm.get_alarmname());
+                        startActivity(new Intent(getApplicationContext(), CardsTest.class));
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
     public void cancelAlarm(View view){
         startActivity(new Intent(getApplicationContext(), CardsTest.class));
     }
@@ -214,7 +238,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
         String errorString = "";
         switch(isValid()){
             case "valid":
-                AlarmDBHandler alarmDBHandler = new AlarmDBHandler(getApplicationContext(), this.alarm.get_alarmname(), null, 8);
+                AlarmDBHandler alarmDBHandler = new AlarmDBHandler(getApplicationContext(), this.alarm.get_alarmname(), null, 0);
                 if(editing){
                     alarmDBHandler.updateAlarm(oldAlarmName, this.alarm);
                 } else {
