@@ -22,6 +22,8 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     List<ToggleButton> dayBtns = new ArrayList<>();
     boolean[] days = new boolean[7];
     Button deleteBtn;
+    boolean editing_parent;
+    String editing_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +32,12 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
 
         parentAlarm = (parentAlarm == null) ? (Alarm) getIntent().getSerializableExtra("activeAlarm") : null;
 
+        editing_parent = getIntent().getBooleanExtra("editing_parent", false);
+        editing_name = getIntent().getStringExtra("editing_name");
+
         wake_time = (TimePicker) findViewById(R.id.wake_time);
         wake_time.setIs24HourView(true);
+        //TODO Find way to make this backwards compatible
         wake_time.setHour(7);
         wake_time.setMinute(0);
 
@@ -148,8 +154,6 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     public void deleteTime(View view){
         ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
         for(int i = 0; i < alarmTimes.size(); i++) {
-            String eId = eAlarmTime.getTimeID();
-            String delId = alarmTimes.get(i).getTimeID();
             if(eAlarmTime.getTimeID().equals(alarmTimes.get(i).getTimeID())){
                 alarmTimes.remove(i);
                 goToAlarmPage();
@@ -160,6 +164,9 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     private void goToAlarmPage(){
         Intent alarmScreen = new Intent(getApplicationContext(), AlarmActivity.class);
         alarmScreen.putExtra("activeAlarm", parentAlarm);
+        alarmScreen.putExtra("editing", editing_parent);
+        alarmScreen.putExtra("editing_name", editing_name);
+
         startActivity(alarmScreen);
     }
 

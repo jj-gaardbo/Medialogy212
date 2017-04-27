@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class AlarmDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String DATABASE_NAME = "alarmDB.db"; // names the file that the data is saved to
     public static final String TABLE_ALARMS = "alarms";
     public static final String COLUMN_ID = "_id";
@@ -81,11 +81,13 @@ public class AlarmDBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_ALARMS + " WHERE " + COLUMN_ALARMNAME + "=\"" + alarmname + "\";");
     }
 
-    public void updateAlarm(String alarmname, Alarm alarm){
+    public void updateAlarm(String oldAlarmName, Alarm alarm){
+        //String id = getAlarmID(oldAlarmName);
         SQLiteDatabase db = getWritableDatabase();
         Gson gson = new GsonBuilder().create();
         String alarmString = gson.toJson(alarm);
-        db.execSQL("UPDATE "+ TABLE_ALARMS + " SET " + COLUMN_DATA + "=\""+ alarmString + "\" WHERE" + COLUMN_ALARMNAME + "=\"" + alarmname + "\"");
+        String updateQuery = "UPDATE "+ TABLE_ALARMS + " SET " + COLUMN_DATA + "='"+ alarmString + "', " + COLUMN_ALARMNAME + "='"+alarm.get_alarmname()+"' WHERE " + COLUMN_ID + " IN (SELECT DISTINCT "+COLUMN_ID+" FROM "+TABLE_ALARMS+" WHERE "+COLUMN_ALARMNAME+"=\""+oldAlarmName+"\");";
+        db.execSQL(updateQuery);
     }
 
     public ArrayList<String> getAlarmNames() {

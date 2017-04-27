@@ -3,32 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/singleCardImageView"
-        android:layout_width="300dp"
-        android:layout_height="225dp"
-        android:adjustViewBounds="false"
-        android:cropToPadding="true"
-        android:paddingTop="5dp"
-        app:srcCompat="@drawable/card"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
     <View
         android:id="@+id/myRectangleView"
         android:layout_width="275dp"
-        android:layout_height="200dp"
+        android:layout_height="175dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:adjustViewBounds="false"
         android:background="@drawable/rectangle"
         android:cropToPadding="true"
-        android:paddingTop="5dp" />
+        android:paddingTop="5dp"
+
+        />
 
     <TextView
         android:id="@+id/singleCardTextView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="22dp"
         android:gravity="center"
         android:text="TextView"
         android:textColor="@color/accent_material_dark"
@@ -36,52 +29,37 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Switch
-        android:id="@+id/activeSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Switch"
-        android:layout_alignBottom="@+id/singleCardImageView"
-        android:layout_alignEnd="@+id/singleCardTextView" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        android:layout_marginEnd="11dp"
-        android:layout_alignBaseline="@+id/nearMarkerTextVIew"
-        android:layout_alignBottom="@+id/nearMarkerTextVIew"
-        android:layout_alignEnd="@+id/singleCardImageView" />
-
     <TextView
         android:id="@+id/nearMarkerTextVIew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/activeSwitch"
-        android:layout_alignStart="@+id/singleCardTextView"
         android:text="near marker"
         android:textColor="@color/accent_material_dark"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/markerActiveTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/nearMarkerTextVIew"
-        android:layout_below="@+id/nearMarkerTextVIew"
-        android:text="de activated"
-        android:textColor="@color/accent_material_dark"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@+id/myRectangleView"
+        android:layout_alignStart="@+id/singleCardTextView" />
 
     <TextView
         android:id="@+id/wakeUpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:text="wakeUpTime"
         android:textColor="@color/accent_material_dark"
         android:textSize="18sp"
-        android:layout_above="@+id/checkBox"
+
+        android:layout_alignTop="@+id/gotoBedTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp" />
+
+    <TextView
+        android:id="@+id/gotoBedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to bed"
+        android:textColor="@color/accent_material_dark"
+        android:textSize="18sp"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/singleCardTextView"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

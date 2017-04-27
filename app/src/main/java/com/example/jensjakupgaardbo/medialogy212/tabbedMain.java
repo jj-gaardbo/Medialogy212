@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +40,8 @@ public class tabbedMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        //Intent intent = new Intent(this, AlarmActivity.class);
+        //this.startActivity(intent);
 
         boolean isFirstStart = prefs.getBoolean("firstStart", true);
         if (isFirstStart) {
@@ -78,17 +79,7 @@ public class tabbedMain extends AppCompatActivity {
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(), PlaceActivity.class);
-                    startActivity(i);
-                }
-            });
             }
-
-
     }
 
 
@@ -193,7 +184,7 @@ public class tabbedMain extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void gotoAlarm(View view) {
+    public void goToAlarm(View view) {
         Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);
         startActivity(openAlarmPage);
     }
