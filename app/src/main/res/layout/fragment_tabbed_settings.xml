@@ -12,8 +12,8 @@
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="shit"
-        />
+        android:text="Some settings will eventually be put in here, someday, maybe"
+        android:textAlignment="center" />
 
 
 

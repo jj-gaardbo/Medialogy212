@@ -8,7 +8,9 @@ import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
 import layout.firstInfoFragment;
+import layout.fourthInfoFragment;
 import layout.secondInfoFragment;
+import layout.thirdInfoFragment;
 
 
 public class Infopage extends AppIntro {
@@ -17,20 +19,20 @@ public class Infopage extends AppIntro {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showSkipButton(false);
+        showSkipButton(true);
 
         addSlide(new firstInfoFragment());
         addSlide(new secondInfoFragment());
-
-        //addSlide(AppIntroFragment.newInstance("Importance of sleep", "Sleep real important yo", R.mipmap.shit, Color.parseColor("#c0392b")));
-        //addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#e74c3c")));
-        //addSlide(AppIntroFragment.newInstance("Blue light", "Not good fo ur ass", R.mipmap.shit, Color.parseColor("#f74c3c")));
+        addSlide(new thirdInfoFragment());
+        addSlide(new fourthInfoFragment());
 
     }
 
     @Override
     public void onSkipPressed() {
         // Do something when users tap on Skip button.
+        Intent i = new Intent(getApplicationContext(), tabbedMain.class);
+        startActivity(i);
     }
 
     @Override
