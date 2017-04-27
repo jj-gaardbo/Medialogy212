@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
 
-public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapClickListener {
+public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final String TAG = AlarmActivity.class.getSimpleName();
 
@@ -59,7 +59,9 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_json));
             googleMap.setOnMarkerDragListener(this);
+            googleMap.setOnMyLocationButtonClickListener(this);
             googleMap.setOnMapClickListener(this);
+
     }
 
     @Override
@@ -304,7 +306,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             location = new LatLng(55.6503358, 12.5410666);
             Log.d(TAG, "Current location is null. Using defaults.");
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 1));
-            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
 
         return location;
@@ -385,4 +387,13 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {}
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        LatLng pos = new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude());
+        this.alarm.set_latlng(pos);
+        addMapMarker(pos);
+        drawMapMarkerRadius(pos);
+        return false;
+    }
 }
