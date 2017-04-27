@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
 
-public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapClickListener {
+public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final String TAG = AlarmActivity.class.getSimpleName();
 
@@ -77,6 +77,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             googleMap.setMinZoomPreference(10);
             googleMap.setMaxZoomPreference(30);
 
+
             googleMap.addMarker(new MarkerOptions()
                     .draggable(true)
                     .position(location)
@@ -104,6 +105,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
                             this, R.raw.map_style_json));
             googleMap.setOnMarkerDragListener(this);
             googleMap.setOnMapClickListener(this);
+            googleMap.setOnMyLocationButtonClickListener(this);
 
     }
 
@@ -406,5 +408,14 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             outState.putParcelable("location", lastLoc);
             super.onSaveInstanceState(outState);
         }
+    }
+
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        lastLoc = new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude());
+
+        setUpMap();
+        return false;
     }
 }
