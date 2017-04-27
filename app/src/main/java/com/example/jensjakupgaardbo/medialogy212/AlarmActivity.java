@@ -197,7 +197,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
         //Hide the delete button if a new alarm is created
-        Button deleteBtn = (Button) findViewById(R.id.delete_alarm);
+        ImageButton deleteBtn = (ImageButton) findViewById(R.id.delete_alarm);
         if (editing) {
             deleteBtn.setVisibility(View.VISIBLE);
         } else {
