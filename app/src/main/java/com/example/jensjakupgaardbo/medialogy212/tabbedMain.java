@@ -25,6 +25,7 @@ import android.widget.ListView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class tabbedMain extends AppCompatActivity {
 
@@ -271,28 +272,72 @@ public class tabbedMain extends AppCompatActivity {
     }
 
     public void setHalfHourBefore(Alarm alarmToSet){//sets an inexact alarm that goes off half an hour before either wake or gotoBed
+        Calendar rightNow = Calendar.getInstance();
 
     }
 
-    public Alarm getNearestAlarm(LatLng currentLocation){
+    static public int getDayOfWeek(){
+        Calendar rightNow = Calendar.getInstance();
+        int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
+
+        switch (dayOfWeek) {
+            case Calendar.SUNDAY:
+                dayOfWeek = 6;
+                break;
+
+            case Calendar.MONDAY:
+                dayOfWeek = 0;
+                break;
+
+            case Calendar.TUESDAY:
+                dayOfWeek = 1;
+                break;
+
+            case Calendar.WEDNESDAY:
+                dayOfWeek = 2;
+                break;
+
+
+            case Calendar.THURSDAY:
+                dayOfWeek = 3;
+                break;
+
+            case Calendar.FRIDAY:
+                dayOfWeek = 4;
+                break;
+
+            case Calendar.SATURDAY:
+                dayOfWeek = 5;
+                break;
+
+
+
+
+
+
+
+
+        }
+        return  dayOfWeek;
+    }
+    public Alarm getFirstAlarmInRange(LatLng currentLocation){
+        //returns the nearest alarm in range, returns null if no alarms are in range
         AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,11);
         ArrayList<Alarm> alarms =  dbHandler.getAlarms();
         if(alarms == null){
             return null;
         }
-        Location myLocation = latLngToLocation(currentLocation);
-        float distance = 250000;
-        Alarm closestAlarm = new Alarm();
         for(Alarm a : alarms){
-            if(myLocation.distanceTo((Location) latLngToLocation(a.get_latlng()))< distance){
-                distance = myLocation.distanceTo((Location) latLngToLocation(a.get_latlng()));
-                closestAlarm = a;
-
+            if(compareLatLngs(a.get_latlng(),currentLocation)<searchRadius){
+                return a;
             }
         }
 
-        return closestAlarm;
+        return null;
     }
+
+
+
 }
 
 
