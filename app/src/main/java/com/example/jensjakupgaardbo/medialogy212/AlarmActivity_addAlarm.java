@@ -26,6 +26,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     ImageButton deleteBtn;
     boolean editing_parent;
     String editing_name = "";
+    boolean no_days_picked = false;
 
 
     @Override
@@ -41,7 +42,7 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
 
         wake_time = (TimePicker) findViewById(R.id.wake_time);
         wake_time.setIs24HourView(true);
-        //TODO Find way to make this backwards compatible
+
         wake_time.setCurrentHour(7);
         wake_time.setCurrentMinute(0);
 
@@ -125,6 +126,12 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
             }
         }
 
+        if(disableIndexes.size() == 0){
+            no_days_picked = true;
+        } else {
+            no_days_picked = false;
+        }
+
     }
 
     public void refreshDays(View view){
@@ -137,20 +144,22 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
 
     private void saveTime(){
         checkDays();
-        ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
-        AlarmTime alarmTime;
-        if(editing){
-            eAlarmTime.setWakeUp(String.format(Locale.ENGLISH, "%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()));
-            eAlarmTime.setDuration(duration.getValue());
-            eAlarmTime.setDays(days);
-            for(int i = 0; i < alarmTimes.size(); i++) {
-                if(eAlarmTime.getTimeID().equals(alarmTimes.get(i).getTimeID())){
-                    alarmTimes.set(i, eAlarmTime);
+        if(!no_days_picked){
+            ArrayList<AlarmTime> alarmTimes = parentAlarm.getAlarmTimes();
+            AlarmTime alarmTime;
+            if(editing){
+                eAlarmTime.setWakeUp(String.format(Locale.ENGLISH, "%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()));
+                eAlarmTime.setDuration(duration.getValue());
+                eAlarmTime.setDays(days);
+                for(int i = 0; i < alarmTimes.size(); i++) {
+                    if(eAlarmTime.getTimeID().equals(alarmTimes.get(i).getTimeID())){
+                        alarmTimes.set(i, eAlarmTime);
+                    }
                 }
+            } else {
+                alarmTime = new AlarmTime(String.format(Locale.ENGLISH,"%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()), duration.getValue(), days);
+                alarmTimes.add(alarmTime);
             }
-        } else {
-            alarmTime = new AlarmTime(String.format(Locale.ENGLISH,"%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()), duration.getValue(), days);
-            alarmTimes.add(alarmTime);
         }
         goToAlarmPage();
     }
