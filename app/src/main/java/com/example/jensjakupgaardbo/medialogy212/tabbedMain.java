@@ -1,9 +1,9 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
-import android.*;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,7 +22,10 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class tabbedMain extends AppCompatActivity {
 
@@ -35,6 +38,8 @@ public class tabbedMain extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    final int searchRadius = 150;
+    final String currentAlarmName = "";
 
     FloatingActionButton fab;
     //ListAdapter cardAdapter;
@@ -232,18 +237,107 @@ public class tabbedMain extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Infopage.class);
         startActivity(i);
     }
+
+
 /*
-    public LatLng updateLKL() {   //updates the latLng last know location in shared prefs and returns a latLng object
-        SharedPreferences sharedPref = getSharedPreferences(lastKnowLocation, MODE_PRIVATE);
-        SharedPreferences.Editor updater = sharedPref.edit();
-        LatLng location = new LatLng(15, 85);
-        updater.putString(lastKnowLocation, location.toString());
-        //LocationSer
-        updater.commit();
+
+    private void checkClosestAlarm(LatLng pos ){
+        Location alarmLocation = latLngToLocation(pos);
+        Location current = getCurrentLocation();
+
+        if(current.distanceTo(alarmLocation)<searchRadius){
+            return;
+        }else{
+            cancelAlarms();
+            setUpdateAlarm;
+
+        }
+
+    }
+
+ */
+        public float compareLatLngs(LatLng location1, LatLng location2){
+            Location loc1 = latLngToLocation(location1);
+            Location loc2 = latLngToLocation(location2);
+            return loc1.distanceTo(loc2);
+
+        }
+
+
+        public Location latLngToLocation(LatLng position){
+        Location location = new Location("");
+        location.setLatitude(position.latitude);
+        location.setLongitude(position.longitude);
         return location;
     }
 
-*/
+    public void setHalfHourBefore(Alarm alarmToSet){//sets an inexact alarm that goes off half an hour before either wake or gotoBed
+        Calendar rightNow = Calendar.getInstance();
+
+    }
+
+    static public int getDayOfWeek(){
+        Calendar rightNow = Calendar.getInstance();
+        int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
+
+        switch (dayOfWeek) {
+            case Calendar.SUNDAY:
+                dayOfWeek = 6;
+                break;
+
+            case Calendar.MONDAY:
+                dayOfWeek = 0;
+                break;
+
+            case Calendar.TUESDAY:
+                dayOfWeek = 1;
+                break;
+
+            case Calendar.WEDNESDAY:
+                dayOfWeek = 2;
+                break;
+
+
+            case Calendar.THURSDAY:
+                dayOfWeek = 3;
+                break;
+
+            case Calendar.FRIDAY:
+                dayOfWeek = 4;
+                break;
+
+            case Calendar.SATURDAY:
+                dayOfWeek = 5;
+                break;
+
+
+
+
+
+
+
+
+        }
+        return  dayOfWeek;
+    }
+    public Alarm getFirstAlarmInRange(LatLng currentLocation){
+        //returns the nearest alarm in range, returns null if no alarms are in range
+        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,11);
+        ArrayList<Alarm> alarms =  dbHandler.getAlarms();
+        if(alarms == null){
+            return null;
+        }
+        for(Alarm a : alarms){
+            if(compareLatLngs(a.get_latlng(),currentLocation)<searchRadius){
+                return a;
+            }
+        }
+
+        return null;
+    }
+
+
+
 }
 
 
