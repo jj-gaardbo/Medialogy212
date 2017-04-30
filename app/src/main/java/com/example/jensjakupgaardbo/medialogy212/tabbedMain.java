@@ -38,6 +38,8 @@ public class tabbedMain extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    final static public int DATABASE_VERSION = 11;
     final int searchRadius = 150;
     final String currentAlarmName = "";
 
@@ -155,7 +157,7 @@ public class tabbedMain extends AppCompatActivity {
                 rootView = inflater.inflate(R.layout.fragment_tabbed_settings, container, false);
             } else {
                 rootView = inflater.inflate(R.layout.fragment_tabbed_main, container, false);
-                AlarmDBHandler dbHandler = new AlarmDBHandler(container.getContext(),null,null,11);
+                AlarmDBHandler dbHandler = new AlarmDBHandler(container.getContext(),null,null,DATABASE_VERSION);
                 ArrayList<Alarm> nonSortedAlarms = dbHandler.getAlarms();
 
                 final ArrayList<Alarm> alarms = nonSortedAlarms;
@@ -241,21 +243,13 @@ public class tabbedMain extends AppCompatActivity {
 
 /*
 
-    private void checkClosestAlarm(LatLng pos ){
-        Location alarmLocation = latLngToLocation(pos);
-        Location current = getCurrentLocation();
+    private void updateAlarms(){
 
-        if(current.distanceTo(alarmLocation)<searchRadius){
-            return;
-        }else{
-            cancelAlarms();
-            setUpdateAlarm;
-
-        }
+        Alarm closestAlarm = getFirstAlarmInRange();
 
     }
+*/
 
- */
         public float compareLatLngs(LatLng location1, LatLng location2){
             Location loc1 = latLngToLocation(location1);
             Location loc2 = latLngToLocation(location2);
@@ -269,10 +263,12 @@ public class tabbedMain extends AppCompatActivity {
         location.setLatitude(position.latitude);
         location.setLongitude(position.longitude);
         return location;
-    }
+        }
 
     public void setHalfHourBefore(Alarm alarmToSet){//sets an inexact alarm that goes off half an hour before either wake or gotoBed
         Calendar rightNow = Calendar.getInstance();
+        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,DATABASE_VERSION);
+
 
     }
 
@@ -297,7 +293,6 @@ public class tabbedMain extends AppCompatActivity {
                 dayOfWeek = 2;
                 break;
 
-
             case Calendar.THURSDAY:
                 dayOfWeek = 3;
                 break;
@@ -309,20 +304,13 @@ public class tabbedMain extends AppCompatActivity {
             case Calendar.SATURDAY:
                 dayOfWeek = 5;
                 break;
-
-
-
-
-
-
-
-
         }
         return  dayOfWeek;
     }
+
     public Alarm getFirstAlarmInRange(LatLng currentLocation){
         //returns the nearest alarm in range, returns null if no alarms are in range
-        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,11);
+        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,DATABASE_VERSION);
         ArrayList<Alarm> alarms =  dbHandler.getAlarms();
         if(alarms == null){
             return null;

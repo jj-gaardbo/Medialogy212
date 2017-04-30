@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class AlarmDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = tabbedMain.DATABASE_VERSION;
     private static final String DATABASE_NAME = "alarmDB.db"; // names the file that the data is saved to
     public static final String TABLE_ALARMS = "alarms";
     public static final String COLUMN_ID = "_id";

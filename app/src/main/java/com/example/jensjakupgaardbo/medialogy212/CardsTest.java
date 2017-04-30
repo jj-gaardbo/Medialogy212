@@ -1,8 +1,5 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +16,7 @@ public class CardsTest extends AppCompatActivity {
 
     ListAdapter cardAdapter;
     ArrayList<Alarm> alarms;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +66,7 @@ public class CardsTest extends AppCompatActivity {
         Intent gotoDatabaseActivity = new Intent(this, dataBaseOverview.class);
         this.startActivity(gotoDatabaseActivity);
     }
-    public void setAlarm(View view){
+  /*  public void setAlarm(View view){
 
         PendingIntent pendingIntent;
 
@@ -84,14 +79,19 @@ public class CardsTest extends AppCompatActivity {
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
 
-    }
-
-    private Alarm getClosestAlarm() {
+    }*/
+/*
+    private Alarm getClosestAlarm(LatLng pos) {
         //// TODO: 27-04-2017       implement location stuff to compare latLng object for each alarm in the cardsAdapter
-        LatLng lkl = new LatLng(45,45);
-        float distance = 12000;
+
+        Location current = new Location("");
+        current.setLatitude(pos.latitude);
+        current.setLongitude(pos.longitude);
+
+
+
         if (!cardAdapter.isEmpty()) return (Alarm) cardAdapter.getItem(0);
-        /*
+
         {
             int itemNr = cardAdapter.getCount();
 
@@ -104,7 +104,11 @@ public class CardsTest extends AppCompatActivity {
             }
 
         }
-        */
+
         return new Alarm();
     }
+    */
+
+
+
 }
