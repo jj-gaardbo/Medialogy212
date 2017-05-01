@@ -211,22 +211,40 @@ public class tabbedMain extends AppCompatActivity {
         boolean isBedTime ;
         String[] wakeTime =  alarmToSet.getWakeTimeOfDay(day).split(":");
         String[] bedTime = alarmToSet.getBedTime(day).split(":");
+        if(Integer.parseInt(bedTime[0]) < 12 ){
+            bedTime[0] =  String.valueOf((Integer.parseInt(bedTime[0]) + 24));
+        }
+        wakeTime[0] =  String.valueOf((Integer.parseInt(wakeTime[0]) + 24));
+
         int hour = time.get(Calendar.HOUR_OF_DAY);
         int minute = time.get(Calendar.MINUTE);
 
         //figure out which type of alarm to set
-        if( hour < Integer.parseInt(bedTime[0])  ){
-            isBedTime = true;
-        }else  if(hour > Integer.parseInt(bedTime[0]) ){
-            isBedTime = false;
-        } else if ( minute < Integer.parseInt(bedTime[1]) ){
-            isBedTime = true;
+        if( hour < Integer.parseInt(wakeTime[0])  ){
+            if(hour < Integer.parseInt(bedTime[0]) ){
+                isBedTime = true;
+            }else{
+                isBedTime = false;
+            }
         }else{
-            isBedTime = false;
+            if( minute < Integer.parseInt(bedTime[1])){
+                isBedTime = true;
+            }else{
+                isBedTime = false;
+            }
+
         }
+
 
         int alarmHour;
         int alarmMin;
+
+        if(Integer.parseInt(bedTime[0]) > 24 ){
+            bedTime[0] =  String.valueOf((Integer.parseInt(bedTime[0]) -24));
+        }
+        wakeTime[0] =  String.valueOf((Integer.parseInt(wakeTime[0]) -24));
+
+
 
         if(isBedTime){
             alarmHour =  Integer.parseInt(bedTime[0]);
@@ -249,12 +267,12 @@ public class tabbedMain extends AppCompatActivity {
 
         //alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
 
-        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin +" and isBedTime is :" + isBedTime , Toast.LENGTH_LONG).show();
 
     }
 
     public boolean isAfterAlarms(Calendar rightNow, Alarm alarm, int day){
-        if(rightNow.get(Calendar.HOUR_OF_DAY)< Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
+        if(rightNow.get(Calendar.HOUR_OF_DAY)> Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
             return true;
         }
         return false;
