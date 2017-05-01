@@ -211,25 +211,39 @@ public class tabbedMain extends AppCompatActivity {
     public void setAlarm(Alarm alarmToSet,Calendar time, int day){
         Intent intent = new Intent(this, AlarmReceiver.class);
         String bedOrWake = "";
-        boolean isBedTime ;
+        boolean isBedTime = true;
         String[] wakeTime =  alarmToSet.getWakeTimeOfDay(day).split(":");
         String[] bedTime = alarmToSet.getBedTime(day).split(":");
+        if(Integer.parseInt(bedTime[0]) < 12 ){
+            bedTime[0] =  String.valueOf((Integer.parseInt(bedTime[0]) + 24));
+        }
+        wakeTime[0] =  String.valueOf((Integer.parseInt(wakeTime[0]) + 24));
+
         int hour = time.get(Calendar.HOUR_OF_DAY);
         int minute = time.get(Calendar.MINUTE);
 
         //figure out which type of alarm to set
-        if( hour < Integer.parseInt(bedTime[0])  ){
-            isBedTime = true;
-        }else  if(hour > Integer.parseInt(bedTime[0]) ){
-            isBedTime = false;
-        } else if ( minute < Integer.parseInt(bedTime[1]) ){
-            isBedTime = true;
+        if (hour < Integer.parseInt(bedTime[0])){
+                isBedTime = true;
+
+        } else if ( hour == Integer.parseInt(bedTime[0]) && minute < Integer.parseInt(bedTime[1])) {
+                isBedTime = true;
         }else{
-            isBedTime = false;
+                isBedTime = false;
         }
+
+
+
 
         int alarmHour;
         int alarmMin;
+
+        if(Integer.parseInt(bedTime[0]) > 24 ){
+            bedTime[0] =  String.valueOf((Integer.parseInt(bedTime[0]) -24));
+        }
+        wakeTime[0] =  String.valueOf((Integer.parseInt(wakeTime[0]) -24));
+
+
 
         if(isBedTime){
             alarmHour =  Integer.parseInt(bedTime[0]);
@@ -245,19 +259,27 @@ public class tabbedMain extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         time.set(Calendar.HOUR_OF_DAY, alarmHour);
         time.set(Calendar.MINUTE,alarmMin);
+        int convertToCallenderDay = day -1;
+        if(convertToCallenderDay < 0){
+            convertToCallenderDay = 7;
+        }
+        //time.set(Calendar.DAY_OF_WEEK, convertToCallenderDay);
+        time.set(Calendar.SECOND, 0);
+
+
 
         intent.putExtra("isBedTime", isBedTime);
 
         alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, 0);
 
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
 
-        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin +" and isBedTime is :" + isBedTime , Toast.LENGTH_LONG).show();
 
     }
 
     public boolean isAfterAlarms(Calendar rightNow, Alarm alarm, int day){
-        if(rightNow.get(Calendar.HOUR_OF_DAY)< Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
+        if(rightNow.get(Calendar.HOUR_OF_DAY)> Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
             return true;
         }
         return false;
