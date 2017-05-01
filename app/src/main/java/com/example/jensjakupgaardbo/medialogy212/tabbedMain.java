@@ -1,25 +1,31 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class tabbedMain extends AppCompatActivity {
 
@@ -31,10 +37,16 @@ public class tabbedMain extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+
+    final static public int DATABASE_VERSION = 11;
+    final static public String CURRENTALARM = "currentalarm";
+    final int searchRadius = 150;
+
+    PendingIntent alarmIntent;
 
     FloatingActionButton fab;
-    //ListAdapter cardAdapter;
+    ListAdapter cardAdapter;
     //ArrayList<Alarm> alarms;
 
     /**
@@ -46,6 +58,13 @@ public class tabbedMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                startService(new Intent(getApplicationContext(), AlarmLocationService.class));
+            } else {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
@@ -71,140 +90,33 @@ public class tabbedMain extends AppCompatActivity {
 
         } else {
             setContentView(R.layout.activity_tabbed_main);
-
-/*
-            AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,11);
+            fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+            AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
             ArrayList<Alarm> nonSortedAlarms = dbHandler.getAlarms();
 
             final ArrayList<Alarm> alarms = nonSortedAlarms;
-
-            if(cardAdapter == null){
-                cardAdapter = new CardsAdapter(this,alarms);
+            if (cardAdapter == null) {
+                cardAdapter = new CardsAdapter(this, alarms);
             }
             ListView editList = (ListView) findViewById(R.id.listOfCards);
             editList.setAdapter(cardAdapter);
-            */
-
-
-
-
-
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            // Create the adapter that will return a fragment for each of the two
-            // primary sections of the activity.
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-            // Set up the ViewPager with the sections adapter.
-            mViewPager = (ViewPager) findViewById(R.id.container);
-            mViewPager.setAdapter(mSectionsPagerAdapter);
-
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(mViewPager);
-
-            fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-
-        }
-
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView;
-            if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
-                rootView = inflater.inflate(R.layout.fragment_tabbed_settings, container, false);
-            } else {
-                rootView = inflater.inflate(R.layout.fragment_tabbed_main, container, false);
-                AlarmDBHandler dbHandler = new AlarmDBHandler(container.getContext(),null,null,11);
-                ArrayList<Alarm> nonSortedAlarms = dbHandler.getAlarms();
-
-                final ArrayList<Alarm> alarms = nonSortedAlarms;
-                //if(cardAdapter == null){
-                ListAdapter cardAdapter = new CardsAdapter(container.getContext(),alarms);
-                //}
-                ListView editList = (ListView) rootView.findViewById(R.id.listOfCards);
-                editList.setAdapter(cardAdapter);
-                editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                        Alarm alarm =  alarms.get(position);
-                                                        Intent intent = new Intent(getView().getContext(), AlarmActivity.class);
-                                                        intent.putExtra("activeAlarm", alarm);
-                                                        if(alarm.get_latlng() != null){
-                                                            intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
-                                                            alarm.set_latlng(null);
-                                                        }
-                                                        intent.putExtra("editing", true);
-                                                        startActivity(intent);
+            editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    Alarm alarm = alarms.get(position);
+                                                    Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                                                    intent.putExtra("activeAlarm", alarm);
+                                                    if (alarm.get_latlng() != null) {
+                                                        intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+                                                        alarm.set_latlng(null);
                                                     }
+                                                    intent.putExtra("editing", true);
+                                                    startActivity(intent);
                                                 }
-                );
+                                            }
+            );
 
-                //
-            }
-            return rootView;
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 2 total pages.
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Alarms";
-                case 1:
-                    return "Settings";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
+            updateAlarms();
         }
     }
 
@@ -222,19 +134,195 @@ public class tabbedMain extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Infopage.class);
         startActivity(i);
     }
-/*
-    public LatLng updateLKL() {   //updates the latLng last know location in shared prefs and returns a latLng object
-        SharedPreferences sharedPref = getSharedPreferences(lastKnowLocation, MODE_PRIVATE);
-        SharedPreferences.Editor updater = sharedPref.edit();
-        LatLng location = new LatLng(15, 85);
-        updater.putString(lastKnowLocation, location.toString());
-        //LocationSer
-        updater.commit();
+
+    public LatLng readLastLoc() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String locationString = prefs.getString("lastLocation", "noLastLocation");
+        if (locationString.equals("noLastLocation")) {
+            return null;
+        }
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(locationString, LatLng.class);
+    }
+
+    public Alarm getCurrentAlarm() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String alarmString = prefs.getString(CURRENTALARM, "nocurrentalarm");
+        if (alarmString.equals("nocurrentalarm")) {
+            return null;
+        }
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(alarmString, Alarm.class);
+    }
+
+
+    private void updateAlarms() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        LatLng location = readLastLoc();
+        Alarm currentAlarm = getCurrentAlarm();
+        if (currentAlarm == null){
+            setNextAlarm(getFirstAlarmInRange());
+        }
+    }
+
+    private void clearAlarms() {
+        AlarmManager alarmManger = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManger != null) {
+            alarmManger.cancel(alarmIntent);
+        }
+    }
+
+
+    public float compareLatLngs(LatLng location1, LatLng location2) {
+        Location loc1 = latLngToLocation(location1);
+        Location loc2 = latLngToLocation(location2);
+        return loc1.distanceTo(loc2);
+
+    }
+
+
+    public Location latLngToLocation(LatLng position) {
+        Location location = new Location("");
+        location.setLatitude(position.latitude);
+        location.setLongitude(position.longitude);
         return location;
     }
 
-*/
+    public void setNextAlarm(Alarm alarmToSet) {//sets an inexact alarm that goes off half an hour before either wake or gotoBed
+        Calendar rightNow = Calendar.getInstance();
+        if(alarmToSet == null){
+            return;
+        }
+        int today = getDayOfWeek();
+        int tomorrow = getDayOfWeek() + 1;
+        if (tomorrow > 7) tomorrow = 0;
+
+        if(isAfterAlarms(rightNow,alarmToSet ,today)){
+            setAlarm(alarmToSet,rightNow, tomorrow);
+        }else{
+            setAlarm(alarmToSet, rightNow ,today);
+        }
+
+    }
+
+    public void setAlarm(Alarm alarmToSet,Calendar time, int day){
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        String bedOrWake = "";
+        boolean isBedTime ;
+        String[] wakeTime =  alarmToSet.getWakeTimeOfDay(day).split(":");
+        String[] bedTime = alarmToSet.getBedTime(day).split(":");
+        int hour = time.get(Calendar.HOUR_OF_DAY);
+        int minute = time.get(Calendar.MINUTE);
+
+        //figure out which type of alarm to set
+        if( hour < Integer.parseInt(bedTime[0])  ){
+            isBedTime = true;
+        }else  if(hour > Integer.parseInt(bedTime[0]) ){
+            isBedTime = false;
+        } else if ( minute < Integer.parseInt(bedTime[1]) ){
+            isBedTime = true;
+        }else{
+            isBedTime = false;
+        }
+
+        int alarmHour;
+        int alarmMin;
+
+        if(isBedTime){
+            alarmHour =  Integer.parseInt(bedTime[0]);
+            alarmMin = Integer.parseInt(bedTime[1]);
+        }else{
+            alarmHour =  Integer.parseInt(wakeTime[0]);
+            alarmMin = Integer.parseInt(wakeTime[1]);
+        }
+
+
+
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        time.set(Calendar.HOUR_OF_DAY, alarmHour);
+        time.set(Calendar.MINUTE,alarmMin);
+
+        intent.putExtra("isBedTime", isBedTime);
+
+        alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, 0);
+
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
+
+        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin , Toast.LENGTH_LONG).show();
+
+    }
+
+    public boolean isAfterAlarms(Calendar rightNow, Alarm alarm, int day){
+        if(rightNow.get(Calendar.HOUR_OF_DAY)< Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
+            return true;
+        }
+        return false;
+    }
+
+    static public int getDayOfWeek() {
+        Calendar rightNow = Calendar.getInstance();
+        int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
+
+        switch (dayOfWeek) {
+            case Calendar.SUNDAY:
+                dayOfWeek = 6;
+                break;
+
+            case Calendar.MONDAY:
+                dayOfWeek = 0;
+                break;
+
+            case Calendar.TUESDAY:
+                dayOfWeek = 1;
+                break;
+
+            case Calendar.WEDNESDAY:
+                dayOfWeek = 2;
+                break;
+
+            case Calendar.THURSDAY:
+                dayOfWeek = 3;
+                break;
+
+            case Calendar.FRIDAY:
+                dayOfWeek = 4;
+                break;
+
+            case Calendar.SATURDAY:
+                dayOfWeek = 5;
+                break;
+        }
+        return dayOfWeek;
+    }
+
+    public Alarm getFirstAlarmInRange() {
+        //returns the nearest alarm in range, returns null if no alarms are in range
+        //first checks if currentalarm is in range
+        LatLng currentLocation = readLastLoc();
+
+
+            //if not check all alarms in database and return the first in range
+            AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
+            ArrayList<Alarm> alarms = dbHandler.getAlarms();
+            if (alarms == null) {
+            } else {
+                for (Alarm a : alarms) {
+                    if (compareLatLngs(a.get_latlng(), currentLocation) < searchRadius) {
+                        return a;
+                    }
+                }
+            }
+
+
+        return null;
+    }
 }
+
+
+
+
+
 
 
 
