@@ -1,24 +1,48 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.app.NotificationManager;
+import android.content.ContentProvider;
+import android.support.v4.app.NotificationCompat;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-/**
- * Created by Rasmus on 21-04-2017.
- */
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class AlarmReceiver extends BroadcastReceiver{
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        /*PackageManager pm = context.getPackageManager();
-        Intent launchIntent = pm.getLaunchIntentForPackage("C:\\Users\\Rasmus\\Documents\\GitHub\\Medialogy212\\app\\src\\main\\java\\com\\example\\jensjakupgaardbo\\medialogy212\\dataBaseOverview.java");
-        launchIntent.putExtra("some_data", "value");
-        context.startActivity(launchIntent);
-*/
-        Intent openDb = new Intent(context, dataBaseOverview.class);
-        context.startActivity(openDb);
-        //Toast.makeText(context, "I'm running", Toast.LENGTH_SHORT).show();
+        if (isBedTime()) {
+            triggerBedtimeNotification(context);
+        } else {
+            triggerWakeAlarmActivity(context, intent);
+        }
     }
+
+    public void triggerBedtimeNotification(Context context){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.moon)
+                        .setContentTitle("Sleep time")
+                        .setContentText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!");
+
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(0, mBuilder.build());
+    }
+
+    public boolean isBedTime(){
+        return true;
+    }
+
+    public void triggerWakeAlarmActivity(Context context, Intent intent){
+        if(intent != null){
+            context.startActivity(intent);
+        } else {
+            context.startActivity(new Intent(context, WakeTimeActivity.class));
+        }
+    }
+
+
 }
