@@ -1,5 +1,8 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,8 +18,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,8 +40,10 @@ public class tabbedMain extends AppCompatActivity {
 
 
     final static public int DATABASE_VERSION = 11;
+    final static public String CURRENTALARM = "currentalarm";
     final int searchRadius = 150;
-    final String currentAlarmName = "";
+
+    PendingIntent alarmIntent;
 
     FloatingActionButton fab;
     ListAdapter cardAdapter;
@@ -107,6 +115,8 @@ public class tabbedMain extends AppCompatActivity {
                                                 }
                                             }
             );
+
+            updateAlarms();
         }
     }
 
@@ -125,39 +135,132 @@ public class tabbedMain extends AppCompatActivity {
         startActivity(i);
     }
 
+    public LatLng readLastLoc() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String locationString = prefs.getString("lastLocation", "noLastLocation");
+        if (locationString.equals("noLastLocation")) {
+            return null;
+        }
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(locationString, LatLng.class);
+    }
 
-/*
+    public Alarm getCurrentAlarm() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String alarmString = prefs.getString(CURRENTALARM, "nocurrentalarm");
+        if (alarmString.equals("nocurrentalarm")) {
+            return null;
+        }
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(alarmString, Alarm.class);
+    }
 
-    private void updateAlarms(){
 
-        Alarm closestAlarm = getFirstAlarmInRange();
+    private void updateAlarms() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        LatLng location = readLastLoc();
+        Alarm currentAlarm = getCurrentAlarm();
+        if (currentAlarm == null){
+            setNextAlarm(getFirstAlarmInRange());
+        }
+    }
+
+    private void clearAlarms() {
+        AlarmManager alarmManger = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManger != null) {
+            alarmManger.cancel(alarmIntent);
+        }
+    }
+
+
+    public float compareLatLngs(LatLng location1, LatLng location2) {
+        Location loc1 = latLngToLocation(location1);
+        Location loc2 = latLngToLocation(location2);
+        return loc1.distanceTo(loc2);
 
     }
-*/
-
-        public float compareLatLngs(LatLng location1, LatLng location2){
-            Location loc1 = latLngToLocation(location1);
-            Location loc2 = latLngToLocation(location2);
-            return loc1.distanceTo(loc2);
-
-        }
 
 
-        public Location latLngToLocation(LatLng position){
+    public Location latLngToLocation(LatLng position) {
         Location location = new Location("");
         location.setLatitude(position.latitude);
         location.setLongitude(position.longitude);
         return location;
-        }
+    }
 
-    public void setHalfHourBefore(Alarm alarmToSet){//sets an inexact alarm that goes off half an hour before either wake or gotoBed
+    public void setNextAlarm(Alarm alarmToSet) {//sets an inexact alarm that goes off half an hour before either wake or gotoBed
         Calendar rightNow = Calendar.getInstance();
-        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,DATABASE_VERSION);
+        if(alarmToSet == null){
+            return;
+        }
+        int today = getDayOfWeek();
+        int tomorrow = getDayOfWeek() + 1;
+        if (tomorrow > 7) tomorrow = 0;
 
+        if(isAfterAlarms(rightNow,alarmToSet ,today)){
+            setAlarm(alarmToSet,rightNow, tomorrow);
+        }else{
+            setAlarm(alarmToSet, rightNow ,today);
+        }
 
     }
 
-    static public int getDayOfWeek(){
+    public void setAlarm(Alarm alarmToSet,Calendar time, int day){
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        String bedOrWake = "";
+        boolean isBedTime ;
+        String[] wakeTime =  alarmToSet.getWakeTimeOfDay(day).split(":");
+        String[] bedTime = alarmToSet.getBedTime(day).split(":");
+        int hour = time.get(Calendar.HOUR_OF_DAY);
+        int minute = time.get(Calendar.MINUTE);
+
+        //figure out which type of alarm to set
+        if( hour < Integer.parseInt(bedTime[0])  ){
+            isBedTime = true;
+        }else  if(hour > Integer.parseInt(bedTime[0]) ){
+            isBedTime = false;
+        } else if ( minute < Integer.parseInt(bedTime[1]) ){
+            isBedTime = true;
+        }else{
+            isBedTime = false;
+        }
+
+        int alarmHour;
+        int alarmMin;
+
+        if(isBedTime){
+            alarmHour =  Integer.parseInt(bedTime[0]);
+            alarmMin = Integer.parseInt(bedTime[1]);
+        }else{
+            alarmHour =  Integer.parseInt(wakeTime[0]);
+            alarmMin = Integer.parseInt(wakeTime[1]);
+        }
+
+
+
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        time.set(Calendar.HOUR_OF_DAY, alarmHour);
+        time.set(Calendar.MINUTE,alarmMin);
+
+        intent.putExtra("isBedTime", isBedTime);
+
+        alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, 0);
+
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
+
+        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin , Toast.LENGTH_LONG).show();
+
+    }
+
+    public boolean isAfterAlarms(Calendar rightNow, Alarm alarm, int day){
+        if(rightNow.get(Calendar.HOUR_OF_DAY)< Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
+            return true;
+        }
+        return false;
+    }
+
+    static public int getDayOfWeek() {
         Calendar rightNow = Calendar.getInstance();
         int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
 
@@ -190,25 +293,33 @@ public class tabbedMain extends AppCompatActivity {
                 dayOfWeek = 5;
                 break;
         }
-        return  dayOfWeek;
+        return dayOfWeek;
     }
 
-    public Alarm getFirstAlarmInRange(LatLng currentLocation){
+    public Alarm getFirstAlarmInRange() {
         //returns the nearest alarm in range, returns null if no alarms are in range
-        AlarmDBHandler dbHandler = new AlarmDBHandler(this,null,null,DATABASE_VERSION);
-        ArrayList<Alarm> alarms =  dbHandler.getAlarms();
-        if(alarms == null){
-            return null;
-        }
-        for(Alarm a : alarms){
-            if(compareLatLngs(a.get_latlng(),currentLocation)<searchRadius){
-                return a;
+        //first checks if currentalarm is in range
+        LatLng currentLocation = readLastLoc();
+
+
+            //if not check all alarms in database and return the first in range
+            AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
+            ArrayList<Alarm> alarms = dbHandler.getAlarms();
+            if (alarms == null) {
+            } else {
+                for (Alarm a : alarms) {
+                    if (compareLatLngs(a.get_latlng(), currentLocation) < searchRadius) {
+                        return a;
+                    }
+                }
             }
-        }
+
 
         return null;
     }
 }
+
+
 
 
 
