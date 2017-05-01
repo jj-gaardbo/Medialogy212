@@ -20,7 +20,7 @@ public class AlarmLocationService extends Service{
 
     private static final String TAG = "LOCATIONLISTENER";
     private LocationManager locationManager = null;
-    private static final int LOCATION_INTERVAL = 10000;
+    private static final int LOCATION_INTERVAL = 60000;
     private static final float LOCATION_DISTANCE = 100f;
 
     private class AlarmLocationListener implements android.location.LocationListener{
