@@ -256,9 +256,9 @@ public class tabbedMain extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         time.set(Calendar.HOUR_OF_DAY, alarmHour);
         time.set(Calendar.MINUTE,alarmMin);
-        int convertToCallenderDay = day +1;
+        int convertToCallenderDay = day +2;
         if(convertToCallenderDay > 7){
-            convertToCallenderDay = 0;
+            convertToCallenderDay = 1;
         }
         time.set(Calendar.DAY_OF_WEEK, convertToCallenderDay);
         time.set(Calendar.SECOND, 0);
