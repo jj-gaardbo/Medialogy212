@@ -79,10 +79,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-                android:name=".AlarmLocationService"
-                android:enabled="true"/>
-
         <activity android:name=".WakeTimeActivity">
         </activity>
     </application>
