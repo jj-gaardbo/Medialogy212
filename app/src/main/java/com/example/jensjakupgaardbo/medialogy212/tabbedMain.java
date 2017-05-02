@@ -323,19 +323,20 @@ public class tabbedMain extends AppCompatActivity {
         //first checks if currentalarm is in range
         LatLng currentLocation = tabbedMain.readLastLoc(this);
 
+        if(currentLocation != null){
 
             //if not check all alarms in database and return the first in range
             AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
             ArrayList<Alarm> alarms = dbHandler.getAlarms();
-            if (alarms == null) {
-            } else {
+            if (alarms != null) {
                 for (Alarm a : alarms) {
-                    if (compareLatLngs(a.get_latlng(), currentLocation) < searchRadius) {
+                    if (a.get_latlng() != null && compareLatLngs(a.get_latlng(), currentLocation) < searchRadius) {
                         return a;
                     }
                 }
             }
 
+        }
 
         return null;
     }

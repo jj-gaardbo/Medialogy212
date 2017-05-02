@@ -2,6 +2,7 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentProvider;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
@@ -23,14 +24,27 @@ public class AlarmReceiver extends BroadcastReceiver{
     }
 
     public void triggerBedtimeNotification(Context context){
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
+
+        Intent resultIntent = new Intent(context, tabbedMain.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        context,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        Notification.Builder mBuilder =
+                new Notification.Builder(context)
                         .setSmallIcon(R.drawable.moon)
                         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.moon))
                         .setContentTitle("Sleep time")
-                        .setContentText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!")
+                        .setContentText("Go to sleep bitch! Die motherfucker, die!")
+                        .setContentIntent(resultPendingIntent)
                         .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(Notification.PRIORITY_MAX);
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setStyle(new Notification.BigTextStyle()
+                            .bigText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!"));
 
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
