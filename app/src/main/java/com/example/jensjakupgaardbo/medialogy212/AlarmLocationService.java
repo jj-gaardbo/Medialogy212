@@ -105,14 +105,6 @@ public class AlarmLocationService extends Service{
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
                     locationListeners[0]);
-
-            Gson gson = new GsonBuilder().create();
-            String locationString = gson.toJson(new LatLng(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude(), locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()));
-            SharedPreferences getPrefs = getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor e = getPrefs.edit();
-            e.putString("lastLocation", locationString);
-            e.apply();
-
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {

@@ -1,5 +1,6 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.ContentProvider;
 import android.support.v4.app.NotificationCompat;
@@ -25,7 +26,8 @@ public class AlarmReceiver extends BroadcastReceiver{
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.moon)
                         .setContentTitle("Sleep time")
-                        .setContentText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!");
+                        .setContentText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!")
+                        .setPriority(Notification.PRIORITY_HIGH);
 
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);

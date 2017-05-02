@@ -263,7 +263,7 @@ public class tabbedMain extends AppCompatActivity {
         if(convertToCallenderDay < 0){
             convertToCallenderDay = 7;
         }
-        //time.set(Calendar.DAY_OF_WEEK, convertToCallenderDay);
+        time.set(Calendar.DAY_OF_WEEK, convertToCallenderDay);
         time.set(Calendar.SECOND, 0);
 
 
