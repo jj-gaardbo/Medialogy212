@@ -9,21 +9,24 @@
         android:id="@+id/myRectangleView"
         android:layout_width="0dp"
         android:layout_height="175dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="54dp"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="32dp"
         android:adjustViewBounds="false"
+
         android:background="@drawable/rectangle"
         android:cropToPadding="true"
+        android:paddingBottom="10dp"
         android:paddingTop="5dp"
-
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="54dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        android:layout_marginEnd="54dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/nearMarkerTextVIew"
@@ -46,17 +49,18 @@
         android:id="@+id/singleCardTextView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="TextView"
+        android:textAlignment="center"
         android:textColor="@color/accent_material_dark"
         android:textSize="18sp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="22dp"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/myRectangleView"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/wakeUpTextView"
@@ -77,17 +81,17 @@
         android:id="@+id/gotoBedTextView"
         android:layout_width="78dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="00:00"
         android:textColor="@color/accent_material_dark"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="@+id/singleCardTextView"
         app:layout_constraintTop_toBottomOf="@+id/singleCardTextView"
-        android:layout_marginRight="13dp"
+        android:layout_marginRight="0dp"
         app:layout_constraintRight_toRightOf="@+id/singleCardTextView"
-        app:layout_constraintHorizontal_bias="0.612" />
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <ImageView
         android:id="@+id/imageView5"
