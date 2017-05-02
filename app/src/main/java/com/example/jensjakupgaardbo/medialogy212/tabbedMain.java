@@ -125,7 +125,8 @@ public class tabbedMain extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         cancelAlarms();
-        updateAlarms();
+        setAlarms(this);
+        //updateAlarms();
     }
 
     public void goToGallery(View view) {
@@ -183,7 +184,7 @@ public class tabbedMain extends AppCompatActivity {
 
             //Setting wake alarm for tomorrow
 
-            int tomorrow = dayOfWeek + 2;
+            int tomorrow = dayOfWeek + 3;
             if (tomorrow > 7) {// setting it to be saturday if it is not
                 tomorrow = 1;
             }

@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Vibrator;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,6 +16,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class AlarmReceiver extends BroadcastReceiver{
 
+    Vibrator v;
     AlarmLocationListener locListener;
     private static final int SEARCH_RADIUS = 150;
 
@@ -22,6 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Gson gson = new GsonBuilder().create();
         Alarm alarm = gson.fromJson(intent.getStringExtra("alarmString"), Alarm.class);
+        v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         //Check if the user is within range of the alarms location
         if(!isInRange(context, alarm)){
@@ -31,9 +34,20 @@ public class AlarmReceiver extends BroadcastReceiver{
         boolean isBedTime = intent.getExtras().getBoolean("isBedTime", false);
         if (isBedTime) {
             triggerBedtimeNotification(context);
+            vibrateOnce();
         } else {
             triggerWakeAlarmActivity(context);
+            vibrate();
         }
+    }
+
+    public void vibrateOnce(){
+        v.vibrate(1000);
+    }
+
+    public void vibrate(){
+        long[] pattern = {0, 100, 1000};
+        v.vibrate(pattern, 0);
     }
 
     public boolean isInRange(Context context, Alarm alarm){
