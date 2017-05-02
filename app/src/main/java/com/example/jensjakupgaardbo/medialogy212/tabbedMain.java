@@ -123,6 +123,7 @@ public class tabbedMain extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        cancelAlarms();
         updateAlarms();
     }
 
