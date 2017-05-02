@@ -67,4 +67,9 @@ public class AlarmTime implements Serializable{
         }
         return String.format(Locale.ENGLISH,"%02d:%02d", hour, minutes);
     }
+
+
+    public int getSleepDuration() {
+        return duration;
+    }
 }

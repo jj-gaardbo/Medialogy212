@@ -127,6 +127,8 @@ public class tabbedMain extends AppCompatActivity {
         cancelAlarms();
         setAlarms(this);
         //updateAlarms();
+        //updateAlarms();
+        setAlarms(this);
     }
 
 
@@ -172,6 +174,11 @@ public class tabbedMain extends AppCompatActivity {
             Calendar time = rightNow;
             PendingIntent pendingAlarmIntent;
 
+            int dayOfWeekTomorrow = dayOfWeek +1;
+            if(dayOfWeekTomorrow>6){
+                dayOfWeekTomorrow = 0;
+            }
+            //// TODO: 02-05-2017  make sure it consider week changes
             int wakeTimeHour = Integer.parseInt(a.getWakeTimeOfDay(dayOfWeek).split(":")[0]);
             int wakeTimeMinute = Integer.parseInt(a.getWakeTimeOfDay(dayOfWeek).split(":")[1]);
 
@@ -203,7 +210,7 @@ public class tabbedMain extends AppCompatActivity {
             intentBed.putExtra("alarmString", alarmString);
             time.set(Calendar.HOUR_OF_DAY, bedTimeHour);
             time.set(Calendar.MINUTE, bedTimeMinute);
-            if (bedTimeHour < 12) {
+            if (wakeTimeHour - a.getSleepDuration(dayOfWeekTomorrow) > 0) {
                 //do nothing
             } else {
                 int today = tomorrow - 1;
@@ -214,7 +221,6 @@ public class tabbedMain extends AppCompatActivity {
             alarmManager.set(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pendingAlarmIntent);
             alrmPendIntents.add(pendingAlarmIntent);
         }
-
 
     }
 

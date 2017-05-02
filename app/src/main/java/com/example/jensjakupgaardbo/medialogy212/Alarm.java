@@ -89,6 +89,16 @@ public class Alarm implements Serializable{
 
         return bedtime;
     }
+    public int getSleepDuration(int dayOfWeek){
+        int sleepDur = 0;
+        for(AlarmTime t : alarmTimes){
+            if(t.days[dayOfWeek]){
+                sleepDur = t.getDuration();
+                break;
+            }
+        }
+        return sleepDur;
+    }
 
     public static LatLng reconvertLocation(Alarm alarm, double[] alarmLocationConverted){
         return new LatLng(alarmLocationConverted[0], alarmLocationConverted[1]);
