@@ -19,9 +19,9 @@
     android:id="@+id/listOfCards"
     android:layout_width="match_parent"
     android:layout_height="517dp"
-    android:layout_alignParentBottom="true"
-    android:divider="@null"
+        android:divider="@null"
     android:dividerHeight="0dp"
 
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
     </RelativeLayout>
