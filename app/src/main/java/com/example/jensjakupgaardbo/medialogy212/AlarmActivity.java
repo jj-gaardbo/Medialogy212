@@ -391,15 +391,10 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public boolean onMyLocationButtonClick() {
-        if(!locationPerm){
-            return false;
-        }
-
-        LatLng pos = tabbedMain.readLastLoc(this);
+        LatLng pos = new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude());
         this.alarm.set_latlng(pos);
         addMapMarker(pos);
         drawMapMarkerRadius(pos);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
         return false;
     }
 }
