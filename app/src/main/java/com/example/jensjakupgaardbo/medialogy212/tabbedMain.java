@@ -121,6 +121,12 @@ public class tabbedMain extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateAlarms();
+    }
+
     public void goToGallery(View view) {
         Intent intent = new Intent(getApplicationContext(), Gallery.class);
         startActivity(intent);
