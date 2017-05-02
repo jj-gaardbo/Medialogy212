@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,6 +27,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 public class tabbedMain extends AppCompatActivity {
 
@@ -101,19 +104,19 @@ public class tabbedMain extends AppCompatActivity {
             ListView editList = (ListView) findViewById(R.id.listOfCards);
             editList.setAdapter(cardAdapter);
             editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                    Alarm alarm = alarms.get(position);
-                                                    Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
-                                                    intent.putExtra("activeAlarm", alarm);
-                                                    if (alarm.get_latlng() != null) {
-                                                        intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
-                                                        alarm.set_latlng(null);
-                                                    }
-                                                    intent.putExtra("editing", true);
-                                                    startActivity(intent);
-                                                }
-                                            }
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Alarm alarm = alarms.get(position);
+                    Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                    intent.putExtra("activeAlarm", alarm);
+                    if (alarm.get_latlng() != null) {
+                        intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+                        alarm.set_latlng(null);
+                    }
+                    intent.putExtra("editing", true);
+                    startActivity(intent);
+                }
+            }
             );
 
             updateAlarms();
@@ -135,8 +138,8 @@ public class tabbedMain extends AppCompatActivity {
         startActivity(i);
     }
 
-    public LatLng readLastLoc() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+    public static LatLng readLastLoc(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String locationString = prefs.getString("lastLocation", "noLastLocation");
         if (locationString.equals("noLastLocation")) {
             return null;
@@ -158,7 +161,7 @@ public class tabbedMain extends AppCompatActivity {
 
     private void updateAlarms() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        LatLng location = readLastLoc();
+        LatLng location = tabbedMain.readLastLoc(this);
         Alarm currentAlarm = getCurrentAlarm();
         if (currentAlarm == null){
             setNextAlarm(getFirstAlarmInRange());
@@ -321,7 +324,7 @@ public class tabbedMain extends AppCompatActivity {
     public Alarm getFirstAlarmInRange() {
         //returns the nearest alarm in range, returns null if no alarms are in range
         //first checks if currentalarm is in range
-        LatLng currentLocation = readLastLoc();
+        LatLng currentLocation = tabbedMain.readLastLoc(this);
 
 
             //if not check all alarms in database and return the first in range

@@ -12,7 +12,8 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (isBedTime()) {
+        boolean isBedTime = intent.getExtras().getBoolean("isBedTime", false);
+        if (isBedTime) {
             triggerBedtimeNotification(context);
         } else {
             triggerWakeAlarmActivity(context, intent);
@@ -32,16 +33,14 @@ public class AlarmReceiver extends BroadcastReceiver{
         mNotifyMgr.notify(0, mBuilder.build());
     }
 
-    public boolean isBedTime(){
-        return true;
-    }
-
     public void triggerWakeAlarmActivity(Context context, Intent intent){
+        context.startActivity(new Intent(context, WakeTimeActivity.class));
+/*
         if(intent != null){
             context.startActivity(intent);
         } else {
-            context.startActivity(new Intent(context, WakeTimeActivity.class));
         }
+        */
     }
 
 

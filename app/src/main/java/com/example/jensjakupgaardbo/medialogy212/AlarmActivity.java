@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -59,8 +61,8 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_json));
             googleMap.setOnMarkerDragListener(this);
-            googleMap.setOnMyLocationButtonClickListener(this);
             googleMap.setOnMapClickListener(this);
+            googleMap.setOnMyLocationButtonClickListener(this);
 
     }
 
@@ -306,7 +308,6 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
             location = new LatLng(55.6503358, 12.5410666);
             Log.d(TAG, "Current location is null. Using defaults.");
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 1));
-            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
 
         return location;
@@ -390,10 +391,15 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public boolean onMyLocationButtonClick() {
-        LatLng pos = new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude());
+        if(!locationPerm){
+            return false;
+        }
+
+        LatLng pos = tabbedMain.readLastLoc(this);
         this.alarm.set_latlng(pos);
         addMapMarker(pos);
         drawMapMarkerRadius(pos);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
         return false;
     }
 }
