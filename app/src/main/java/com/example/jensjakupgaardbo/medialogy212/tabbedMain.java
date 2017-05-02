@@ -129,10 +129,6 @@ public class tabbedMain extends AppCompatActivity {
         //updateAlarms();
     }
 
-    public void goToGallery(View view) {
-        Intent intent = new Intent(getApplicationContext(), Gallery.class);
-        startActivity(intent);
-    }
 
     public void goToAlarm(View view) {
         Intent openAlarmPage = new Intent(getApplicationContext(), AlarmActivity.class);

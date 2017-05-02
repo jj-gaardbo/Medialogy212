@@ -23,12 +23,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".ActivityVideoPage"
-                android:label="@string/app_name"/>
-        <activity
-                android:name=".ActivityVideoPage2"
-                android:label="@string/app_name"/>
-        <activity
                 android:name=".Infopage"
                 android:label="@string/app_intro"/>
         <activity android:name=".AlarmActivity"/>
@@ -68,10 +62,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".Gallery"
-                android:label="AlarmApp"
-                android:theme="@style/AppTheme"/>
         <activity android:name=".alarmTimeTest"/>
 
         <receiver android:name=".AlarmReceiver">
