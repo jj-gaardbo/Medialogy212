@@ -259,7 +259,7 @@ public class tabbedMain extends AppCompatActivity {
         time.set(Calendar.SECOND, 0);
 
         intent.putExtra("isBedTime", isBedTime);
-        alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, 0);
+        alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
 
         cancelAlarms();
