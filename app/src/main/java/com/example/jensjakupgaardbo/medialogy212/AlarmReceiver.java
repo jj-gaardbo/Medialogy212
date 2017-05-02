@@ -3,6 +3,7 @@ package com.example.jensjakupgaardbo.medialogy212;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.ContentProvider;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,9 +26,11 @@ public class AlarmReceiver extends BroadcastReceiver{
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.moon)
+                        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.moon))
                         .setContentTitle("Sleep time")
                         .setContentText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!")
-                        .setPriority(Notification.PRIORITY_HIGH);
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_MAX);
 
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
