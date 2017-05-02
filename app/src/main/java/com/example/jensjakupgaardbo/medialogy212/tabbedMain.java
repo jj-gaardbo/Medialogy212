@@ -87,7 +87,6 @@ public class tabbedMain extends AppCompatActivity {
                     e.apply();
                 }
             });
-
             t.start();
 
         } else {
@@ -156,11 +155,13 @@ public class tabbedMain extends AppCompatActivity {
 
 
     private void updateAlarms() {
-        SharedPreferences prefs = getDefaultSharedPreferences(getBaseContext());
+
         LatLng location = tabbedMain.readLastLoc(this);
         Alarm currentAlarm = getActiveAlarm();
         if (currentAlarm == null){
             setNextAlarm(getFirstAlarmInRange());
+        }else{
+            Toast.makeText(this, "this alarm is active:" + currentAlarm.get_alarmname(),Toast.LENGTH_SHORT).show();
         }
     }
 
