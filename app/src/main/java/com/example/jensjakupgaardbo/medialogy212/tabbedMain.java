@@ -42,6 +42,7 @@ public class tabbedMain extends AppCompatActivity {
 
     final static public int DATABASE_VERSION = 11;
 
+    public static boolean hasLocationPermission = false;
 
     final int searchRadius = 150;
     public static Alarm activeAlarm = null;
@@ -62,7 +63,7 @@ public class tabbedMain extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                startService(new Intent(getApplicationContext(), AlarmLocationService.class));
+                tabbedMain.hasLocationPermission = true;
             } else {
                 requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
@@ -172,7 +173,6 @@ public class tabbedMain extends AppCompatActivity {
         Location loc1 = latLngToLocation(location1);
         Location loc2 = latLngToLocation(location2);
         return loc1.distanceTo(loc2);
-
     }
 
 
