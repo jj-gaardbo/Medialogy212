@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,6 +26,8 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+
 public class tabbedMain extends AppCompatActivity {
 
     /**
@@ -40,14 +41,15 @@ public class tabbedMain extends AppCompatActivity {
 
 
     final static public int DATABASE_VERSION = 11;
-    final static public String CURRENTALARM = "currentalarm";
+
+
     final int searchRadius = 150;
-
-    PendingIntent alarmIntent;
-
+    public static Alarm activeAlarm = null;
+    private PendingIntent alarmIntent;
+    private ArrayList<PendingIntent> alrmPendIntents = new ArrayList<>();
     FloatingActionButton fab;
     ListAdapter cardAdapter;
-    //ArrayList<Alarm> alarms;
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -66,14 +68,14 @@ public class tabbedMain extends AppCompatActivity {
             }
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences prefs = getDefaultSharedPreferences(getBaseContext());
 
         boolean isFirstStart = prefs.getBoolean("firstStart", true);
         if (isFirstStart) {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    SharedPreferences getPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                    SharedPreferences getPrefs = getDefaultSharedPreferences(getBaseContext());
 
                     Intent i = new Intent(getApplicationContext(), Infopage.class);
                     startActivity(i);
@@ -136,7 +138,7 @@ public class tabbedMain extends AppCompatActivity {
     }
 
     public static LatLng readLastLoc(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = getDefaultSharedPreferences(context);
         String locationString = prefs.getString("lastLocation", "noLastLocation");
         if (locationString.equals("noLastLocation")) {
             return null;
@@ -145,32 +147,18 @@ public class tabbedMain extends AppCompatActivity {
         return gson.fromJson(locationString, LatLng.class);
     }
 
-    public Alarm getCurrentAlarm() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String alarmString = prefs.getString(CURRENTALARM, "nocurrentalarm");
-        if (alarmString.equals("nocurrentalarm")) {
-            return null;
-        }
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(alarmString, Alarm.class);
-    }
+
 
 
     private void updateAlarms() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences prefs = getDefaultSharedPreferences(getBaseContext());
         LatLng location = tabbedMain.readLastLoc(this);
-        Alarm currentAlarm = getCurrentAlarm();
+        Alarm currentAlarm = getActiveAlarm();
         if (currentAlarm == null){
             setNextAlarm(getFirstAlarmInRange());
         }
     }
 
-    private void clearAlarms() {
-        AlarmManager alarmManger = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManger != null) {
-            alarmManger.cancel(alarmIntent);
-        }
-    }
 
 
     public float compareLatLngs(LatLng location1, LatLng location2) {
@@ -263,15 +251,21 @@ public class tabbedMain extends AppCompatActivity {
         time.set(Calendar.DAY_OF_WEEK, convertToCallenderDay);
         time.set(Calendar.SECOND, 0);
 
-
-
         intent.putExtra("isBedTime", isBedTime);
-
         alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, 0);
-
         alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
 
+        cancelAlarms();
+
         Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin +" and isBedTime is :" + isBedTime , Toast.LENGTH_LONG).show();
+
+        setActiveAlarm(alarmToSet);
+        alrmPendIntents.add(alarmIntent);
+
+        if(isBedTime){
+            //set anotherAlarm
+            //save Another notification
+        }
 
     }
 
@@ -339,6 +333,34 @@ public class tabbedMain extends AppCompatActivity {
         }
 
         return null;
+    }
+
+
+    public void setActiveAlarm(Alarm alarm){
+        //saves active alarm
+        activeAlarm = alarm;
+
+    }
+    public Alarm getActiveAlarm() {
+        return activeAlarm;
+    }
+
+    public void cancelAlarms(){
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        String activeAlarm = "no Alarm";
+        for(PendingIntent p: alrmPendIntents){
+            alarmManager.cancel(p);
+        }
+
+        Alarm alarm = getActiveAlarm();
+
+        if(alarm != null){
+            activeAlarm = alarm.get_alarmname();
+        }
+
+        setActiveAlarm(null);
+        Toast.makeText(this,"Canceled alarm: "  ,Toast.LENGTH_LONG).show();
+
     }
 }
 

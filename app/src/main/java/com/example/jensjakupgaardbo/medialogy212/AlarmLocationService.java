@@ -47,6 +47,8 @@ public class AlarmLocationService extends Service{
             Log.e(TAG, "onLocationChanged: " + location);
             lastLocation.set(location);
             saveToPrefs(lastLocation);
+
+
         }
 
         @Override
