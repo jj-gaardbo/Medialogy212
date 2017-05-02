@@ -1,6 +1,7 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Random;
 
 public class AlarmTime implements Serializable{
@@ -59,14 +60,11 @@ public class AlarmTime implements Serializable{
     public String getBedTime() {
         String[] timeParts = wakeUp.split(":");
         int hour = Integer.parseInt( timeParts[0]);
-
+        int minutes = Integer.parseInt(timeParts[1]);
         hour -= duration;
         if(hour < 0){
             hour = 24 + hour;
-            return  Integer.toString(hour)+ ":" + timeParts[1];
         }
-
-        return  "0" + Integer.toString(hour)+ ":" + timeParts[1];
-
+        return String.format(Locale.ENGLISH,"%02d:%02d", hour, minutes);
     }
 }
