@@ -23,8 +23,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
@@ -40,7 +42,7 @@ public class tabbedMain extends AppCompatActivity {
      */
 
 
-    final static public int DATABASE_VERSION = 11;
+    final static public int DATABASE_VERSION = 12;
 
     public static boolean hasLocationPermission = false;
 
@@ -126,9 +128,6 @@ public class tabbedMain extends AppCompatActivity {
         super.onResume();
         cancelAlarms();
         setAlarms(this);
-        //updateAlarms();
-        //updateAlarms();
-        setAlarms(this);
     }
 
 
@@ -154,92 +153,47 @@ public class tabbedMain extends AppCompatActivity {
 
 
     public static void setAlarms(Context context){
-        Calendar rightNow = Calendar.getInstance();
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         AlarmDBHandler dbHandler = new AlarmDBHandler(context, null, null, DATABASE_VERSION);
         ArrayList<Alarm> alarms = dbHandler.getAlarms();
-
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        ArrayList<Calendar>  times;
+
+        String methodInfo = "";
         for(Alarm a: alarms){
-            setBedAndWake(a, getDayOfWeek(), alarmManager, rightNow, context);
+            boolean isFirst = true;
+            times = Alarm.getNextAlarms(context, a);
+            if( times != null) {
+                for (Calendar c : times) {
+                    Intent intent = new Intent(context, AlarmReceiver.class);
+                    if (isFirst) {
+                        intent.putExtra("isBedTime", false);
+                        methodInfo += "waktime: ";
+                        isFirst = false;
+                    } else {
+                        intent.putExtra("isBedTime", true);
+                        methodInfo += "Bedtime: ";
+                    }
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                    alrmPendIntents.add(pendingIntent);
+                    methodInfo += "alarm set: " + dayFormat.format(c.getTime()) + "  at :     " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + "\n";
 
+                }
+
+            }
         }
-
+        Toast.makeText(context, methodInfo, Toast.LENGTH_LONG).show();
     }
 
-    private static void setBedAndWake(Alarm a, int dayOfWeek, AlarmManager alarmManager, Calendar rightNow, Context context) {
-        if(!a.getBedTime(dayOfWeek).equals("No alarm")) {
-            Gson gson = new GsonBuilder().create();
-            String alarmString = gson.toJson(a);
 
-            Calendar time = rightNow;
-            PendingIntent pendingAlarmIntent;
-
-            int dayOfWeekTomorrow = dayOfWeek +1;
-            if(dayOfWeekTomorrow>6){
-                dayOfWeekTomorrow = 0;
-            }
-            //// TODO: 02-05-2017  make sure it consider week changes
-            int wakeTimeHour = Integer.parseInt(a.getWakeTimeOfDay(dayOfWeek).split(":")[0]);
-            int wakeTimeMinute = Integer.parseInt(a.getWakeTimeOfDay(dayOfWeek).split(":")[1]);
-
-            int bedTimeHour = Integer.parseInt(a.getBedTime(dayOfWeek).split(":")[0]);
-            int bedTimeMinute = Integer.parseInt(a.getBedTime(dayOfWeek).split(":")[1]);
-
-            //Setting wake alarm for tomorrow
-
-            int tomorrow = dayOfWeek + 3;
-            if (tomorrow > 7) {// setting it to be saturday if it is not
-                tomorrow = 1;
-            }
-            Intent intent = new Intent(context, AlarmReceiver.class);
-            intent.putExtra("isBedTime", false);
-            intent.putExtra("alarmString", alarmString);
-            time.set(Calendar.DAY_OF_WEEK, tomorrow);
-            time.set(Calendar.HOUR_OF_DAY, wakeTimeHour);
-            time.set(Calendar.MINUTE, wakeTimeMinute);
-            time.set(Calendar.SECOND, 0);
-
-            pendingAlarmIntent = PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.set(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pendingAlarmIntent);
-            alrmPendIntents.add(pendingAlarmIntent);
-
-            //setBedTime alarm
-
-            Intent intentBed = new Intent(context, AlarmReceiver.class);
-            intentBed.putExtra("isBedTime", true);
-            intentBed.putExtra("alarmString", alarmString);
-            time.set(Calendar.HOUR_OF_DAY, bedTimeHour);
-            time.set(Calendar.MINUTE, bedTimeMinute);
-            if (wakeTimeHour - a.getSleepDuration(dayOfWeekTomorrow) > 0) {
-                //do nothing
-            } else {
-                int today = tomorrow - 1;
-                if (today < 1) today = 7;
-                time.set(Calendar.DAY_OF_WEEK, today);
-            }
-            pendingAlarmIntent = PendingIntent.getBroadcast(context,0,intentBed,PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.set(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pendingAlarmIntent);
-            alrmPendIntents.add(pendingAlarmIntent);
-        }
-
-    }
 
 
     private void updateAlarms() {
+        cancelAlarms();
+        setAlarms(this);
 
 
-        Alarm currentAlarm = getActiveAlarm();
-        if (currentAlarm == null){
-            setNextAlarm(getFirstAlarmInRange());
-        }else{
-            LatLng location = tabbedMain.readLastLoc(this);
-            if(compareLatLngs(location, currentAlarm.get_latlng()) < searchRadius){
-                Toast.makeText(this, "this alarm is active:" + currentAlarm.get_alarmname(), Toast.LENGTH_SHORT).show();
-            }else {
-                cancelAlarms();
-                setNextAlarm(getFirstAlarmInRange());
-            }
-        }
     }
 
 
@@ -256,105 +210,6 @@ public class tabbedMain extends AppCompatActivity {
         location.setLatitude(position.latitude);
         location.setLongitude(position.longitude);
         return location;
-    }
-
-    public void setNextAlarm(Alarm alarmToSet) {//sets an inexact alarm that goes off half an hour before either wake or gotoBed
-        Calendar rightNow = Calendar.getInstance();
-        if(alarmToSet == null){
-            return;
-        }
-        int today = getDayOfWeek();
-        int tomorrow = getDayOfWeek() + 1;
-        if (tomorrow > 7) tomorrow = 0;
-
-        if(isAfterAlarms(rightNow,alarmToSet ,today)){
-            setAlarm(alarmToSet,rightNow, tomorrow);
-        }else{
-            setAlarm(alarmToSet, rightNow ,today);
-        }
-
-    }
-
-    public void setAlarm(Alarm alarmToSet,Calendar time, int day){
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        boolean isBedTime = true;
-        String[] wakeTime =  alarmToSet.getWakeTimeOfDay(day).split(":");
-        String[] bedTime = alarmToSet.getBedTime(day).split(":");
-        if(Integer.parseInt(bedTime[0]) < 12 ){
-            bedTime[0] =  String.valueOf((Integer.parseInt(bedTime[0]) + 24));
-        }
-        wakeTime[0] =  String.valueOf((Integer.parseInt(wakeTime[0]) + 24));
-
-        int hour = time.get(Calendar.HOUR_OF_DAY);
-        int minute = time.get(Calendar.MINUTE);
-
-        //figure out which type of alarm to set
-        if (hour < Integer.parseInt(bedTime[0])){
-                isBedTime = true;
-
-        } else if ( hour == Integer.parseInt(bedTime[0]) && minute < Integer.parseInt(bedTime[1])) {
-                isBedTime = true;
-        }else{
-                isBedTime = false;
-        }
-
-
-
-
-        int alarmHour;
-        int alarmMin;
-
-        if(Integer.parseInt(bedTime[0]) > 24 ){
-            bedTime[0] =  String.valueOf((Integer.parseInt(bedTime[0]) -24));
-        }
-        wakeTime[0] =  String.valueOf((Integer.parseInt(wakeTime[0]) -24));
-
-
-
-        if(isBedTime){
-            alarmHour =  Integer.parseInt(bedTime[0]);
-            alarmMin = Integer.parseInt(bedTime[1]);
-        }else{
-            alarmHour =  Integer.parseInt(wakeTime[0]);
-            alarmMin = Integer.parseInt(wakeTime[1]);
-        }
-
-
-
-
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        time.set(Calendar.HOUR_OF_DAY, alarmHour);
-        time.set(Calendar.MINUTE,alarmMin);
-        int convertToCallenderDay = day +2;
-        if(convertToCallenderDay > 7){
-            convertToCallenderDay = 1;
-        }
-        time.set(Calendar.DAY_OF_WEEK, convertToCallenderDay);
-        time.set(Calendar.SECOND, 0);
-
-        intent.putExtra("isBedTime", isBedTime);
-        alarmIntent = PendingIntent.getBroadcast(tabbedMain.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarmIntent);
-
-        cancelAlarms();
-
-        Toast.makeText(this, "alarm set for day: " + day + " , and is set to go off on :" + alarmHour + " hour and " + alarmMin +" and isBedTime is :" + isBedTime , Toast.LENGTH_LONG).show();
-
-        setActiveAlarm(alarmToSet);
-        alrmPendIntents.add(alarmIntent);
-
-        if(isBedTime){
-            //set anotherAlarm
-            //save Another notification
-        }
-
-    }
-
-    public boolean isAfterAlarms(Calendar rightNow, Alarm alarm, int day){
-        if(rightNow.get(Calendar.HOUR_OF_DAY)> Integer.parseInt(alarm.getWakeTimeOfDay(day).split(":")[0]) ){
-            return true;
-        }
-        return false;
     }
 
     static public int getDayOfWeek() {
@@ -440,7 +295,7 @@ public class tabbedMain extends AppCompatActivity {
         }
 
         setActiveAlarm(null);
-        Toast.makeText(this,"Canceled alarm: "  ,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"Canceled alarm: "  ,Toast.LENGTH_LONG).show();
 
     }
 }

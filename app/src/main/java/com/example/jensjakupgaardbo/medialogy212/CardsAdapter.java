@@ -31,8 +31,8 @@ class CardsAdapter extends ArrayAdapter<Alarm> {
 
         alarmTextView.setText( singleAlarm.get_alarmname());
         nearMarkerTextView.setText("Near Marker");
-        wakeUptime.setText(singleAlarm.getWakeTimeOfDay(tabbedMain.getDayOfWeek()));
-        gotoBedTextView.setText(singleAlarm.getBedTime(tabbedMain.getDayOfWeek()));
+        wakeUptime.setText("functions need");
+        gotoBedTextView.setText("implementing");
 
         return customView;
     }
