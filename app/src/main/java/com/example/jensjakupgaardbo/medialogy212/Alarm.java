@@ -2,13 +2,14 @@ package com.example.jensjakupgaardbo.medialogy212;
 
 // class for use in the database of the app, this is the base class that tells us what to save about the alarms
 import android.content.Context;
-
 import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Alarm implements Serializable{
 
@@ -248,6 +249,70 @@ public class Alarm implements Serializable{
         Location alarmLocation = this.getAlarmLocation();
         float distance = alarmLocation.distanceTo(deviceLocation);
         return (distance < tabbedMain.SEARCH_RADIUS);
+    }
+
+    public ArrayList<String>  getNextAlarmTimes(){
+        ArrayList<String> times = new ArrayList<>();
+        Calendar rightNow = Calendar.getInstance();
+        int today = rightNow.get(Calendar.DAY_OF_WEEK);
+        int tomorrow = today + 1;
+
+        if (tomorrow > 7) {tomorrow = 1;}
+
+        //check if todays alarms have gone off
+        int[] todayWakeTime = this.getWakeTimeOfDay(convertToOutTimeSys(today));
+        //do nothing if no alarms were set yesterday
+        if(todayWakeTime != null){
+            if((rightNow.get(Calendar.HOUR_OF_DAY) < todayWakeTime[0]) || ((int)rightNow.get(Calendar.HOUR_OF_DAY) == (todayWakeTime[0]) && (rightNow.get(Calendar.MINUTE) < todayWakeTime[1]))){
+                //if wake alarm has not gone off give the times for that
+                times.add(String.format(Locale.ENGLISH,"%02d:%02d", todayWakeTime[0], todayWakeTime[1]));
+
+                //check if bedTime would go off today, if it would put that with it
+                int[] todayBedTimes = todayWakeTime;
+                todayBedTimes[0] += - this.getSleepDuration(convertToOutTimeSys(today));
+
+                if(todayBedTimes[0]< 0) {
+                    return times;
+                }
+
+                if(rightNow.get(Calendar.HOUR_OF_DAY) < todayBedTimes[0] || ((int) rightNow.get(Calendar.HOUR_OF_DAY) == todayBedTimes[0] && rightNow.get(Calendar.MINUTE) < todayBedTimes[1])){
+                    times.add(String.format(Locale.ENGLISH,"%02d:%02d", todayBedTimes[0], todayBedTimes[1]));
+                }
+                return times;
+            }
+        }
+
+        //if we get here there must be no alarms to set for today and so we can move on to tomorrow
+
+        int[] tomorrowWakeTimes = this.getWakeTimeOfDay(convertToOutTimeSys(tomorrow));
+        if(tomorrowWakeTimes != null){
+            //we can always assume that the tomorrow alarm has not been set
+
+            times.add(String.format(Locale.ENGLISH,"%02d:%02d", tomorrowWakeTimes[0], tomorrowWakeTimes[1]));
+
+            //check if bedTime would go off today, if it would put that with it
+            int[] tomorrowBedTimes = tomorrowWakeTimes;
+            tomorrowBedTimes[0] += - this.getSleepDuration(convertToOutTimeSys(tomorrow));
+
+            //if tomorrowBedTime is positive the alarm will go off tomorrow otherwise it must be tested
+            if(tomorrowBedTimes[0] > -1) {
+
+                times.add(String.format(Locale.ENGLISH,"%02d:%02d", tomorrowBedTimes[0], tomorrowBedTimes[1]));
+                return times;
+            }else {
+                //if not the alarm must be today and we need to get its hours today
+                tomorrowBedTimes[0] += 24;
+            }
+
+
+            if(rightNow.get(Calendar.HOUR_OF_DAY) < tomorrowBedTimes[0] || ((int) rightNow.get(Calendar.HOUR_OF_DAY) == tomorrowBedTimes[0] && rightNow.get(Calendar.MINUTE) < tomorrowBedTimes[1])){
+                times.add(String.format(Locale.ENGLISH,"%02d:%02d", tomorrowBedTimes[0], tomorrowBedTimes[1]));
+            }
+            return times;
+        }
+
+        // if we get here there must be no times to return
+        return null;
     }
 
 }
