@@ -35,9 +35,12 @@ public class AlarmLocationListener implements LocationListener {
     public void request(){
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-            setLastLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
-            setLatitude(lastLocation.getLatitude());
-            setLongitude(lastLocation.getLongitude());
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location != null){
+                setLastLocation(location);
+                setLatitude(lastLocation.getLatitude());
+                setLongitude(lastLocation.getLongitude());
+            }
 
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);

@@ -17,11 +17,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class WakeTimeActivity extends AppCompatActivity {
 
     private MediaPlayer mMediaPlayer;
     TextView wakeAlarmName;
+    TextView wakeAlarmTime;
     Button stopButton;
 
     @Override
@@ -37,6 +41,10 @@ public class WakeTimeActivity extends AppCompatActivity {
         if(alarm != null){
             wakeAlarmName = (TextView) findViewById(R.id.wake_alarm_name);
             wakeAlarmName.setText(alarm.get_alarmname());
+
+            wakeAlarmTime = (TextView) findViewById(R.id.wake_alarm_time);
+            Calendar cal = Calendar.getInstance();
+            wakeAlarmTime.setText(String.format(Locale.ENGLISH,"%02d:%02d", cal.getTime().getHours(), cal.getTime().getMinutes()));
         }
 
         stopButton = (Button) findViewById(R.id.stop_alarm);

@@ -46,6 +46,8 @@ public class tabbedMain extends AppCompatActivity {
 
     public static boolean hasLocationPermission = false;
 
+    public ArrayList<Alarm> alarms = new ArrayList<>();
+
     public static ArrayList<PendingIntent> alarmPendingIntents = new ArrayList<>();
     FloatingActionButton fab;
     ListAdapter cardAdapter;
@@ -59,10 +61,13 @@ public class tabbedMain extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 tabbedMain.hasLocationPermission = true;
-                locationListener = new AlarmLocationListener(this, "gps");
             } else {
                 requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
+        }
+
+        if(tabbedMain.hasLocationPermission){
+            locationListener = new AlarmLocationListener(getBaseContext(), "gps");
         }
 
         SharedPreferences prefs = getDefaultSharedPreferences(getBaseContext());
@@ -90,12 +95,11 @@ public class tabbedMain extends AppCompatActivity {
             setContentView(R.layout.activity_tabbed_main);
             fab = (FloatingActionButton) findViewById(R.id.fabAdd);
             AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
-            ArrayList<Alarm> nonSortedAlarms = dbHandler.getAlarms();
-
-            final ArrayList<Alarm> alarms = nonSortedAlarms;
+            alarms = dbHandler.getAlarms();
             if (cardAdapter == null) {
                 cardAdapter = new CardsAdapter(this, alarms);
             }
+
             ListView editList = (ListView) findViewById(R.id.listOfCards);
             editList.setAdapter(cardAdapter);
             editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -120,7 +124,7 @@ public class tabbedMain extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cancelAlarms();
+        cancelAlarms(this);
         setAlarms(this);
     }
 
@@ -181,8 +185,8 @@ public class tabbedMain extends AppCompatActivity {
         Toast.makeText(context, methodInfo, Toast.LENGTH_LONG).show();
     }
 
-    public void cancelAlarms(){
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+    public static void cancelAlarms(Context context){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         for(PendingIntent p: alarmPendingIntents){
             alarmManager.cancel(p);
         }
