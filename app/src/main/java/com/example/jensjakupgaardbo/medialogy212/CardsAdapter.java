@@ -47,20 +47,19 @@ class CardsAdapter extends ArrayAdapter<Alarm> {
 
         if(times != null){
             wakeUptime.setText(times.get(0));
+
+            if(times.size()>1){
+                gotoBedTextView.setText(times.get(1));
+                gotoBedTextView.setTextColor(Color.WHITE);
+            }else{
+                gotoBedTextView.setText("past bed time");
+                wakeUptime.setTextColor(Color.WHITE);
+            }
+
         }else{
             wakeUptime.setText("no alarm coming up");
+
         }
-
-
-        if(times.size()>1){
-            gotoBedTextView.setText(times.get(1));
-            gotoBedTextView.setTextColor(Color.WHITE);
-        }else{
-            gotoBedTextView.setText("past bed time");
-            wakeUptime.setTextColor(Color.WHITE);
-        }
-
-
 
         return customView;
     }
