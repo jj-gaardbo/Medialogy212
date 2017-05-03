@@ -1,6 +1,7 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,9 +43,18 @@ class CardsAdapter extends ArrayAdapter<Alarm> {
             }
             nearMarkerTextView.setText("Near Marker : "+inRange);
         }
+        ArrayList<String> times = singleAlarm.getNextAlarmTimes();
+        wakeUptime.setText(times.get(0));
 
-        wakeUptime.setText("functions need");
-        gotoBedTextView.setText("implementing");
+        if(times.size()>1){
+            gotoBedTextView.setText(times.get(1));
+            gotoBedTextView.setTextColor(Color.WHITE);
+        }else{
+            gotoBedTextView.setText("past bed time");
+            wakeUptime.setTextColor(Color.WHITE);
+        }
+
+
 
         return customView;
     }
