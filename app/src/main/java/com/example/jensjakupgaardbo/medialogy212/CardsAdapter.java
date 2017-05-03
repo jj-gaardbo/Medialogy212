@@ -44,7 +44,13 @@ class CardsAdapter extends ArrayAdapter<Alarm> {
             nearMarkerTextView.setText("Near Marker : "+inRange);
         }
         ArrayList<String> times = singleAlarm.getNextAlarmTimes();
-        wakeUptime.setText(times.get(0));
+
+        if(times != null){
+            wakeUptime.setText(times.get(0));
+        }else{
+            wakeUptime.setText("no alarm coming up");
+        }
+
 
         if(times.size()>1){
             gotoBedTextView.setText(times.get(1));
