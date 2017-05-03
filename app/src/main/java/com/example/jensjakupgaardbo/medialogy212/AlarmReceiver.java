@@ -16,9 +16,19 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     Vibrator v;
     AlarmLocationListener locListener;
+    private static final int ALARM_TYPE_NOTIFICATION = 1;
+    private static final int ALARM_TYPE_GO_TO_SLEEP = 2;
+    private static final int ALARM_TYPE_WAKE_UP = 3;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        int alarmType = intent.getExtras().getInt("alarmType", 0);
+
+        if(alarmType == 0){
+            return;
+        }
+
         Gson gson = new GsonBuilder().create();
         Alarm alarm = gson.fromJson(intent.getStringExtra("alarmString"), Alarm.class);
         v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -28,26 +38,32 @@ public class AlarmReceiver extends BroadcastReceiver{
         if(!inRange){
             return;
         }
+
+        //todo: Remove this if statement code and replaced with switch/case based on the ALARM TYPE INTEGER
         boolean isBedTime = intent.getExtras().getBoolean("isBedTime", false);
         if (isBedTime) {
-            triggerBedtimeNotification(context);
-            vibrateOnce();
+            triggerBedtimeActivity(context, alarm);
         } else {
             triggerWakeAlarmActivity(context, alarm);
-            vibrate();
         }
+
+        switch(alarmType){
+            case ALARM_TYPE_NOTIFICATION:
+                triggerPreBedTimeNotification(context);
+                break;
+
+            case ALARM_TYPE_GO_TO_SLEEP:
+                triggerBedtimeActivity(context, alarm);
+                break;
+
+            case ALARM_TYPE_WAKE_UP:
+                triggerWakeAlarmActivity(context, alarm);
+                break;
+        }
+
     }
 
-    public void vibrateOnce(){
-        v.vibrate(1000);
-    }
-
-    public void vibrate(){
-        long[] pattern = {0, 100, 1000};
-        v.vibrate(pattern, 0);
-    }
-
-    public void triggerBedtimeNotification(Context context){
+    public void triggerPreBedTimeNotification(Context context){
         Intent resultIntent = new Intent(context, tabbedMain.class);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
@@ -61,18 +77,25 @@ public class AlarmReceiver extends BroadcastReceiver{
                 new Notification.Builder(context)
                         .setSmallIcon(R.drawable.moon)
                         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.moon))
-                        .setContentTitle("Sleep time")
-                        .setContentText("Go to sleep bitch! Die motherfucker, die!")
+                        .setContentTitle("Approaching bed time")
+                        .setContentText("It is almost bed time.")
                         .setContentIntent(resultPendingIntent)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setPriority(Notification.PRIORITY_MAX)
                         .setStyle(new Notification.BigTextStyle()
-                            .bigText("In order to get your chosen amount of sleep before tomorrow, you have to go to bed now. Motherfucker!"));
+                                .bigText("In order to get the appropriate amount of sleep, you have to go to bed in 30 minutes."));
 
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         // Builds the notification and issues it.
         mNotifyMgr.notify(0, mBuilder.build());
+    }
+
+    public void triggerBedtimeActivity(Context context, Alarm alarm){
+        Gson gson = new GsonBuilder().create();
+        Intent bedTimeActivityIntent = new Intent(context, BedTimeActivity.class);
+        bedTimeActivityIntent.putExtra("alarmString", gson.toJson(alarm));
+        context.startActivity(bedTimeActivityIntent);
     }
 
     public void triggerWakeAlarmActivity(Context context, Alarm alarm){

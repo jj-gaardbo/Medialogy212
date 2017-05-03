@@ -72,6 +72,8 @@
 
         <activity android:name=".WakeTimeActivity">
         </activity>
+        <activity android:name=".BedTimeActivity">
+        </activity>
     </application>
 
 </manifest>
