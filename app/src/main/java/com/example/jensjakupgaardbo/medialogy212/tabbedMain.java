@@ -12,10 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -77,16 +74,11 @@ public class tabbedMain extends AppCompatActivity {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    SharedPreferences getPrefs = getDefaultSharedPreferences(getBaseContext());
-
-                    Intent i = new Intent(getApplicationContext(), Infopage.class);
-                    startActivity(i);
-
-                    SharedPreferences.Editor e = getPrefs.edit();
-
-                    e.putBoolean("firstStart", false);
-
-                    e.apply();
+                SharedPreferences getPrefs = getDefaultSharedPreferences(getBaseContext());
+                open_info();
+                SharedPreferences.Editor e = getPrefs.edit();
+                e.putBoolean("firstStart", false);
+                e.apply();
                 }
             });
             t.start();
@@ -119,6 +111,15 @@ public class tabbedMain extends AppCompatActivity {
             );
 
         }
+
+        ImageButton infoPageBtn = (ImageButton) findViewById(R.id.info_page_button);
+        infoPageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                open_info();
+            }
+        });
+
     }
 
     @Override
@@ -191,6 +192,11 @@ public class tabbedMain extends AppCompatActivity {
             alarmManager.cancel(p);
         }
     }
+
+    public void open_info(){
+        startActivity(new Intent(getApplicationContext(), Infopage.class));
+    }
+
 }
 
 
