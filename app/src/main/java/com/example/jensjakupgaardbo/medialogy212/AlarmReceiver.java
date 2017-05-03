@@ -27,7 +27,8 @@ public class AlarmReceiver extends BroadcastReceiver{
         v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         //Check if the user is within range of the alarms location
-        if(!isInRange(context, alarm)){
+        boolean inRange = isInRange(context, alarm);
+        if(!inRange){
             return;
         }
 

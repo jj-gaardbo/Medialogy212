@@ -166,6 +166,8 @@ public class tabbedMain extends AppCompatActivity {
             if( times != null) {
                 for (Calendar c : times) {
                     Intent intent = new Intent(context, AlarmReceiver.class);
+                    Gson gson = new GsonBuilder().create();
+                    intent.putExtra("alarmString", gson.toJson(a));
                     if (isFirst) {
                         intent.putExtra("isBedTime", false);
                         methodInfo += "waktime: ";
