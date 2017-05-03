@@ -6,12 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +17,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -47,7 +44,7 @@ public class tabbedMain extends AppCompatActivity {
 
     public static boolean hasLocationPermission = false;
 
-    public static ArrayList<PendingIntent> alrmPendIntents = new ArrayList<>();
+    public static ArrayList<PendingIntent> alarmPendingIntents = new ArrayList<>();
     FloatingActionButton fab;
     ListAdapter cardAdapter;
 
@@ -172,7 +169,7 @@ public class tabbedMain extends AppCompatActivity {
                     else if (SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                     }
-                    alrmPendIntents.add(pendingIntent);
+                    alarmPendingIntents.add(pendingIntent);
                     methodInfo += "alarm set: " + dayFormat.format(c.getTime()) + "  at :     " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + "\n";
 
                 }
@@ -184,7 +181,7 @@ public class tabbedMain extends AppCompatActivity {
 
     public void cancelAlarms(){
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        for(PendingIntent p: alrmPendIntents){
+        for(PendingIntent p: alarmPendingIntents){
             alarmManager.cancel(p);
         }
     }
