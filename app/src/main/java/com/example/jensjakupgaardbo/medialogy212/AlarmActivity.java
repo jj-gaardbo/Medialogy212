@@ -370,11 +370,9 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
 
         // generate BitmapDescriptor from circle Bitmap
         BitmapDescriptor bmD = BitmapDescriptorFactory.fromBitmap(bm);
-        int radiusM = 150;
-
         googleMap.addGroundOverlay(new GroundOverlayOptions().
                 image(bmD).
-                position(location, radiusM * 2, radiusM * 2).
+                position(location, AlarmReceiver.SEARCH_RADIUS * 2, AlarmReceiver.SEARCH_RADIUS * 2).
                 transparency(0.4f));
     }
 

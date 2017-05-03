@@ -18,7 +18,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     Vibrator v;
     AlarmLocationListener locListener;
-    private static final int SEARCH_RADIUS = 150;
+    public static final int SEARCH_RADIUS = 500;
 
     @Override
     public void onReceive(Context context, Intent intent) {
