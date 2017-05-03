@@ -12,12 +12,12 @@ import com.example.jensjakupgaardbo.medialogy212.R;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 public class secondInfoFragment extends Fragment implements ISlideBackgroundColorHolder {
-    ViewGroup shit;
+    ViewGroup viewGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_second_info, container, false);
-        shit = container;
+        viewGroup = container;
         setBackgroundColor(getDefaultBackgroundColor());
         return v;
     }
@@ -31,8 +31,8 @@ public class secondInfoFragment extends Fragment implements ISlideBackgroundColo
     @Override
     public void setBackgroundColor(@ColorInt int backgroundColor) {
         // Set the background color of the view within your slide to which the transition should be applied.
-        if (shit != null) {
-            shit.setBackgroundColor(backgroundColor);
+        if (viewGroup != null) {
+            viewGroup.setBackgroundColor(backgroundColor);
         }
     }
 }

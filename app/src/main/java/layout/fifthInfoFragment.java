@@ -1,5 +1,8 @@
 package layout;
 
+import com.example.jensjakupgaardbo.medialogy212.R;
+import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -8,15 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.jensjakupgaardbo.medialogy212.R;
-import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
-
-public class fourthInfoFragment extends Fragment implements ISlideBackgroundColorHolder {
+public class fifthInfoFragment extends Fragment implements ISlideBackgroundColorHolder {
     ViewGroup viewGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_fourth_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_fifth_info, container, false);
         viewGroup = container;
         setBackgroundColor(getDefaultBackgroundColor());
         return v;
@@ -35,4 +35,5 @@ public class fourthInfoFragment extends Fragment implements ISlideBackgroundColo
             viewGroup.setBackgroundColor(backgroundColor);
         }
     }
+
 }

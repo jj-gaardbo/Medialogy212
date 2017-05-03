@@ -12,12 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class firstInfoFragment extends Fragment implements ISlideBackgroundColorHolder {
-    ViewGroup shit;
+    ViewGroup viewGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_first_info, container, false);
-        shit = container;
+        viewGroup = container;
         setBackgroundColor(getDefaultBackgroundColor());
         return v;
     }
@@ -31,8 +31,8 @@ public class firstInfoFragment extends Fragment implements ISlideBackgroundColor
     @Override
     public void setBackgroundColor(@ColorInt int backgroundColor) {
         // Set the background color of the view within your slide to which the transition should be applied.
-        if (shit != null) {
-            shit.setBackgroundColor(backgroundColor);
+        if (viewGroup != null) {
+            viewGroup.setBackgroundColor(backgroundColor);
         }
     }
 }

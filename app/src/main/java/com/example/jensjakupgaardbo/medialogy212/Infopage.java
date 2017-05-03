@@ -7,10 +7,7 @@ import android.os.Bundle;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
-import layout.firstInfoFragment;
-import layout.fourthInfoFragment;
-import layout.secondInfoFragment;
-import layout.thirdInfoFragment;
+import layout.*;
 
 
 public class Infopage extends AppIntro {
@@ -25,6 +22,8 @@ public class Infopage extends AppIntro {
         addSlide(new secondInfoFragment());
         addSlide(new thirdInfoFragment());
         addSlide(new fourthInfoFragment());
+        addSlide(new fifthInfoFragment());
+
 
     }
 
