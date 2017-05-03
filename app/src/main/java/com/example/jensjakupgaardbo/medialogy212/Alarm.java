@@ -155,16 +155,13 @@ public class Alarm implements Serializable{
         Calendar rightNow = Calendar.getInstance();
         int today = rightNow.get(Calendar.DAY_OF_WEEK);
         int tomorrow = today + 1;
-        int toyota;
 
         if (tomorrow > 7) {tomorrow = 1;}
 
-
         //check if todays alarms have gone off
         int[] todayWakeTime = a.getWakeTimeOfDay(convertToOutTimeSys(today));
-        if(todayWakeTime == null){
-            //do nothing if no alarms were set yesterday
-        }else{
+        //do nothing if no alarms were set yesterday
+        if(todayWakeTime != null){
             if((rightNow.get(Calendar.HOUR_OF_DAY) < todayWakeTime[0]) || ((int)rightNow.get(Calendar.HOUR_OF_DAY) == (todayWakeTime[0]) && (rightNow.get(Calendar.MINUTE) < todayWakeTime[1]))){
                 //if wake alarm has not gone off give the times for that
                 Calendar time = Calendar.getInstance();
@@ -194,9 +191,7 @@ public class Alarm implements Serializable{
         //if we get here there must be no alarms to set for today and so we can move on to tomorrow
 
         int[] tomorrowWakeTimes = a.getWakeTimeOfDay(convertToOutTimeSys(tomorrow));
-        if(tomorrowWakeTimes == null){
-            //do nothing if no alarms were set yesterday
-        }else{
+        if(tomorrowWakeTimes != null){
             //we can always assume that the tomorrow alarm has not been set
             Calendar time = Calendar.getInstance();
             time.set(Calendar.HOUR_OF_DAY, tomorrowWakeTimes[0]);
@@ -245,6 +240,16 @@ public class Alarm implements Serializable{
             return alarmLocation;
         }
 
+    public boolean isInRange(){
+        if(!tabbedMain.hasLocationPermission){
+            return false;
+        }
+        Location deviceLocation = tabbedMain.locationListener.getLastLocation();
+        Location alarmLocation = this.getAlarmLocation();
+        float distance = alarmLocation.distanceTo(deviceLocation);
+        return (distance < tabbedMain.SEARCH_RADIUS);
     }
+
+}
 
 

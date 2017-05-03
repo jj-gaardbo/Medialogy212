@@ -41,6 +41,7 @@ public class tabbedMain extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
 
+    public static final int SEARCH_RADIUS = 500;
 
     final static public int DATABASE_VERSION = 12;
 

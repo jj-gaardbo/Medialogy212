@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Vibrator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,7 +16,6 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     Vibrator v;
     AlarmLocationListener locListener;
-    public static final int SEARCH_RADIUS = 500;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -26,7 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver{
         v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         locListener = tabbedMain.locationListener;
         //Check if the user is within range of the alarms location
-        boolean inRange = isInRange(alarm);
+        boolean inRange = alarm.isInRange();
         if(!inRange){
             return;
         }
@@ -47,16 +45,6 @@ public class AlarmReceiver extends BroadcastReceiver{
     public void vibrate(){
         long[] pattern = {0, 100, 1000};
         v.vibrate(pattern, 0);
-    }
-
-    public boolean isInRange(Alarm alarm){
-        if(!tabbedMain.hasLocationPermission || alarm == null){
-            return false;
-        }
-        Location deviceLocation = locListener.getLastLocation();
-        Location alarmLocation = alarm.getAlarmLocation();
-        float distance = alarmLocation.distanceTo(deviceLocation);
-        return (distance < SEARCH_RADIUS);
     }
 
     public void triggerBedtimeNotification(Context context){

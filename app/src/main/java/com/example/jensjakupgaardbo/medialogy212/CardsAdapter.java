@@ -37,7 +37,7 @@ class CardsAdapter extends ArrayAdapter<Alarm> {
             Location alarmLocation = singleAlarm.getAlarmLocation();
             float distance = alarmLocation.distanceTo(location);
             String inRange = "no";
-            if(distance < AlarmReceiver.SEARCH_RADIUS){
+            if(distance < tabbedMain.SEARCH_RADIUS){
                 inRange = "yes";
             }
             nearMarkerTextView.setText("Near Marker : "+inRange);
