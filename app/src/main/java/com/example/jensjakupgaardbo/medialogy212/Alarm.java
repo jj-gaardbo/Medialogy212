@@ -3,6 +3,7 @@ package com.example.jensjakupgaardbo.medialogy212;
 // class for use in the database of the app, this is the base class that tells us what to save about the alarms
 import android.content.Context;
 
+import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -236,8 +237,13 @@ public class Alarm implements Serializable{
         return null;
         }
 
-
-
+        public Location getAlarmLocation(){
+            LatLng alarmCoords = this.get_latlng();
+            Location alarmLocation = new Location("");
+            alarmLocation.setLatitude(alarmCoords.latitude);
+            alarmLocation.setLongitude(alarmCoords.longitude);
+            return alarmLocation;
+        }
 
     }
 

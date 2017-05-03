@@ -25,13 +25,12 @@ public class AlarmReceiver extends BroadcastReceiver{
         Gson gson = new GsonBuilder().create();
         Alarm alarm = gson.fromJson(intent.getStringExtra("alarmString"), Alarm.class);
         v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-
+        locListener = tabbedMain.locationListener;
         //Check if the user is within range of the alarms location
-        boolean inRange = isInRange(context, alarm);
+        boolean inRange = isInRange(alarm);
         if(!inRange){
             return;
         }
-
         boolean isBedTime = intent.getExtras().getBoolean("isBedTime", false);
         if (isBedTime) {
             triggerBedtimeNotification(context);
@@ -51,23 +50,14 @@ public class AlarmReceiver extends BroadcastReceiver{
         v.vibrate(pattern, 0);
     }
 
-    public boolean isInRange(Context context, Alarm alarm){
+    public boolean isInRange(Alarm alarm){
         if(!tabbedMain.hasLocationPermission || alarm == null){
             return false;
         }
-        locListener = new AlarmLocationListener(context, "gps");
         Location deviceLocation = locListener.getLastLocation();
-        Location alarmLocation = getAlarmLocation(alarm);
+        Location alarmLocation = alarm.getAlarmLocation();
         float distance = alarmLocation.distanceTo(deviceLocation);
         return (distance < SEARCH_RADIUS);
-    }
-
-    public Location getAlarmLocation(Alarm alarm){
-        LatLng alarmCoords = alarm.get_latlng();
-        Location alarmLocation = new Location("");
-        alarmLocation.setLatitude(alarmCoords.latitude);
-        alarmLocation.setLongitude(alarmCoords.longitude);
-        return alarmLocation;
     }
 
     public void triggerBedtimeNotification(Context context){

@@ -53,11 +53,7 @@ public class tabbedMain extends AppCompatActivity {
     FloatingActionButton fab;
     ListAdapter cardAdapter;
 
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    public static AlarmLocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +62,7 @@ public class tabbedMain extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 tabbedMain.hasLocationPermission = true;
+                locationListener = new AlarmLocationListener(this, "gps");
             } else {
                 requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
