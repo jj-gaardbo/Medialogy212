@@ -16,9 +16,9 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     Vibrator v;
     AlarmLocationListener locListener;
-    private static final int ALARM_TYPE_NOTIFICATION = 1;
-    private static final int ALARM_TYPE_GO_TO_SLEEP = 2;
-    private static final int ALARM_TYPE_WAKE_UP = 3;
+    public static final int ALARM_TYPE_NOTIFICATION = 1;
+    public static final int ALARM_TYPE_GO_TO_SLEEP = 2;
+    public static final int ALARM_TYPE_WAKE_UP = 3;
 
     @Override
     public void onReceive(Context context, Intent intent) {
