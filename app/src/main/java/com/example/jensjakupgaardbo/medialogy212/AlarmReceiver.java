@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Vibrator;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import static android.content.Context.NOTIFICATION_SERVICE;
