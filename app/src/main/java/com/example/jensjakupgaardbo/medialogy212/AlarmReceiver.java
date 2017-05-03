@@ -33,7 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver{
             triggerBedtimeNotification(context);
             vibrateOnce();
         } else {
-            triggerWakeAlarmActivity(context);
+            triggerWakeAlarmActivity(context, alarm);
             vibrate();
         }
     }
@@ -75,8 +75,11 @@ public class AlarmReceiver extends BroadcastReceiver{
         mNotifyMgr.notify(0, mBuilder.build());
     }
 
-    public void triggerWakeAlarmActivity(Context context){
-        context.startActivity(new Intent(context, WakeTimeActivity.class));
+    public void triggerWakeAlarmActivity(Context context, Alarm alarm){
+        Gson gson = new GsonBuilder().create();
+        Intent wakeTimeActivityIntent = new Intent(context, WakeTimeActivity.class);
+        wakeTimeActivityIntent.putExtra("alarmString", gson.toJson(alarm));
+        context.startActivity(wakeTimeActivityIntent);
     }
 
 
