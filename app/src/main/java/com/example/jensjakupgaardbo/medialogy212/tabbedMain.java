@@ -46,7 +46,7 @@ public class tabbedMain extends AppCompatActivity {
 
     public static boolean hasLocationPermission = false;
 
-    public static ArrayList<PendingIntent> alrmPendIntents = new ArrayList<>();
+    public static ArrayList<PendingIntent> alarmPendingIntents = new ArrayList<>();
     FloatingActionButton fab;
     ListAdapter cardAdapter;
 
@@ -171,7 +171,7 @@ public class tabbedMain extends AppCompatActivity {
                     else if (SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                     }
-                    alrmPendIntents.add(pendingIntent);
+                    alarmPendingIntents.add(pendingIntent);
                     methodInfo += "alarm set: " + dayFormat.format(c.getTime()) + "  at :     " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + "\n";
 
                 }
@@ -183,7 +183,7 @@ public class tabbedMain extends AppCompatActivity {
 
     public void cancelAlarms(){
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        for(PendingIntent p: alrmPendIntents){
+        for(PendingIntent p: alarmPendingIntents){
             alarmManager.cancel(p);
         }
     }
