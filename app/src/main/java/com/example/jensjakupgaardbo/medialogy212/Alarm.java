@@ -194,8 +194,9 @@ public class Alarm implements Serializable{
                     //setting notification
                     Calendar notiTime = (Calendar) time.clone();
                     notiTime.add(Calendar.MINUTE, -30);
-                    times.add(notiTime);
-
+                    if(rightNow.get(Calendar.DAY_OF_WEEK) == notiTime.get(Calendar.DAY_OF_WEEK ) && rightNow.getTimeInMillis()<notiTime.getTimeInMillis()) {
+                        times.add(notiTime);
+                    }
                 }
                 return times;
             }
@@ -231,8 +232,9 @@ public class Alarm implements Serializable{
                 //setting notification
                 Calendar notiTime = (Calendar) time.clone();
                 notiTime.add(Calendar.MINUTE, -30);
-                times.add(notiTime);
-
+                if(rightNow.get(Calendar.DAY_OF_WEEK) == notiTime.get(Calendar.DAY_OF_WEEK ) && rightNow.getTimeInMillis()<notiTime.getTimeInMillis()) {
+                    times.add(notiTime);
+                }
                 return times;
 
             }else {
@@ -249,7 +251,9 @@ public class Alarm implements Serializable{
                 //setting notification
                 Calendar notiTime = (Calendar) time.clone();
                 notiTime.add(Calendar.MINUTE, -30);
-                times.add(notiTime);
+                if(rightNow.get(Calendar.DAY_OF_WEEK) == notiTime.get(Calendar.DAY_OF_WEEK ) && rightNow.getTimeInMillis()<notiTime.getTimeInMillis()) {
+                    times.add(notiTime);
+                }
             }
             return times;
             }
