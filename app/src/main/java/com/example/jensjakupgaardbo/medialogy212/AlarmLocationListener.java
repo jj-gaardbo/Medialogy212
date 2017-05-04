@@ -7,9 +7,15 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 public class AlarmLocationListener implements LocationListener {
 
-    private LocationManager locationManager;
+    private boolean isGPSEnabled;
+    private boolean isNetworkEnabled;
+    private boolean canGetLocation;
+
+    public LocationManager locationManager;
 
     public Location lastLocation;
 
@@ -20,7 +26,7 @@ public class AlarmLocationListener implements LocationListener {
 
     public AlarmLocationListener(Context context, String provider){
         initializeLocationManager(context);
-        request();
+        request(context);
         Log.e(TAG, "LocationListener Constructed" + provider);
     }
 
@@ -32,21 +38,68 @@ public class AlarmLocationListener implements LocationListener {
         this.lastLocation = lastLocation;
     }
 
-    public void request(){
+    public void getLocation(Context context) {
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(location != null){
-                setLastLocation(location);
-                setLatitude(lastLocation.getLatitude());
-                setLongitude(lastLocation.getLongitude());
+            locationManager = (LocationManager) context
+                    .getSystemService(LOCATION_SERVICE);
+
+            // getting GPS status
+            isGPSEnabled = locationManager
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            // getting network status
+            isNetworkEnabled = locationManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                // no network provider is enabled
+            } else {
+                this.canGetLocation = true;
+                if (isNetworkEnabled) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            1000,
+                            1, this);
+                    Log.d("Network", "Network Enabled");
+                    if (locationManager != null) {
+                        lastLocation = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (lastLocation != null) {
+                            latitude = lastLocation.getLatitude();
+                            longitude = lastLocation.getLongitude();
+                        }
+                    }
+                }
+                // if GPS Enabled get lat/long using GPS Services
+                if (isGPSEnabled) {
+                    if (lastLocation == null) {
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                1000,
+                                1, this);
+                        Log.d("GPS", "GPS Enabled");
+                        if (locationManager != null) {
+                            lastLocation = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (lastLocation != null) {
+                                latitude = lastLocation.getLatitude();
+                                longitude = lastLocation.getLongitude();
+                            }
+                        }
+                    }
+                }
             }
 
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "gps provider does not exist " + ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+    }
+
+    public void request(Context context){
+
+        getLocation(context);
+
     }
 
     public double getLatitude() {
@@ -95,7 +148,7 @@ public class AlarmLocationListener implements LocationListener {
     private void initializeLocationManager(Context context){
         Log.e(TAG, "initializeLocationManager");
         if (locationManager == null) {
-            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         }
     }
 

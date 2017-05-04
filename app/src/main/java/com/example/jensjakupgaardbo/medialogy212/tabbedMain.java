@@ -8,12 +8,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
 
+import com.example.jensjakupgaardbo.medialogy212.alarmServices.BedTimeActivityService;
+import com.example.jensjakupgaardbo.medialogy212.alarmServices.NotificationService;
+import com.example.jensjakupgaardbo.medialogy212.alarmServices.WakeUpAlarmService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -130,7 +134,7 @@ public class tabbedMain extends AppCompatActivity {
         super.onResume();
         setupCards();
         cancelAlarms(this);
-        setAlarms(this);
+        setAlarms(getBaseContext());
     }
 
 
@@ -148,7 +152,7 @@ public class tabbedMain extends AppCompatActivity {
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         AlarmDBHandler dbHandler = new AlarmDBHandler(context, null, null, DATABASE_VERSION);
         ArrayList<Alarm> alarms = dbHandler.getAlarms();
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         ArrayList<Calendar>  times;
 
         String methodInfo = "";
@@ -159,19 +163,24 @@ public class tabbedMain extends AppCompatActivity {
 
                 int alarmType = 3;
                 for (Calendar c : times) {
-                    Intent intent = new Intent(context.getApplicationContext(), AlarmReceiver.class);
+                    Intent intent;
+                    if(alarmType == 3){
+                        intent = new Intent(context, WakeUpAlarmService.class);
+                    } else if(alarmType == 2){
+                        intent = new Intent(context, BedTimeActivityService.class);
+                    } else {
+                        intent = new Intent(context, NotificationService.class);
+                    }
                     Gson gson = new GsonBuilder().create();
                     intent.putExtra("alarmString", gson.toJson(a));
                     intent.putExtra("alarmType", alarmType);
-                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                     methodInfo += String.valueOf(alarmType);
                     if(alarmType>1){
                         alarmType--;
                     }
 
-
-
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getService(context, 111, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     final int SDK_INT = Build.VERSION.SDK_INT;
                     if (SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -181,7 +190,8 @@ public class tabbedMain extends AppCompatActivity {
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                     }
                     else if (SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
+                        //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                     }
                     alarmPendingIntents.add(pendingIntent);
                     methodInfo += "alarm set: " + dayFormat.format(c.getTime()) + "  at :     " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + "\n";

@@ -93,6 +93,8 @@ public class WakeTimeActivity extends AppCompatActivity {
     //Stop the wake alarm sound and the activity
     private void stop_alarm(){
         mMediaPlayer.stop();
+        tabbedMain.cancelAlarms(getApplicationContext());
+        tabbedMain.setAlarms(getApplicationContext());
         finish();
     }
 

@@ -4,6 +4,8 @@ package com.example.jensjakupgaardbo.medialogy212;
 import android.content.Context;
 import android.location.Location;
 
+import android.location.LocationListener;
+import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -270,11 +272,21 @@ public class Alarm implements Serializable{
             return alarmLocation;
         }
 
-    public boolean isInRange(){
+    public boolean isInRange(Location deviceLocation){
+        Location alarmLocation = this.getAlarmLocation();
+        float distance = alarmLocation.distanceTo(deviceLocation);
+        return (distance < 500);
+    }
+
+    public boolean isInRange(Context context){
         if(!tabbedMain.hasLocationPermission){
             return false;
         }
-        Location deviceLocation = tabbedMain.locationListener.getLastLocation();
+        AlarmLocationListener locationListener = tabbedMain.locationListener;
+        Location deviceLocation = locationListener.getLastLocation();
+        if (deviceLocation == null) {
+            locationListener.request(context);
+        }
         Location alarmLocation = this.getAlarmLocation();
         float distance = alarmLocation.distanceTo(deviceLocation);
         return (distance < tabbedMain.SEARCH_RADIUS);
