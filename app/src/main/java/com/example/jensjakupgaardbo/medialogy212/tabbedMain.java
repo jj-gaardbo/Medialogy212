@@ -159,7 +159,7 @@ public class tabbedMain extends AppCompatActivity {
 
                 int alarmType = 3;
                 for (Calendar c : times) {
-                    Intent intent = new Intent(context, AlarmReceiver.class);
+                    Intent intent = new Intent(context.getApplicationContext(), AlarmReceiver.class);
                     Gson gson = new GsonBuilder().create();
                     intent.putExtra("alarmString", gson.toJson(a));
                     intent.putExtra("alarmType", alarmType);
@@ -190,7 +190,9 @@ public class tabbedMain extends AppCompatActivity {
 
             }
         }
-        Toast.makeText(context, methodInfo, Toast.LENGTH_LONG).show();
+
+            Toast.makeText(context,methodInfo, Toast.LENGTH_LONG).show();
+
     }
 
     public static void cancelAlarms(Context context){
