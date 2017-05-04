@@ -39,14 +39,6 @@ public class AlarmReceiver extends BroadcastReceiver{
             return;
         }
 
-        //todo: Remove this if statement code and replaced with switch/case based on the ALARM TYPE INTEGER
-        boolean isBedTime = intent.getExtras().getBoolean("isBedTime", false);
-        if (isBedTime) {
-            triggerBedtimeActivity(context, alarm);
-        } else {
-            triggerWakeAlarmActivity(context, alarm);
-        }
-
         switch(alarmType){
             case ALARM_TYPE_NOTIFICATION:
                 triggerPreBedTimeNotification(context);
