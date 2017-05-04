@@ -69,9 +69,9 @@ public class AlarmLocationListener implements LocationListener {
     public void onLocationChanged(Location location) {
         Log.e(TAG, "onLocationChanged: " + location);
         if(location != null){
-            lastLocation.set(location);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            setLastLocation(location);
+            setLatitude(location.getLatitude());
+            setLongitude(location.getLongitude());
         }
     }
 
