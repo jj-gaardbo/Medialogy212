@@ -84,32 +84,7 @@ public class tabbedMain extends AppCompatActivity {
             t.start();
 
         } else {
-            setContentView(R.layout.activity_tabbed_main);
-            fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-            AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
-            alarms = dbHandler.getAlarms();
-            if (cardAdapter == null) {
-                cardAdapter = new CardsAdapter(this, alarms);
-            }
-
-            ListView editList = (ListView) findViewById(R.id.listOfCards);
-            editList.setAdapter(cardAdapter);
-            editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Alarm alarm = alarms.get(position);
-                    Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
-                    intent.putExtra("activeAlarm", alarm);
-                    if (alarm.get_latlng() != null) {
-                        intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
-                        alarm.set_latlng(null);
-                    }
-                    intent.putExtra("editing", true);
-                    startActivity(intent);
-                }
-            }
-            );
-
+            setupCards();
         }
 
         ImageButton infoPageBtn = (ImageButton) findViewById(R.id.info_page_button);
@@ -122,9 +97,38 @@ public class tabbedMain extends AppCompatActivity {
 
     }
 
+    private void setupCards(){
+        setContentView(R.layout.activity_tabbed_main);
+        fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+        AlarmDBHandler dbHandler = new AlarmDBHandler(this, null, null, DATABASE_VERSION);
+        alarms = dbHandler.getAlarms();
+        if (cardAdapter == null) {
+            cardAdapter = new CardsAdapter(this, alarms);
+        }
+
+        ListView editList = (ListView) findViewById(R.id.listOfCards);
+        editList.setAdapter(cardAdapter);
+        editList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                Alarm alarm = alarms.get(position);
+                                                Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                                                intent.putExtra("activeAlarm", alarm);
+                                                if (alarm.get_latlng() != null) {
+                                                    intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(alarm.get_latlng()));
+                                                    alarm.set_latlng(null);
+                                                }
+                                                intent.putExtra("editing", true);
+                                                startActivity(intent);
+                                            }
+                                        }
+        );
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        setupCards();
         cancelAlarms(this);
         setAlarms(this);
     }
@@ -159,6 +163,7 @@ public class tabbedMain extends AppCompatActivity {
                     Gson gson = new GsonBuilder().create();
                     intent.putExtra("alarmString", gson.toJson(a));
                     intent.putExtra("alarmType", alarmType);
+                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     methodInfo += String.valueOf(alarmType);
                     if(alarmType>1){
                         alarmType--;

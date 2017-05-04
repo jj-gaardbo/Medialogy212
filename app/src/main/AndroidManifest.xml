@@ -46,12 +46,6 @@
 
         <activity android:name=".CardsTest"/>
 
-        <receiver android:name=".AlarmReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
         <activity
                 android:name=".tabbedMain"
                 android:label="@string/app_name"
