@@ -149,21 +149,23 @@ public class tabbedMain extends AppCompatActivity {
 
         String methodInfo = "";
         for(Alarm a: alarms){
-            boolean isFirst = true;
+
             times = Alarm.getNextAlarms(context, a);
             if( times != null) {
+
+                int alarmType = 3;
                 for (Calendar c : times) {
                     Intent intent = new Intent(context, AlarmReceiver.class);
                     Gson gson = new GsonBuilder().create();
                     intent.putExtra("alarmString", gson.toJson(a));
-                    if (isFirst) {
-                        intent.putExtra("isBedTime", false);
-                        methodInfo += "waktime: ";
-                        isFirst = false;
-                    } else {
-                        intent.putExtra("isBedTime", true);
-                        methodInfo += "Bedtime: ";
+                    intent.putExtra("alarmType", alarmType);
+                    methodInfo += String.valueOf(alarmType);
+                    if(alarmType>1){
+                        alarmType--;
                     }
+
+
+
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     final int SDK_INT = Build.VERSION.SDK_INT;

@@ -157,7 +157,12 @@ public class Alarm implements Serializable{
         int today = rightNow.get(Calendar.DAY_OF_WEEK);
         int tomorrow = today + 1;
 
-        if (tomorrow > 7) {tomorrow = 1;}
+        int weekOfTomorrow = rightNow.get(Calendar.WEEK_OF_MONTH);
+
+        if (tomorrow > 7) {
+            tomorrow = 1;
+            weekOfTomorrow += 1;
+        }
 
         //check if todays alarms have gone off
         int[] todayWakeTime = a.getWakeTimeOfDay(convertToOutTimeSys(today));
@@ -184,6 +189,13 @@ public class Alarm implements Serializable{
                     time.set(Calendar.HOUR_OF_DAY, todayBedTimes[0]);
                     time.set(Calendar.MINUTE, todayBedTimes[1]);
                     times.add(time);
+
+
+                    //setting notification
+                    Calendar notiTime = (Calendar) time.clone();
+                    notiTime.add(Calendar.MINUTE, -30);
+                    times.add(notiTime);
+
                 }
                 return times;
             }
@@ -199,6 +211,7 @@ public class Alarm implements Serializable{
             time.set(Calendar.MINUTE, tomorrowWakeTimes[1]);
             time.set(Calendar.SECOND, 0);
             time.set(Calendar.DAY_OF_WEEK, tomorrow);
+            time.set(Calendar.WEEK_OF_MONTH, weekOfTomorrow);
             times.add(time);
 
             //instanciate new time to be used further down
@@ -212,8 +225,16 @@ public class Alarm implements Serializable{
                 time.set(Calendar.HOUR_OF_DAY, tomorrowBedTimes[0]);
                 time.set(Calendar.MINUTE, tomorrowBedTimes[1]);
                 time.set(Calendar.DAY_OF_WEEK, tomorrow);
+                time.set(Calendar.WEEK_OF_MONTH, weekOfTomorrow);
                 times.add(time);
+
+                //setting notification
+                Calendar notiTime = (Calendar) time.clone();
+                notiTime.add(Calendar.MINUTE, -30);
+                times.add(notiTime);
+
                 return times;
+
             }else {
                 //if not the alarm must be today and we need to get its hours today
                 tomorrowBedTimes[0] += 24;
@@ -225,6 +246,10 @@ public class Alarm implements Serializable{
                 time.set(Calendar.MINUTE, tomorrowBedTimes[1]);
                 time.set(Calendar.DAY_OF_WEEK, today);
                 times.add(time);
+                //setting notification
+                Calendar notiTime = (Calendar) time.clone();
+                notiTime.add(Calendar.MINUTE, -30);
+                times.add(notiTime);
             }
             return times;
             }
@@ -314,6 +339,8 @@ public class Alarm implements Serializable{
         // if we get here there must be no times to return
         return null;
     }
+
+
 
 }
 
