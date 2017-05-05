@@ -36,8 +36,6 @@ public class NotificationService extends Service {
         locationListener.getLocation(getBaseContext());
 
         if(alarm.isInRange(locationListener.getLastLocation())){
-            locationListener.locationManager.removeUpdates(locationListener);
-            locationListener = null;
             Notification.Builder mBuilder =
                     new Notification.Builder(getApplicationContext())
                             .setSmallIcon(R.drawable.moon)
@@ -58,6 +56,8 @@ public class NotificationService extends Service {
             tabbedMain.cancelAlarms(getApplicationContext());
             tabbedMain.setAlarms(getApplicationContext());
         }
+        locationListener.locationManager.removeUpdates(locationListener);
+        locationListener = null;
         return START_NOT_STICKY;
     }
 }
