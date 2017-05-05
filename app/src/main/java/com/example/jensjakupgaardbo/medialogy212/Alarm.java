@@ -275,7 +275,7 @@ public class Alarm implements Serializable{
     public boolean isInRange(Location deviceLocation){
         Location alarmLocation = this.getAlarmLocation();
         float distance = alarmLocation.distanceTo(deviceLocation);
-        return (distance < 500);
+        return (distance < AlarmLocationListener.SEARCH_RADIUS);
     }
 
     public boolean isInRange(Context context){
@@ -289,7 +289,7 @@ public class Alarm implements Serializable{
         }
         Location alarmLocation = this.getAlarmLocation();
         float distance = alarmLocation.distanceTo(deviceLocation);
-        return (distance < tabbedMain.SEARCH_RADIUS);
+        return (distance < AlarmLocationListener.SEARCH_RADIUS);
     }
 
     public ArrayList<String>  getNextAlarmTimes(){

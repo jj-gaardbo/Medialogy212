@@ -33,8 +33,6 @@ public class BedTimeActivityService extends Service {
         locationListener.getLocation(getBaseContext());
 
         if(alarm.isInRange(locationListener.getLastLocation())){
-            locationListener.locationManager.removeUpdates(locationListener);
-            locationListener = null;
             Intent dialogIntent = new Intent(this, BedTimeActivity.class);
             dialogIntent.putExtra("alarmString", gson.toJson(alarm));
             dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -44,6 +42,8 @@ public class BedTimeActivityService extends Service {
             tabbedMain.cancelAlarms(getApplicationContext());
             tabbedMain.setAlarms(getApplicationContext());
         }
+        locationListener.locationManager.removeUpdates(locationListener);
+        locationListener = null;
         return START_NOT_STICKY;
     }
 

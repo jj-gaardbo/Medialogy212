@@ -11,6 +11,8 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class AlarmLocationListener implements LocationListener {
 
+    public static final int SEARCH_RADIUS = 500;
+
     private boolean isGPSEnabled;
     private boolean isNetworkEnabled;
     private boolean canGetLocation;
