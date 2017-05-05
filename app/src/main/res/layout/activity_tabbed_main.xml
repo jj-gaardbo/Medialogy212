@@ -24,12 +24,24 @@
 
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/info_page_button"/>
+        android:layout_below="@+id/location" />
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_info_details"
             android:id="@+id/info_page_button"
             android:background="@null"
             android:layout_marginEnd="10dp" android:layout_marginTop="10dp" android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+
+        />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:text="LOCATIONS"
+        android:paddingTop="3dp"
+        android:layout_alignTop="@+id/info_page_button"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
