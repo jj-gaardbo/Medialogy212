@@ -1,8 +1,11 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -12,6 +15,7 @@ import java.util.Locale;
 
 public class AlarmActivity_addAlarm extends AppCompatActivity {
 
+    private static final String TAG = "ALARM_ADD_TIME";
     private static final int SLEEP_DURATION_MIN_VALUE = 1;
     private static final int SLEEP_DURATION_MAX_VALUE = 12;
     private static final int SLEEP_DURATION_DEFAULT_VALUE = 7;
@@ -102,6 +106,10 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
 
     private void checkDays(){
 
+        if(no_days_picked){
+            return;
+        }
+
         //Create an array that holds the indexes of used days in the current alarm
         List<Integer> disableIndexes = new ArrayList<>();
 
@@ -135,11 +143,17 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
     }
 
     public void refreshDays(View view){
+        no_days_picked = true;
         for(int i = 0; i < dayBtns.size(); i++){
             if(dayBtns.get(i).isEnabled()){
                 days[i] = dayBtns.get(i).isChecked();
+                if(dayBtns.get(i).isChecked()){
+                    no_days_picked = false;
+                }
             }
         }
+
+        Log.d(TAG, "No days picked: "+no_days_picked);
     }
 
     private void saveTime(){
@@ -160,8 +174,10 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
                 alarmTime = new AlarmTime(String.format(Locale.ENGLISH,"%02d:%02d", wake_time.getCurrentHour(), wake_time.getCurrentMinute()), duration.getValue(), days);
                 alarmTimes.add(alarmTime);
             }
+            goToAlarmPage();
+        } else {
+            Toast.makeText(this, "You need to choose one or more days to continue.", Toast.LENGTH_SHORT).show();
         }
-        goToAlarmPage();
     }
 
     public void deleteTime(View view){
