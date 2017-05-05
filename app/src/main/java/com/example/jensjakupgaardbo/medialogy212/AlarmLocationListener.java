@@ -55,21 +55,6 @@ public class AlarmLocationListener implements LocationListener {
                 // no network provider is enabled
             } else {
                 this.canGetLocation = true;
-                if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            1000,
-                            1, this);
-                    Log.d("Network", "Network Enabled");
-                    if (locationManager != null) {
-                        lastLocation = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (lastLocation != null) {
-                            latitude = lastLocation.getLatitude();
-                            longitude = lastLocation.getLongitude();
-                        }
-                    }
-                }
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
                     if (lastLocation == null) {
@@ -85,6 +70,21 @@ public class AlarmLocationListener implements LocationListener {
                                 latitude = lastLocation.getLatitude();
                                 longitude = lastLocation.getLongitude();
                             }
+                        }
+                    }
+                }
+                if (isNetworkEnabled) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            1000,
+                            1, this);
+                    Log.d("Network", "Network Enabled");
+                    if (locationManager != null) {
+                        lastLocation = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (lastLocation != null) {
+                            latitude = lastLocation.getLatitude();
+                            longitude = lastLocation.getLongitude();
                         }
                     }
                 }
