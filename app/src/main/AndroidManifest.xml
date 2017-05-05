@@ -27,8 +27,14 @@
         <activity
                 android:name=".Infopage"
                 android:label="@string/app_intro"/>
-        <activity android:name=".AlarmActivity"/>
-        <activity android:name=".AlarmActivity_addAlarm"/>
+        <activity android:name=".AlarmActivity"
+         android:parentActivityName=".tabbedMain"></activity>
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".tabbedMain" />
+
+        <activity android:name=".AlarmActivity_addAlarm" />
         <activity android:name=".dataBaseOverview"/>
         <activity android:name=".PlaceActivity"/>
         <!--

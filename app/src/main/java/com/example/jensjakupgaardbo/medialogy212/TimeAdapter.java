@@ -33,7 +33,7 @@ public class TimeAdapter extends ArrayAdapter{
 
             // Populate the data into the template view using the data object
             time_wakeupTime.setText(alarmTime.getWakeUp());
-            time_duration.setText(String.valueOf(alarmTime.getDuration()));
+            time_duration.setText(String.valueOf(alarmTime.getDuration()) + " h");
             time_days.setText(convertDaysToString(alarmTime));
         }
 

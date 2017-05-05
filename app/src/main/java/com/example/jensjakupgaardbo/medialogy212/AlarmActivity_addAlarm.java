@@ -185,4 +185,14 @@ public class AlarmActivity_addAlarm extends AppCompatActivity {
         startActivity(alarmScreen);
     }
 
+    public void goBack(View view) {
+        Intent intent = new Intent(this, AlarmActivity.class);
+        intent.putExtra("activeAlarm", parentAlarm);
+        if (parentAlarm.get_latlng() != null) {
+            intent.putExtra("activeAlarmLocation", Alarm.getConvertedLocation(parentAlarm.get_latlng()));
+            parentAlarm.set_latlng(null);
+        }
+        intent.putExtra("editing", true);
+        navigateUpTo(intent);
+    }
 }
