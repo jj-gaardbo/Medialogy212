@@ -11,9 +11,29 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="com.example.jensjakupgaardbo.medialogy212.BedTimeActivity">
 
-    <TextView
-            android:text="Go to sleep bitch! Die, motherfucker! Die!"
+    <Button
+            android:text="Got it!"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" android:id="@+id/bedTimeText"/>
+            android:layout_centerHorizontal="true" android:id="@+id/go_to_sleep_reaction"
+    />
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/go_to_sleep_alarm_name" android:textSize="30sp" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" android:layout_marginTop="70dp"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/go_to_sleep_alarm_time"
+            android:textSize="40sp" android:layout_below="@+id/go_to_sleep_alarm_name" android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"/>
+    <TextView
+            android:text="It is bedtime."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_below="@+id/go_to_sleep_alarm_name"
+            android:layout_centerHorizontal="true" android:layout_marginTop="24dp" android:id="@+id/bed_time_label"/>
+
 </RelativeLayout>
