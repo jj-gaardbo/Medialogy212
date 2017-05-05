@@ -62,8 +62,6 @@
         <service android:name=".alarmServices.NotificationService" android:enabled="true"/>
         <service android:name=".alarmServices.BedTimeActivityService" android:enabled="true"/>
         <service android:name=".alarmServices.WakeUpAlarmService" android:enabled="true"/>
-        <service android:name=".AlarmLocationListener" android:enabled="true"/>
-
 
         <activity android:name=".WakeTimeActivity">
         </activity>
