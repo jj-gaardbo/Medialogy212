@@ -17,7 +17,7 @@
 
       android:layout_centerHorizontal="true"
         android:layout_marginStart="14dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/alarm_name" />
 
     <fragment
@@ -30,12 +30,12 @@
         android:layout_alignParentStart="true" />
 
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/timesList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/timesList"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_alignParentStart="true"
+            android:paddingRight="16dp"
+            android:layout_alignParentStart="true"
         android:scrollbars="none"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/alarm_name" />
