@@ -75,7 +75,7 @@ public class tabbedMain extends AppCompatActivity {
                 @Override
                 public void run() {
                 SharedPreferences getPrefs = getDefaultSharedPreferences(getBaseContext());
-                open_info();
+                openInfo();
                 SharedPreferences.Editor e = getPrefs.edit();
                 e.putBoolean("firstStart", false);
                 e.apply();
@@ -91,7 +91,7 @@ public class tabbedMain extends AppCompatActivity {
         infoPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                open_info();
+                openInfo();
             }
         });
 
@@ -208,10 +208,15 @@ public class tabbedMain extends AppCompatActivity {
         }
     }
 
-    public void open_info(){
+
+
+    public void openInfo(){
         startActivity(new Intent(getApplicationContext(), Infopage.class));
     }
 
+    public void buttonOpenInfo(View view) {
+        openInfo();
+    }
 }
 
 

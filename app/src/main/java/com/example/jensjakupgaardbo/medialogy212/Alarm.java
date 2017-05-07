@@ -4,8 +4,6 @@ package com.example.jensjakupgaardbo.medialogy212;
 import android.content.Context;
 import android.location.Location;
 
-import android.location.LocationListener;
-import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -163,7 +161,10 @@ public class Alarm implements Serializable{
 
         if (tomorrow > 7) {
             tomorrow = 1;
-            weekOfTomorrow += 1;
+
+        }
+        if(tomorrow == 2){
+            weekOfTomorrow++;
         }
 
         //check if todays alarms have gone off
