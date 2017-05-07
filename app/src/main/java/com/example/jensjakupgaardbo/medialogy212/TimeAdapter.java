@@ -52,6 +52,9 @@ public class TimeAdapter extends ArrayAdapter{
             }
         }
         String dayString = str.toString().trim();
+        if(dayString.equals("")){
+            return dayString;
+        }
         return dayString.substring(0, dayString.length()-1);
     }
 
