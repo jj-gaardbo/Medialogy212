@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.34"
         android:lineSpacingExtra="14sp"
-        android:text="so far alarm apps have tried to help, by notifing you when you have to go to bed"
+        android:text="So far alarm apps have tried to help, by notifying you when you have to go to bed"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"

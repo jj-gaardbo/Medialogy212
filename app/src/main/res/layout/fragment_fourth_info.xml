@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.34"
         android:lineSpacingExtra="14sp"
-        android:text="but you dont always want to be disturbed"
+        android:text="But you dont always want to be disturbed"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"

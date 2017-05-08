@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.34"
         android:lineSpacingExtra="14sp"
-        android:text="you can see alot of info on the frontpage"
+        android:text="You can see alot of info on the frontpage"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"

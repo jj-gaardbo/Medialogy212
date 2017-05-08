@@ -12,12 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.34"
         android:lineSpacingExtra="14sp"
-        android:text="this is where Sleepspot is different, our alarms are location based"
+        android:text="This is where SleepSpot is different, our alarms are location based"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"
         android:textSize="30sp"
-        android:layout_marginTop="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -38,13 +37,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.34"
         android:lineSpacingExtra="14sp"
-        android:text="so they wont get in the way"
+        android:text="So they wont get in the way"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"
         android:textSize="30sp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/textView8"
-        android:layout_marginBottom="63dp" />
+        android:layout_below="@+id/imageView10"
+        android:layout_alignStart="@+id/textView8" />
 
 </RelativeLayout>
