@@ -1,13 +1,16 @@
 package com.example.jensjakupgaardbo.medialogy212;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntroFragment;
 
-import layout.*;
+import layout.fifthInfoFragment;
+import layout.firstInfoFragment;
+import layout.fourthInfoFragment;
+import layout.secondInfoFragment;
+import layout.sixthInfoFragment;
+import layout.thirdInfoFragment;
 
 
 public class Infopage extends AppIntro {
@@ -23,6 +26,7 @@ public class Infopage extends AppIntro {
         addSlide(new thirdInfoFragment());
         addSlide(new fourthInfoFragment());
         addSlide(new fifthInfoFragment());
+        addSlide(new sixthInfoFragment());
 
 
     }

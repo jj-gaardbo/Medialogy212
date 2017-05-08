@@ -1,22 +1,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@color/cardview_dark_background"
-    tools:context="layout.firstInfoFragment"
-    android:weightSum="1">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="layout.firstInfoFragment">
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="208dp"
-        android:layout_height="wrap_content"
+        android:layout_width="210dp"
+        android:layout_height="84dp"
         android:lineSpacingExtra="14sp"
         android:text="@string/app_intro"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"
         android:textSize="30sp"
-        android:layout_weight="0.45" />
+        android:layout_weight="0.05" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="309dp"
+        android:layout_height="328dp"
+        app:srcCompat="@drawable/icon" />
 
 </LinearLayout>
