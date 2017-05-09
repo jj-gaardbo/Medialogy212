@@ -391,7 +391,7 @@ public class AlarmActivity extends AppCompatActivity implements OnMapReadyCallba
     private void addMapMarker(LatLng location){
         googleMap.clear();
         googleMap.addMarker(new MarkerOptions()
-                .position(location);
+                .position(location));
     }
 
     @Override

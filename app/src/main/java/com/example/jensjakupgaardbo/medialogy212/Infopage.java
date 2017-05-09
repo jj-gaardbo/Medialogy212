@@ -9,6 +9,7 @@ import layout.fifthInfoFragment;
 import layout.firstInfoFragment;
 import layout.fourthInfoFragment;
 import layout.secondInfoFragment;
+import layout.seventhInfoFragment;
 import layout.sixthInfoFragment;
 import layout.thirdInfoFragment;
 
@@ -27,6 +28,7 @@ public class Infopage extends AppIntro {
         addSlide(new fourthInfoFragment());
         addSlide(new fifthInfoFragment());
         addSlide(new sixthInfoFragment());
+        addSlide(new seventhInfoFragment());
 
 
     }
