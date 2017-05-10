@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="85dp"
-        android:text="Blue light decreases the melatonin level in your body so it is harder to fall asleep at night."
+        android:text="The Circadian clock is an internal body clock which controls when you are ready to go to bed"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         android:textColor="#fff"

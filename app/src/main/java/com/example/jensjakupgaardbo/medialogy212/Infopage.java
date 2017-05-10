@@ -5,12 +5,16 @@ import android.os.Bundle;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
+import layout.eightInfoFragment;
+import layout.eleventhInfoFragment;
 import layout.fifthInfoFragment;
 import layout.firstInfoFragment;
 import layout.fourthInfoFragment;
+import layout.ninthInfoFragment;
 import layout.secondInfoFragment;
 import layout.seventhInfoFragment;
 import layout.sixthInfoFragment;
+import layout.tenthInfoFragment;
 import layout.thirdInfoFragment;
 
 
@@ -29,6 +33,10 @@ public class Infopage extends AppIntro {
         addSlide(new fifthInfoFragment());
         addSlide(new sixthInfoFragment());
         addSlide(new seventhInfoFragment());
+        addSlide(new eightInfoFragment());
+        addSlide(new ninthInfoFragment());
+        addSlide(new tenthInfoFragment());
+        addSlide(new eleventhInfoFragment());
 
 
     }

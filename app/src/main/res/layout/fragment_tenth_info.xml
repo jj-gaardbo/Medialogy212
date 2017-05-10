@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="85dp"
-        android:text="Blue light decreases the melatonin level in your body so it is harder to fall asleep at night."
+        android:text="Using electronic devices before bedtime deacreases sleep perfomance"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         android:textColor="#fff"
