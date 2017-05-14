@@ -17,7 +17,7 @@ public class eleventhInfoFragment extends Fragment implements ISlideBackgroundCo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_ninth_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_eleventh_info, container, false);
         viewGroup = container;
         setBackgroundColor(getDefaultBackgroundColor());
         return v;
