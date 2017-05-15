@@ -19,4 +19,13 @@
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         android:textColor="#fff"
         android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        app:srcCompat="@drawable/bluelight" />
 </RelativeLayout>
